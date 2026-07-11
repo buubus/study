@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platform App Builder — Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#F7F7F5;
+  --carbon:#141415;
+  --indigo:#0047FF;
+  --flint:#8E8E8B;
+  --hair:rgba(20,20,21,.14);
+  --hair-soft:rgba(20,20,21,.08);
+  --paper:#FFFFFF;
+  --indigo-wash:rgba(0,71,255,.06);
+  --amber:#B45309;
+  --amber-wash:rgba(180,83,9,.07);
+  --green:#1a7f52;
+  --green-wash:rgba(26,127,82,.07);
+  --sans:'Inter',-apple-system,sans-serif;
+  --display:'Inter Tight',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--canvas);
+  color:var(--carbon);
+  line-height:1.6;
+  font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+/* ---------- Layout ---------- */
+.shell{display:flex;min-height:100vh}
+.sidebar{
+  width:290px;flex-shrink:0;
+  background:var(--paper);
+  border-right:.5px solid var(--hair);
+  height:100vh;position:sticky;top:0;
+  overflow-y:auto;
+  padding:0;
+}
+.main{flex:1;min-width:0;padding:0}
+.wrap{max-width:820px;margin:0 auto;padding:56px 48px 120px}
+/* ---------- Sidebar ---------- */
+.brand{padding:26px 24px 20px;border-bottom:.5px solid var(--hair)}
+.brand .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--flint)}
+.brand h1{font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-.03em;margin-top:6px;line-height:1.15}
+.progress-wrap{padding:16px 24px;border-bottom:.5px solid var(--hair)}
+.progress-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--flint);margin-bottom:8px}
+.progress-bar{height:3px;background:var(--hair-soft);position:relative;overflow:hidden}
+.progress-fill{position:absolute;top:0;left:0;height:100%;background:var(--indigo);width:0;transition:width .4s ease}
+.nav{padding:12px 0 40px}
+.nav-group{margin-bottom:2px}
+.nav-domain{
+  display:flex;align-items:baseline;gap:8px;
+  padding:11px 24px 6px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--flint);
+}
+.nav-domain .wt{margin-left:auto;color:var(--indigo);font-weight:500}
+.nav-link{
+  display:block;padding:7px 24px 7px 24px;
+  font-size:13px;color:var(--carbon);text-decoration:none;cursor:pointer;
+  border-left:2px solid transparent;line-height:1.35;
+  transition:background .12s,border-color .12s;
+}
+.nav-link:hover{background:var(--indigo-wash)}
+.nav-link.active{border-left-color:var(--indigo);background:var(--indigo-wash);font-weight:500}
+.nav-link .done{color:var(--indigo);font-weight:600}
+.nav-section-title{padding:16px 24px 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--flint);border-top:.5px solid var(--hair-soft);margin-top:10px}
+.nav-link.cheat{color:var(--carbon)}
+.nav-link.cheat::before{content:"▸ ";color:var(--indigo)}
+/* ---------- Content typography ---------- */
+.view{display:none}
+.view.active{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--flint);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow .num{color:var(--indigo)}
+.eyebrow .wt-badge{margin-left:auto;padding:2px 8px;border:.5px solid var(--hair);color:var(--carbon);letter-spacing:.08em}
+h2.title{font-family:var(--display);font-size:30px;font-weight:600;letter-spacing:-.04em;line-height:1.12;margin-bottom:8px}
+.lead{font-size:16px;color:#3a3a3c;margin-bottom:8px;max-width:64ch}
+.rule{height:.5px;background:var(--hair);margin:28px 0}
+h3{font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-.02em;margin:30px 0 10px}
+h4{font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:-.01em;margin:22px 0 6px}
+p{margin-bottom:12px;max-width:68ch}
+.view p, .view li{color:#25252a}
+ul,ol{margin:0 0 14px 22px}
+li{margin-bottom:5px;max-width:66ch}
+strong{font-weight:600;color:var(--carbon)}
+code{font-family:var(--mono);font-size:12.5px;background:var(--indigo-wash);color:var(--carbon);padding:1px 5px;border-radius:2px}
+a.tlink{color:var(--indigo);text-decoration:none;border-bottom:.5px solid rgba(0,71,255,.3)}
+a.tlink:hover{border-bottom-color:var(--indigo)}
+/* ---------- Callouts ---------- */
+.box{border:.5px solid var(--hair);padding:16px 18px;margin:18px 0;background:var(--paper)}
+.box .box-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.box.trap{background:var(--amber-wash);border-color:rgba(180,83,9,.25)}
+.box.trap .box-label{color:var(--amber)}
+.box.key{background:var(--indigo-wash);border-color:rgba(0,71,255,.22)}
+.box.key .box-label{color:var(--indigo)}
+.box.mnem{background:var(--green-wash);border-color:rgba(26,127,82,.25)}
+.box.mnem .box-label{color:var(--green)}
+.box p:last-child,.box ul:last-child,.box li:last-child{margin-bottom:0}
+/* ---------- Tables ---------- */
+.tbl-scroll{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--paper);border:.5px solid var(--hair)}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--flint);text-align:left;padding:10px 12px;border-bottom:.5px solid var(--hair);background:var(--canvas);vertical-align:top}
+td{padding:10px 12px;border-bottom:.5px solid var(--hair-soft);vertical-align:top;color:#25252a}
+tr:last-child td{border-bottom:none}
+td strong{color:var(--carbon)}
+/* ---------- Progress toggle ---------- */
+.lesson-foot{margin-top:40px;padding-top:22px;border-top:.5px solid var(--hair);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.mark-btn{
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  padding:10px 18px;border:.5px solid var(--carbon);background:transparent;color:var(--carbon);
+  cursor:pointer;transition:all .15s;
+}
+.mark-btn:hover{background:var(--carbon);color:var(--canvas)}
+.mark-btn.done{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.nav-jump{margin-left:auto;display:flex;gap:8px}
+.nav-jump button{font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:10px 14px;border:.5px solid var(--hair);background:var(--paper);color:var(--carbon);cursor:pointer}
+.nav-jump button:hover{border-color:var(--carbon)}
+.nav-jump button:disabled{opacity:.3;cursor:default}
+/* ---------- Cheat sheets ---------- */
+.cheat-head{display:flex;align-items:flex-start;gap:16px;margin-bottom:6px}
+.cheat-head .title{flex:1}
+.print-btn{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:9px 14px;border:.5px solid var(--carbon);background:transparent;cursor:pointer;white-space:nowrap}
+.print-btn:hover{background:var(--carbon);color:var(--canvas)}
+.cheat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.cheat-card{border:.5px solid var(--hair);background:var(--paper);padding:14px 16px}
+.cheat-card h4{margin:0 0 8px;font-size:13px;font-family:var(--display);color:var(--indigo);letter-spacing:0}
+.cheat-card ul{margin:0 0 0 16px;font-size:12.5px}
+.cheat-card li{margin-bottom:4px;line-height:1.45}
+.cheat-card.full{grid-column:1/-1}
+.kv{font-size:12.5px;line-height:1.5}
+.kv b{color:var(--carbon)}
+/* ---------- Overview specifics ---------- */
+.fact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.5px;background:var(--hair);border:.5px solid var(--hair);margin:24px 0}
+.fact{background:var(--paper);padding:18px 20px}
+.fact .n{font-family:var(--display);font-size:26px;font-weight:600;letter-spacing:-.03em}
+.fact .n .u{font-size:14px;color:var(--flint);font-weight:400}
+.fact .l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--flint);margin-top:4px}
+.weight-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:.5px solid var(--hair-soft);cursor:pointer}
+.weight-row:hover .wname{color:var(--indigo)}
+.weight-row:last-child{border-bottom:none}
+.weight-row .wnum{font-family:var(--mono);font-size:11px;color:var(--flint);width:22px}
+.weight-row .wname{font-family:var(--display);font-weight:500;font-size:15px;flex:1;letter-spacing:-.01em}
+.weight-row .wbar{width:180px;height:6px;background:var(--hair-soft);position:relative;flex-shrink:0}
+.weight-row .wbar span{position:absolute;left:0;top:0;height:100%;background:var(--indigo)}
+.weight-row .wpct{font-family:var(--mono);font-size:12px;width:38px;text-align:right;font-weight:500}
+/* ---------- Mobile ---------- */
+.menu-toggle{display:none}
+.topbar{display:none}
+@media(max-width:960px){
+  .sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:transform .25s;box-shadow:0 0 0 100vmax rgba(0,0,0,0);width:280px}
+  .sidebar.open{transform:translateX(0);box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}
+  .topbar{display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:.5px solid var(--hair);padding:12px 18px}
+  .menu-toggle{display:inline-flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:4px}
+  .menu-toggle span{width:20px;height:1.5px;background:var(--carbon);display:block}
+  .topbar .tt{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.02em}
+  .wrap{padding:32px 22px 100px}
+  .cheat-grid,.fact-grid{grid-template-columns:1fr}
+  .weight-row .wbar{width:90px}
+  h2.title{font-size:24px}
+}
+/* ---------- Print ---------- */
+@media print{
+  .sidebar,.topbar,.lesson-foot,.print-btn,.mark-btn,.nav-jump{display:none!important}
+  .view{display:none!important}
+  .view.printing{display:block!important}
+  body{background:#fff;font-size:11px}
+  .wrap{max-width:100%;padding:0}
+  .cheat-grid{gap:8px}
+  .cheat-card{break-inside:avoid;border:.5px solid #999}
+  .box{break-inside:avoid}
+  table{font-size:10px}
+  h2.title{font-size:20px}
+  @page{margin:1.2cm}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+  <span class="tt">App Builder Guide</span>
+</div>
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="eyebrow">Salesforce Certification</div>
+      <h1>Platform App&nbsp;Builder<br>Study Guide</h1>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progress</span><span id="progText">0 / 26</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+  </aside>
+  <main class="main">
+    <div class="wrap" id="content"></div>
+  </main>
+</div>
+<script>
+/* ================= CONTENT DATA ================= */
+/* Populated by injected blocks below */
+const DATA = { overview:null, domains:[], cheats:[], master:null };
+</script>
+<script>
+/* ================= OVERVIEW ================= */
+DATA.overview = `
+<div class="eyebrow"><span class="num">00</span> · Orientation</div>
+<h2 class="title">The exam, and how to beat it.</h2>
+<p class="lead">The Platform App Builder credential proves you can design, build, and deploy custom applications using the <strong>declarative</strong> (point-and-click) capabilities of the Salesforce Platform — data model, security, business logic, UI, and deployment — and that you know exactly where declarative ends and code begins.</p>
+<div class="fact-grid">
+  <div class="fact"><div class="n">60<span class="u"> +5</span></div><div class="l">Scored questions (+5 unscored)</div></div>
+  <div class="fact"><div class="n">105<span class="u"> min</span></div><div class="l">Time limit</div></div>
+  <div class="fact"><div class="n">63<span class="u">%</span></div><div class="l">Passing score (~38/60)</div></div>
+  <div class="fact"><div class="n">USD 200</div><div class="l">Register · USD 100 retake</div></div>
+</div>
+<p>Multiple-choice and multiple-select. Proctored, onsite or online. No prerequisites, though Salesforce recommends 6–12 months building apps on the platform. Almost every question is <strong>scenario-based</strong>: you are given business requirements and asked for the <em>most appropriate</em> solution — rarely a straight definition.</p>
+<div class="box key"><div class="box-label">◆ The governing principle</div><p>When two solutions both "work", the exam nearly always rewards the <strong>lowest-code, most maintainable, most scalable</strong> one. Declarative beats code unless a requirement is impossible declaratively. Standard beats custom. Configuration beats customisation.</p></div>
+
+<h3>The five domains, by weight</h3>
+<p>Study time should follow the weighting. Business Logic and Fundamentals together are over half the exam.</p>
+<div class="weights">
+  <div class="weight-row" onclick="show('blpa_formula')"><span class="wnum">03</span><span class="wname">Business Logic &amp; Process Automation</span><span class="wbar"><span style="width:100%"></span></span><span class="wpct">28%</span></div>
+  <div class="weight-row" onclick="show('fund_declarative')"><span class="wnum">01</span><span class="wname">Salesforce Fundamentals</span><span class="wbar"><span style="width:82%"></span></span><span class="wpct">23%</span></div>
+  <div class="weight-row" onclick="show('data_model')"><span class="wnum">02</span><span class="wname">Data Modeling &amp; Management</span><span class="wbar"><span style="width:78%"></span></span><span class="wpct">22%</span></div>
+  <div class="weight-row" onclick="show('ui_customization')"><span class="wnum">04</span><span class="wname">User Interface</span><span class="wbar"><span style="width:60%"></span></span><span class="wpct">17%</span></div>
+  <div class="weight-row" onclick="show('deploy_lifecycle')"><span class="wnum">05</span><span class="wname">App Deployment</span><span class="wbar"><span style="width:36%"></span></span><span class="wpct">10%</span></div>
+</div>
+
+<h3>How to use this guide</h3>
+<p>Each objective is a lesson with a deep dive, exam traps, and mnemonics. Mark lessons complete to track progress (saved in your browser). Every domain has a one-page <strong>cheat sheet</strong> for revision, plus a <strong>master cheat sheet</strong> across the whole exam — all printable via the print button.</p>
+<div class="box mnem"><div class="box-label">◆ Recall aids</div><p>Recurring exam-trap patterns are flagged in amber; the single most important fact in each lesson is flagged in indigo. If you only revise the cheat sheets the week before, you'll cover ~80% of what's asked.</p></div>
+
+<h3>The 48-hour discipline</h3>
+<ul>
+<li><strong>Order of Execution</strong> — know the save sequence cold; it disambiguates half the automation questions.</li>
+<li><strong>Field-type change data loss</strong> — memorise which conversions destroy data.</li>
+<li><strong>Relationship types</strong> — master-detail vs lookup vs junction, and their side-effects on sharing, roll-ups, and reporting.</li>
+<li><strong>Sandbox types</strong> — data copied and refresh intervals.</li>
+<li><strong>Flow beats everything</strong> — new automation is Flow; Workflow Rules and Process Builder are legacy and can no longer be created.</li>
+</ul>
+`;
+
+/* ================= DOMAIN 1: FUNDAMENTALS ================= */
+DATA.domains.push({
+  num:'01', short:'Fundamentals', title:'Salesforce Fundamentals', weight:23,
+  lessons:[
+  {
+    id:'fund_declarative', nav:'Declarative vs code boundaries',
+    title:'Boundaries of declarative vs programmatic customization',
+    lead:'Knowing when point-and-click runs out and code becomes necessary is the single most tested idea on the whole exam.',
+    body:`
+<h3>The build ladder</h3>
+<p>Salesforce customisation climbs a ladder, and you always start at the bottom rung that satisfies the requirement:</p>
+<ol>
+<li><strong>Configuration</strong> — standard features you switch on (standard objects, standard fields, list views).</li>
+<li><strong>Declarative customisation</strong> — custom objects/fields, page layouts, Lightning App Builder, formula fields, validation rules, Flows, approval processes.</li>
+<li><strong>Programmatic customisation</strong> — Apex (triggers, classes), Lightning Web Components / Aura, Visualforce, callouts.</li>
+</ol>
+<div class="box key"><div class="box-label">◆ Core rule</div><p>Choose the <strong>highest-level (least code)</strong> option that fully meets the requirement. Code is only "correct" on this exam when the requirement is <em>impossible</em> declaratively.</p></div>
+
+<h3>When you are forced into code</h3>
+<p>Reach for Apex / LWC only when the scenario needs something declarative tools genuinely cannot do:</p>
+<ul>
+<li><strong>Complex logic across many records / bulk operations</strong> beyond what Flow handles cleanly (heavy loops, complex transaction control, rollback).</li>
+<li><strong>Complex validation across unrelated objects</strong> that a validation rule or Flow can't express.</li>
+<li><strong>Custom transactional logic</strong> — e.g. enforcing rules that must run before/after DML in ways Flow can't, or complex duplicate/merge logic.</li>
+<li><strong>Web service callouts</strong> to external systems (Apex, or Flow with an External Service / HTTP Callout action for simpler cases).</li>
+<li><strong>Highly custom UI/UX</strong> that App Builder + standard components can't deliver → Lightning Web Components.</li>
+<li><strong>Scheduling and asynchronous processing</strong> beyond scheduled Flows (Batch/Queueable Apex).</li>
+</ul>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>If a scenario is achievable with a <strong>Flow, formula, validation rule, or roll-up summary</strong>, then an answer proposing "write an Apex trigger" is <strong>wrong</strong> — even though it would technically work. The reverse trap: a requirement that clearly needs a callout or complex bulk logic where the "use a validation rule" answer is too weak.</p></div>
+
+<h3>Signals in the question</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Phrase in scenario</th><th>Usually points to</th></tr>
+<tr><td>"without using code", "point-and-click", "admin should maintain"</td><td>Declarative (Flow, formula, validation rule)</td></tr>
+<tr><td>"prevent saving when…"</td><td>Validation rule</td></tr>
+<tr><td>"automatically update / create records when…"</td><td>Record-triggered Flow</td></tr>
+<tr><td>"calculate and display a value"</td><td>Formula field (or roll-up)</td></tr>
+<tr><td>"call an external system", "complex logic on thousands of records"</td><td>Apex</td></tr>
+<tr><td>"pixel-perfect / bespoke interface"</td><td>Lightning Web Component</td></tr>
+</table></div>
+`
+  },
+  {
+    id:'fund_appexchange', nav:'Extending an org with AppExchange',
+    title:'Extending an org using the AppExchange',
+    lead:'AppExchange is the "buy, don\'t build" answer — the marketplace of ready-made solutions installed as packages.',
+    body:`
+<h3>What AppExchange offers</h3>
+<p>AppExchange is Salesforce's marketplace. You install pre-built functionality instead of building it yourself. Listings come in several forms:</p>
+<ul>
+<li><strong>Apps</strong> — complete solutions (a full accounting app, a document-generation app).</li>
+<li><strong>Components / Bolt solutions</strong> — Lightning components or building blocks that drop into your org.</li>
+<li><strong>Flow / Lightning extensions</strong> — actions and templates.</li>
+<li><strong>Consulting partners</strong> — implementation services, not software.</li>
+</ul>
+<div class="box key"><div class="box-label">◆ Delivery mechanism</div><p>AppExchange solutions install as <strong>managed packages</strong> (usually) — namespaced, upgradeable by the publisher, IP-protected. This links directly to the App Deployment domain.</p></div>
+
+<h3>The "build vs buy" judgement</h3>
+<p>Choose AppExchange when the scenario describes a <strong>common, non-differentiating need</strong> that a vendor has already solved: e-signature, mass email, data quality/dedupe, document generation, complex billing. Building it yourself would be slower, costlier, and unmaintained.</p>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>Watch for a requirement that a well-known category of app solves (e.g. "generate a branded PDF quote", "clean and deduplicate imported data"). The best answer is often <strong>"install an app from the AppExchange"</strong> rather than a custom build — the exam rewards not reinventing the wheel.</p></div>
+<h4>Before installing</h4>
+<ul>
+<li>Check <strong>security review</strong> status, editions supported, and Salesforce limits the package consumes (custom objects/fields, tabs).</li>
+<li>Install into a <strong>sandbox</strong> first to test.</li>
+<li>Choose install scope: admins only, all users, or specific profiles.</li>
+</ul>
+`
+  },
+  {
+    id:'fund_access', nav:'Object, record & field access',
+    title:'Restricting and extending object, record & field access',
+    lead:'Salesforce security is layered: object → field → record. You must know which lever controls which layer.',
+    body:`
+<h3>The three layers of access</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Layer</th><th>Question it answers</th><th>Controlled by</th></tr>
+<tr><td><strong>Object</strong></td><td>Can the user see/create/edit/delete this <em>type</em> of record at all? (CRUD)</td><td>Profiles &amp; Permission Sets</td></tr>
+<tr><td><strong>Field</strong></td><td>Can the user see/edit this <em>field</em>? (FLS)</td><td>Profiles &amp; Permission Sets (Field-Level Security)</td></tr>
+<tr><td><strong>Record</strong></td><td><em>Which specific records</em> of a type can the user see/edit?</td><td>OWD, Role Hierarchy, Sharing Rules, Manual Sharing, Teams</td></tr>
+</table></div>
+
+<h3>Object &amp; field access — Profiles vs Permission Sets</h3>
+<ul>
+<li>Every user has <strong>exactly one profile</strong> (baseline). A profile grants object CRUD, FLS, tab visibility, app access, and system/user permissions.</li>
+<li><strong>Permission sets</strong> (and permission set groups) <strong>grant additional</strong> access on top of the profile. They only add — they never remove.</li>
+</ul>
+<div class="box key"><div class="box-label">◆ Best-practice model</div><p>Keep profiles <strong>minimal/baseline</strong> and layer exceptions with <strong>permission sets</strong>. When a scenario says "a subset of users also needs X", the answer is a <strong>permission set</strong>, not a new profile.</p></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>A permission set can only <strong>extend</strong> access. It cannot take away what the profile grants. To <em>restrict</em>, you tighten the profile (or use permission set groups with a <strong>muting</strong> permission set within a group).</p></div>
+
+<h3>CRUD + FLS interaction</h3>
+<p>Field access is only meaningful if object access exists. A user needs <strong>Read on the object AND Visible on the field</strong> to see field data. "Edit" similarly requires both.</p>
+<h4>Extending vs restricting — the levers</h4>
+<ul>
+<li><strong>Extend object/field access:</strong> permission sets / permission set groups.</li>
+<li><strong>Restrict object/field access:</strong> profile settings (remove CRUD/FLS).</li>
+<li><strong>Record-level</strong> access is a separate system — covered in the next lesson.</li>
+</ul>
+`
+  },
+  {
+    id:'fund_sharing', nav:'Choosing a sharing solution',
+    title:'Determining the appropriate sharing solution',
+    lead:'Record-level access starts locked by the org-wide default, then opens up through progressively targeted mechanisms.',
+    body:`
+<h3>Sharing is additive, never subtractive</h3>
+<p>Set the <strong>most restrictive</strong> access needed with the Organisation-Wide Default (OWD), then <strong>open up</strong> for the users who need more. Nothing below opens can take access <em>below</em> the OWD.</p>
+
+<h3>Org-Wide Defaults (the baseline)</h3>
+<div class="tbl-scroll"><table>
+<tr><th>OWD setting</th><th>Meaning</th></tr>
+<tr><td><strong>Private</strong></td><td>Only the record owner (and those above in the role hierarchy) can see it.</td></tr>
+<tr><td><strong>Public Read Only</strong></td><td>Everyone can view; only owner/above can edit.</td></tr>
+<tr><td><strong>Public Read/Write</strong></td><td>Everyone can view and edit.</td></tr>
+<tr><td><strong>Controlled by Parent</strong></td><td>Access mirrors the master record (master-detail children).</td></tr>
+</table></div>
+
+<h3>Opening access up — the mechanisms, in order</h3>
+<ol>
+<li><strong>Role Hierarchy</strong> — managers inherit access to records owned by people below them (if "Grant Access Using Hierarchies" is on; it's always on for standard objects).</li>
+<li><strong>Sharing Rules</strong> — automatic, criteria-based or ownership-based rules that share whole groups of records to roles/public groups. Can grant Read Only or Read/Write.</li>
+<li><strong>Manual Sharing</strong> — owner or admin shares an individual record with a specific user/group (only when OWD is Private/Read Only).</li>
+<li><strong>Account/Sales/Case Teams</strong> — team membership grants access to related records.</li>
+<li><strong>Apex Managed Sharing</strong> — programmatic, for complex requirements code can express but declarative rules cannot.</li>
+</ol>
+<div class="box key"><div class="box-label">◆ Decision shortcut</div><p><strong>Everyone same access →</strong> set OWD. <strong>Managers see reports' records →</strong> role hierarchy. <strong>A whole group/role needs a category of records →</strong> sharing rule. <strong>One-off, specific record →</strong> manual sharing. <strong>Logic too complex for rules →</strong> Apex sharing.</p></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>If OWD is <strong>Public Read/Write</strong>, sharing rules and manual sharing are pointless — access is already maximal. Manual sharing and sharing rules only matter when OWD is <strong>more restrictive than everyone-can-edit</strong>.</p></div>
+<div class="box mnem"><div class="box-label">◆ Mnemonic</div><p><strong>"O-R-S-M-A"</strong> — <strong>O</strong>WD, <strong>R</strong>ole hierarchy, <strong>S</strong>haring rules, <strong>M</strong>anual, <strong>A</strong>pex — the order in which access widens, from broad baseline to surgical.</p></div>
+`
+  },
+  {
+    id:'fund_reports', nav:'Reports',
+    title:'Reports — features and capabilities',
+    lead:'Report format follows the shape of the analysis: a list, a grouped subtotal, a two-axis grid, or a blend of blocks.',
+    body:`
+<h3>The four report formats</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Format</th><th>Use when</th><th>Charts?</th></tr>
+<tr><td><strong>Tabular</strong></td><td>Simple list of records, no grouping/subtotals. Fastest. Good for list views / exports.</td><td>No (unless row-limited on a dashboard)</td></tr>
+<tr><td><strong>Summary</strong></td><td>Rows <strong>grouped</strong> with subtotals (e.g. Opportunities grouped by Stage). Most common.</td><td>Yes</td></tr>
+<tr><td><strong>Matrix</strong></td><td>Grouped by <strong>both rows and columns</strong> — a pivot grid (Stage × Month).</td><td>Yes</td></tr>
+<tr><td><strong>Joined</strong></td><td>Multiple report <strong>blocks</strong> side by side, possibly different report types, sharing a common field.</td><td>Yes</td></tr>
+</table></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>Only <strong>Summary</strong> and <strong>Matrix</strong> can feed most dashboard components. A <strong>Tabular</strong> report can only be used on a dashboard if you set a <strong>row limit</strong> and choose a component. Charts require grouping.</p></div>
+
+<h3>Analysis features to know</h3>
+<ul>
+<li><strong>Bucket fields</strong> — categorise records into buckets on the fly without a formula field (e.g. deal-size buckets).</li>
+<li><strong>Summary formulas</strong> — row-level or grouping-level calculated columns (e.g. win rate); <strong>PARENTGROUPVAL / PREVGROUPVAL</strong> for cross-group maths.</li>
+<li><strong>Cross filters</strong> — filter on the presence/absence of related records ("Accounts <em>with/without</em> Opportunities").</li>
+<li><strong>Filter logic</strong> — AND/OR combinations across filters.</li>
+<li><strong>Historical trending &amp; reporting snapshots</strong> — track how data changes over time.</li>
+<li><strong>Row-level formulas</strong> — a calculated value per row without a custom field.</li>
+</ul>
+`
+  },
+  {
+    id:'fund_reporttypes', nav:'Report types',
+    title:'Report types — features and capabilities',
+    lead:'A report type is the lens that defines which objects and fields a report can even draw from — and whether related records are required.',
+    body:`
+<h3>What a report type does</h3>
+<p>A <strong>report type</strong> defines the set of objects (and their relationships) and the fields available to any report built on it. Choose the wrong report type and the data simply isn't reachable.</p>
+
+<h3>Standard vs custom report types</h3>
+<ul>
+<li><strong>Standard</strong> report types are auto-generated by Salesforce for standard/custom objects and their relationships.</li>
+<li><strong>Custom</strong> report types let you define exactly which related objects appear, which fields are available, and — critically — the relationship behaviour.</li>
+</ul>
+
+<div class="box key"><div class="box-label">◆ The "with" vs "with or without" switch</div><p>In a custom report type, the object relationship can be set to:</p><ul><li><strong>"A records must have related B records"</strong> — inner join. Only Accounts that <em>have</em> Cases appear.</li><li><strong>"A records may or may not have related B records"</strong> — outer join. <em>All</em> Accounts appear, with or without Cases.</li></ul><p>This is a frequent scenario question.</p></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"We're missing records that have no related child" → the report type is set to <strong>"must have related"</strong>; switch it to <strong>"may or may not have"</strong>. A custom report type can join up to <strong>four objects</strong>.</p></div>
+<h4>Other capabilities</h4>
+<ul>
+<li>You can <strong>add fields via lookup</strong> to surface fields from related objects.</li>
+<li>Deploy a custom report type from <strong>In Development</strong> to <strong>Deployed</strong> to expose it to users.</li>
+</ul>
+`
+  },
+  {
+    id:'fund_dashboards', nav:'Dashboards',
+    title:'Dashboards — features and capabilities',
+    lead:'A dashboard is a visual layer over report data — and the running user determines whose data everyone sees.',
+    body:`
+<h3>Dashboard fundamentals</h3>
+<ul>
+<li>Each dashboard <strong>component</strong> is powered by a source report (chart, gauge, metric, table, etc.).</li>
+<li>Dashboards show a <strong>snapshot</strong> refreshed on demand or on schedule — not live.</li>
+</ul>
+
+<h3>The running user — the most tested dashboard concept</h3>
+<div class="box key"><div class="box-label">◆ Running user</div><p>A dashboard displays data <strong>as seen by its running user</strong>, respecting that user's sharing access. Everyone viewing the dashboard sees the <em>same</em> data — that of the running user.</p></div>
+<div class="tbl-scroll"><table>
+<tr><th>Type</th><th>Running user</th><th>Use case</th></tr>
+<tr><td><strong>Standard</strong></td><td>Fixed single running user</td><td>Everyone sees the same (e.g. exec) view</td></tr>
+<tr><td><strong>Dynamic</strong></td><td>"The logged-in user"</td><td>Each viewer sees their <em>own</em> data through one dashboard</td></tr>
+</table></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"Each sales rep should see only their own numbers, from one dashboard" → <strong>Dynamic dashboard</strong> (run as logged-in user). "Everyone should see the VP's org-wide numbers" → standard dashboard with the VP as running user. Dynamic dashboards have per-edition limits (e.g. up to 10 in Enterprise).</p></div>
+<h4>Filters &amp; visibility</h4>
+<ul>
+<li><strong>Dashboard filters</strong> let viewers slice the same dashboard (up to 3 filters).</li>
+<li>Access to a dashboard folder controls who can view it; report/dashboard folders can be shared to users, roles, or public groups.</li>
+</ul>
+`
+  },
+  {
+    id:'fund_mobile', nav:'Mobile actions & layouts',
+    title:'Actions & layouts for the mobile experience',
+    lead:'The Salesforce mobile app surfaces the same metadata — but actions and compact layouts decide what is usable on a phone.',
+    body:`
+<h3>Actions — global vs object-specific</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Action type</th><th>Where it lives</th><th>Example</th></tr>
+<tr><td><strong>Global action</strong></td><td>Available from anywhere (mobile nav, Chatter publisher, home). Not tied to one record.</td><td>"Log a Call", "New Contact" from anywhere</td></tr>
+<tr><td><strong>Object-specific action</strong></td><td>On a specific object's page layout; can auto-relate to the parent record.</td><td>"New Case" from an Account, pre-filling the account</td></tr>
+</table></div>
+<p>Action categories include <strong>Create a Record, Update a Record, Log a Call, Send Email, Custom (LWC/Visualforce/Flow)</strong>, and quick actions.</p>
+<div class="box key"><div class="box-label">◆ Why object-specific wins for context</div><p>Object-specific actions can <strong>pre-populate fields</strong> from the parent record and set the relationship automatically — a global action cannot, because it has no parent context.</p></div>
+
+<h3>Compact layouts — the mobile headline</h3>
+<p>The <strong>compact layout</strong> defines the key fields shown at the <strong>top of a record</strong> in the mobile app and in the highlights panel on desktop Lightning. It's how you decide what a user sees first on a small screen.</p>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"Reps need the 4 most important fields visible immediately on their phone" → configure the <strong>compact layout</strong>, not the full page layout. The full page layout still governs the complete detail view and which actions appear in the action bar.</p></div>
+<h4>Also relevant</h4>
+<ul>
+<li>The <strong>page layout's mobile &amp; Lightning actions</strong> section orders which actions appear in the mobile action bar.</li>
+<li>The <strong>Salesforce mobile app navigation</strong> menu is configured per app / profile.</li>
+</ul>
+`
+  },
+  {
+    id:'fund_chatter', nav:'Chatter',
+    title:'Chatter — customizations and use cases',
+    lead:'Chatter is the collaboration layer: feeds, groups, and feed tracking that turn records into conversations.',
+    body:`
+<h3>What Chatter provides</h3>
+<ul>
+<li><strong>Feeds</strong> on records and profiles — posts, comments, @mentions, likes, files.</li>
+<li><strong>Groups</strong> — public, private, or unlisted spaces for collaboration; can be tied to records.</li>
+<li><strong>Topics &amp; hashtags</strong> — cross-cutting organisation of posts.</li>
+<li><strong>Chatter actions</strong> in the publisher — the same global/object-specific actions surface here.</li>
+</ul>
+
+<h3>Feed tracking — the key admin control</h3>
+<div class="box key"><div class="box-label">◆ Feed tracking</div><p>Enable <strong>feed tracking</strong> on an object and choose up to <strong>20 fields</strong>; changes to those fields automatically post to the record's feed. This is the declarative way to get an audit-style "what changed" trail visible to collaborators.</p></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"Users should see when key fields on an Opportunity change, in context, without building anything" → enable <strong>Chatter feed tracking</strong> on those fields. Don't confuse with <strong>field history tracking</strong> (a separate, report-only audit trail of up to 20 fields stored for reporting, not shown in the feed).</p></div>
+
+<h3>Common use cases</h3>
+<ul>
+<li>Cross-functional deal collaboration on the Opportunity feed.</li>
+<li>Groups for projects, regions, or communities of practice.</li>
+<li>Approvals and record changes broadcast to stakeholders.</li>
+<li>Knowledge sharing via posts, files, and topics.</li>
+</ul>
+`
+  }
+  ]
+});
+</script>
+<script>
+/* ================= DOMAIN 2: DATA MODELING ================= */
+DATA.domains.push({
+  num:'02', short:'Data Modeling', title:'Data Modeling & Management', weight:22,
+  lessons:[
+  {
+    id:'data_model', nav:'Choosing the data model',
+    title:'Determining the appropriate data model',
+    lead:'Model with the objects and record types the platform already gives you; add custom only where the standard model has no home for the data.',
+    body:`
+<h3>Standard objects first</h3>
+<p>Know the core CRM objects and how they relate before inventing custom ones:</p>
+<div class="tbl-scroll"><table>
+<tr><th>Object</th><th>Represents</th><th>Key relationships</th></tr>
+<tr><td><strong>Account</strong></td><td>A company/organisation (or person, in Person Accounts)</td><td>Parent to Contacts, Opportunities, Cases</td></tr>
+<tr><td><strong>Contact</strong></td><td>An individual, usually linked to an Account</td><td>Child of Account; Contact Roles on Opps/Cases</td></tr>
+<tr><td><strong>Lead</strong></td><td>An unqualified prospect (person + company in one)</td><td>Converts to Account + Contact + Opportunity</td></tr>
+<tr><td><strong>Opportunity</strong></td><td>A potential sale/deal</td><td>Child of Account; has Products (line items), Stages</td></tr>
+<tr><td><strong>Case</strong></td><td>A customer service issue</td><td>Child of Account/Contact</td></tr>
+<tr><td><strong>Campaign</strong></td><td>A marketing initiative</td><td>Many-to-many with Leads/Contacts via Campaign Members</td></tr>
+</table></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p><strong>Lead conversion</strong> creates an Account, a Contact, and (optionally) an Opportunity. Custom lead fields don't map automatically — you must configure <strong>lead field mapping</strong>, or the data is lost on convert.</p></div>
+
+<h3>Record Types — one object, many business processes</h3>
+<div class="box key"><div class="box-label">◆ Record types</div><p>A <strong>record type</strong> lets a single object support different business processes: different <strong>picklist values</strong>, different <strong>page layouts</strong> (assigned per record type per profile), and different <strong>business processes</strong> (sales processes, support processes, lead processes).</p></div>
+<ul>
+<li>Use record types when the <em>same</em> kind of record behaves differently for different segments — e.g. one Opportunity object with "New Business" and "Renewal" record types, each with its own stages and layout.</li>
+<li>Record type assignment is controlled per <strong>profile</strong> (and permission set).</li>
+<li>Record types do <strong>not</strong> control field-level security or record access — only picklist values, layouts, and process.</li>
+</ul>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>Need different <em>picklist values</em> or <em>page layouts</em> for different groups on the same object → <strong>Record Types</strong>. Need to <em>restrict fields</em> → that's FLS, not record types. Need entirely different data → maybe a new custom object.</p></div>
+
+<h3>Custom vs standard, and external objects</h3>
+<ul>
+<li><strong>Custom objects</strong> — when no standard object fits the entity. Get a <code>__c</code> suffix, standard features (fields, relationships, reports, layouts).</li>
+<li><strong>External objects</strong> (<code>__x</code>) — map to data stored <em>outside</em> Salesforce via Salesforce Connect (OData/Apex adapters). Data is fetched live, not stored; ideal for large external datasets you shouldn't copy in.</li>
+</ul>
+`
+  },
+  {
+    id:'data_relationships', nav:'Relationship types',
+    title:'Relationship types and their implications',
+    lead:'The relationship you pick silently decides sharing, roll-ups, cascade delete, reporting, and required-ness. This is the most consequential modelling choice.',
+    body:`
+<h3>Master-Detail vs Lookup — the core comparison</h3>
+<div class="tbl-scroll"><table>
+<tr><th></th><th>Master-Detail</th><th>Lookup</th></tr>
+<tr><td>Coupling</td><td><strong>Tight</strong> — child depends on parent</td><td><strong>Loose</strong> — independent</td></tr>
+<tr><td>Parent required?</td><td><strong>Always required</strong></td><td>Optional (can be required)</td></tr>
+<tr><td>Delete behaviour</td><td><strong>Cascade delete</strong> — delete parent → children deleted</td><td>By default parent can't be deleted if referenced; optional clear/prevent</td></tr>
+<tr><td>Record ownership</td><td>Child has <strong>no owner</strong> — inherits parent's</td><td>Child has its own owner</td></tr>
+<tr><td>Sharing / security</td><td>Child access <strong>controlled by parent</strong></td><td>Independent sharing</td></tr>
+<tr><td>Roll-up summary on parent?</td><td><strong>Yes</strong></td><td><strong>No</strong> (except a few standard cases)</td></tr>
+<tr><td>Reparenting</td><td>Not allowed by default (option to allow)</td><td>Freely reparented</td></tr>
+<tr><td>Limit per object</td><td>Up to <strong>2</strong> master-detail fields</td><td>Up to 40 (counts toward relationship limit)</td></tr>
+</table></div>
+<div class="box key"><div class="box-label">◆ The deciding questions</div><p>Do you need a <strong>roll-up summary</strong> on the parent? → Master-detail (the only way to roll up). Should deleting the parent delete the children? → Master-detail. Should the child stand alone / be optionally linked / have its own sharing? → Lookup.</p></div>
+
+<h3>Many-to-Many via a junction object</h3>
+<p>Salesforce has no native many-to-many field. You create a <strong>junction object</strong> with <strong>two master-detail relationships</strong> — one to each parent.</p>
+<ul>
+<li>The <strong>first</strong> master-detail defined is the <strong>primary</strong>: it controls the junction record's <strong>ownership, sharing, and look-and-feel (colour, layout)</strong>, and its cascade behaviour.</li>
+<li>The <strong>second</strong> is the secondary parent.</li>
+<li>Example: a <em>Campaign Member</em>-style bridge, or <em>Job ↔ Candidate</em> via an "Application" junction.</li>
+</ul>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"A Position can have many Candidates and a Candidate many Positions" → <strong>junction object with two master-detail relationships</strong>. If a junction uses lookups instead of master-detail, you lose cascade delete and roll-up capability.</p></div>
+
+<h3>Other relationship types</h3>
+<ul>
+<li><strong>Hierarchical</strong> — a special lookup available <em>only on the User object</em> (e.g. "Manager").</li>
+<li><strong>External lookup</strong> — child (standard/custom/external) relates to an <strong>external object</strong> via a parent's External ID.</li>
+<li><strong>Indirect lookup</strong> — an external object child relates to a standard/custom parent by matching an External ID field.</li>
+<li><strong>Self-relationship</strong> — a lookup from an object to itself (e.g. Account → Parent Account).</li>
+</ul>
+<div class="box mnem"><div class="box-label">◆ Mnemonic — master-detail powers</div><p><strong>"ROCS"</strong>: <strong>R</strong>oll-ups, <strong>O</strong>wnership inherited, <strong>C</strong>ascade delete, <strong>S</strong>haring controlled by parent. If the scenario wants any of ROCS, it's master-detail.</p></div>
+`
+  },
+  {
+    id:'data_fieldtypes', nav:'Field data types & changes',
+    title:'Selecting & changing field data types',
+    lead:'Some type conversions are safe; others silently destroy existing data. You will be asked which.',
+    body:`
+<h3>Choosing the right field type</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Need</th><th>Field type</th></tr>
+<tr><td>Fixed set of choices, single</td><td>Picklist</td></tr>
+<tr><td>Multiple choices from a set</td><td>Multi-select picklist (use sparingly — poor for reporting/filtering)</td></tr>
+<tr><td>Calculated, read-only value</td><td>Formula</td></tr>
+<tr><td>Auto-incrementing unique ID</td><td>Auto Number</td></tr>
+<tr><td>Money</td><td>Currency</td></tr>
+<tr><td>Yes/no</td><td>Checkbox</td></tr>
+<tr><td>Link to another record</td><td>Lookup / Master-Detail</td></tr>
+<tr><td>Unique external key for integration</td><td>Text/Number with <strong>External ID</strong> + Unique</td></tr>
+</table></div>
+<div class="box key"><div class="box-label">◆ External ID</div><p>Marking a field as <strong>External ID</strong> makes it indexed and usable as the match key for <strong>upserts</strong> and integration. Frequently the right answer when a scenario mentions matching Salesforce records to an external system's key.</p></div>
+
+<h3>Changing a field's data type — data-loss rules</h3>
+<div class="box trap"><div class="box-label">▲ The big one</div><p>Changing to certain types <strong>truncates or deletes</strong> existing data. Always test in a sandbox and export first.</p></div>
+<div class="tbl-scroll"><table>
+<tr><th>Conversion</th><th>Result</th></tr>
+<tr><td>Text → Picklist</td><td>Generally safe, but existing values not in the picklist may need cleanup; <strong>can lose data</strong> if restricted</td></tr>
+<tr><td>Picklist → Text</td><td>Safe (values become text)</td></tr>
+<tr><td>Text ↔ Text Area</td><td>Safe</td></tr>
+<tr><td>Text Area (Long) → Text/Text Area</td><td><strong>Truncates</strong> beyond the shorter limit → data loss</td></tr>
+<tr><td>Number / Currency / Percent (interchange)</td><td>Usually safe, but watch decimal places / length</td></tr>
+<tr><td>Auto Number → anything, or → Auto Number</td><td>Changing <em>to</em> Auto Number reassigns values; changing <em>from</em> Auto Number keeps the text</td></tr>
+<tr><td>To/from <strong>most types generally</strong></td><td>Many conversions <strong>delete data in fields</strong> such as when changing to Checkbox, Currency, Number, Percent, Date, Date/Time — Salesforce warns you</td></tr>
+</table></div>
+<div class="box key"><div class="box-label">◆ Restrictions you can't change</div><ul style="margin-bottom:0"><li>Can't change a field used in an <strong>Apex, formula, or reference</strong> without resolving the dependency.</li><li>Can't convert a field to a type that <strong>breaks existing validation rules, roll-ups, or field updates</strong>.</li><li>Some conversions are simply <strong>not allowed</strong> (e.g. to/from certain formula/roll-up types).</li></ul></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>When a scenario asks "what happens to existing data if we change field X from Long Text Area to Text(255)?" → <strong>data beyond 255 characters is lost</strong>. The safe move is always: <em>export data, test in sandbox, then convert</em>.</p></div>
+`
+  },
+  {
+    id:'data_schema', nav:'Schema Builder',
+    title:'Capabilities & considerations of Schema Builder',
+    lead:'Schema Builder is the visual, drag-and-drop way to see and extend the data model — with a few hard limits.',
+    body:`
+<h3>What Schema Builder can do</h3>
+<ul>
+<li><strong>Visualise</strong> the entire data model — objects and their relationships as an ER-style diagram.</li>
+<li><strong>Create custom objects</strong> and drag <strong>new fields</strong> and <strong>relationships</strong> directly onto the canvas.</li>
+<li>Show/hide objects and legend; auto-layout the diagram.</li>
+</ul>
+<div class="box key"><div class="box-label">◆ Best for</div><p>Understanding an unfamiliar org's model at a glance, and rapidly sketching new objects/fields/relationships without stepping through the setup wizards.</p></div>
+
+<h3>What Schema Builder cannot do — the considerations</h3>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>Schema Builder <strong>cannot</strong>:</p><ul style="margin-bottom:0"><li>Set <strong>field-level security</strong> or add fields to <strong>page layouts</strong> (new fields aren't auto-added to layouts).</li><li>Configure <strong>validation rules</strong>, record types, or most field attributes beyond creation.</li><li>Delete objects/fields (you leave Schema Builder for that).</li></ul></div>
+<p>So while it's excellent for design and light building, detailed configuration (security, layouts, business logic) still happens in the standard Object Manager.</p>
+`
+  },
+  {
+    id:'data_import', nav:'Import, export & external data',
+    title:'Importing, exporting & external data sources',
+    lead:'Match the tool to the volume, the object, and whether you need to insert, update, or upsert.',
+    body:`
+<h3>Import tools</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Tool</th><th>Volume</th><th>Notes</th></tr>
+<tr><td><strong>Data Import Wizard</strong></td><td>Up to <strong>50,000</strong> records</td><td>In-browser; Accounts, Contacts, Leads, Campaign Members, custom objects. Can trigger workflows/flows optionally. No delete.</td></tr>
+<tr><td><strong>Data Loader</strong></td><td>Up to <strong>5 million</strong> records</td><td>Desktop app (or CLI); all objects; supports insert, update, <strong>upsert</strong>, delete, export. For large/complex loads.</td></tr>
+</table></div>
+<div class="box key"><div class="box-label">◆ Wizard vs Loader shortcut</div><p><strong>≤50k, standard objects, admin doing it in-browser →</strong> Data Import Wizard. <strong>&gt;50k, any object, need upsert/delete/scheduling →</strong> Data Loader.</p></div>
+
+<h3>Operations — insert / update / upsert</h3>
+<ul>
+<li><strong>Insert</strong> — create new records.</li>
+<li><strong>Update</strong> — change existing records (matched by Salesforce Id).</li>
+<li><strong>Upsert</strong> — insert or update in one pass, matched by <strong>External ID</strong> field. The go-to for syncing from an external system without duplicates.</li>
+</ul>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"Load records from another system, updating existing ones and creating new ones, avoiding duplicates" → <strong>upsert on an External ID field</strong>. Plain insert would duplicate; plain update would skip new records.</p></div>
+
+<h3>Considerations before importing</h3>
+<ul>
+<li>Deduplicate with <strong>matching &amp; duplicate rules</strong>.</li>
+<li>Map fields carefully; watch picklist/record-type/owner values.</li>
+<li>Loading can fire (or bypass) automation — decide deliberately.</li>
+<li>Respect governor/storage limits and field data types.</li>
+</ul>
+
+<h3>External data — Salesforce Connect</h3>
+<p>When you need to <strong>see external data live without importing it</strong>, use <strong>Salesforce Connect</strong> with <strong>external objects</strong> (OData 2.0/4.0 or a custom Apex adapter). Data stays in the source system and is fetched on demand — good for very large datasets or systems of record you must not copy.</p>
+`
+  }
+  ]
+});
+</script>
+<script>
+/* ================= DOMAIN 3: BUSINESS LOGIC ================= */
+DATA.domains.push({
+  num:'03', short:'Business Logic', title:'Business Logic & Process Automation', weight:28,
+  lessons:[
+  {
+    id:'blpa_formula', nav:'Formula fields',
+    title:'Formula fields',
+    lead:'A read-only field that calculates its value at runtime — the first tool to reach for when a scenario says "display" or "calculate".',
+    body:`
+<h3>What formula fields are</h3>
+<ul>
+<li><strong>Read-only</strong>, calculated every time the record is viewed/queried — <strong>never stored</strong>, always current.</li>
+<li>Return types: Text, Number, Currency, Percent, Date, Date/Time, Checkbox (boolean), Time.</li>
+<li>Can reference the record's own fields, and — via <strong>cross-object formulas</strong> — fields on <strong>parent</strong> records up the relationship chain.</li>
+</ul>
+<div class="box key"><div class="box-label">◆ Cross-object formulas</div><p>Formulas can traverse <strong>up to 10 relationships</strong> to pull a <em>parent's</em> field (e.g. show the Account's Industry on the Contact). They can go <strong>up</strong> (child → parent), never down to children — for children you need a roll-up summary.</p></div>
+
+<h3>Common functions to recognise</h3>
+<ul>
+<li><strong>IF, CASE</strong> — branching logic.</li>
+<li><strong>ISBLANK / ISNULL, ISCHANGED, ISNEW, PRIORVALUE</strong> — state checks (the last three only in validation rules / flows, not in formula fields).</li>
+<li><strong>TEXT, VALUE, DATE, TODAY, NOW</strong> — conversions & dates.</li>
+<li><strong>ISPICKVAL, INCLUDES</strong> — picklist / multi-select checks.</li>
+<li><strong>HYPERLINK, IMAGE</strong> — rich display.</li>
+</ul>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>A formula field <strong>cannot</strong> reference a <strong>child</strong> record or aggregate children — that's a roll-up summary. It also can't be edited or set by automation. And a formula field <strong>doesn't store history</strong>. Compiled formula size (~3,900 chars / 5,000 bytes) is a real limit for very complex formulas.</p></div>
+`
+  },
+  {
+    id:'blpa_rollup', nav:'Roll-up summary fields',
+    title:'Roll-up summary fields',
+    lead:'The only declarative way to aggregate child records onto a parent — but only across a master-detail relationship.',
+    body:`
+<h3>What they do</h3>
+<p>A <strong>roll-up summary</strong> sits on the <strong>parent</strong> and aggregates values from its <strong>child</strong> records: <strong>COUNT, SUM, MIN, MAX</strong>. The value is stored and recalculated automatically.</p>
+<div class="box key"><div class="box-label">◆ The hard requirement</div><p>Roll-up summaries require a <strong>master-detail</strong> relationship (child → parent). You <strong>cannot</strong> create one over a plain lookup. A handful of standard exceptions exist (e.g. rolling up from Opportunities to Accounts), but for custom modelling: <strong>no master-detail, no roll-up</strong>.</p></div>
+
+<h3>Capabilities & limits</h3>
+<ul>
+<li>Can filter which child records are included (criteria).</li>
+<li>COUNT works on any child; SUM/MIN/MAX need a numeric/currency/date field.</li>
+<li>Cannot roll up <strong>certain fields</strong> — e.g. you can't SUM a child <em>formula field that itself references a parent/roll-up</em> in some cases, long text, or cross-object formulas.</li>
+</ul>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"Sum child amounts onto the parent, but the relationship is a lookup" → you must either (a) change it to master-detail, or (b) use a <strong>record-triggered Flow</strong> (or AppExchange tool / Apex) to maintain the total. Flow is the declarative workaround when master-detail isn't possible.</p></div>
+<div class="box mnem"><div class="box-label">◆ Remember</div><p>Roll-up = <strong>up</strong> the master-detail, aggregating <strong>down-level children</strong>, using only <strong>COUNT/SUM/MIN/MAX</strong>.</p></div>
+`
+  },
+  {
+    id:'blpa_validation', nav:'Validation rules',
+    title:'Validation rules',
+    lead:'The gatekeeper: a formula that, when TRUE, blocks the save and shows an error. Data quality lives here.',
+    body:`
+<h3>How they work</h3>
+<ul>
+<li>A validation rule is a <strong>formula that returns TRUE/FALSE</strong>. <strong>TRUE = error</strong> — the save is blocked and the message shown.</li>
+<li>They run on <strong>insert and update</strong>, at the point of save.</li>
+<li>Errors can be shown at the <strong>top of the page</strong> or next to a <strong>specific field</strong>.</li>
+</ul>
+<div class="box key"><div class="box-label">◆ Design the logic backwards</div><p>You write the condition that describes the <strong>invalid</strong> state. "Close Date must be in the future" → the rule fires when <code>CloseDate &lt; TODAY()</code>.</p></div>
+
+<h3>Functions that make validation powerful</h3>
+<ul>
+<li><strong>ISCHANGED(field)</strong> — only enforce when a field changes.</li>
+<li><strong>PRIORVALUE(field)</strong> — compare to the value before edit.</li>
+<li><strong>ISNEW()</strong> — only on record creation.</li>
+<li><strong>ISPICKVAL, ISBLANK, REGEX</strong> — value checks and format enforcement.</li>
+<li><strong>$Profile / $Permission / $User</strong> — bypass rules for certain users (e.g. "integration user is exempt").</li>
+</ul>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>Validation rules also fire on records created/updated by <strong>imports, APIs, and automation</strong> — a badly written rule can break a data load or a Flow. To exempt an integration, gate the rule on <code>$User</code>/<code>$Profile</code>. Also: cross-object validation can reference <strong>parent</strong> fields (up the master-detail), not children.</p></div>
+`
+  },
+  {
+    id:'blpa_approval', nav:'Approval processes',
+    title:'Approval processes',
+    lead:'A structured, multi-step sign-off engine — the right answer whenever a record must be formally approved before it progresses.',
+    body:`
+<h3>Anatomy of an approval process</h3>
+<ul>
+<li><strong>Entry criteria</strong> — which records can enter (e.g. Discount &gt; 20%).</li>
+<li><strong>Approval steps</strong> — one or more, each with an approver (specific user, role, manager field, queue, or dynamically via related user).</li>
+<li><strong>Actions</strong> at each transition: <strong>Initial Submission, Approval, Rejection, Recall</strong> — each can trigger field updates, email alerts, tasks, or outbound messages.</li>
+<li><strong>Approver options</strong> — approve/reject by email, in-app, or via the Salesforce mobile app; can allow delegates.</li>
+</ul>
+<div class="box key"><div class="box-label">◆ Signature capabilities</div><p>Approval processes uniquely provide: <strong>record locking</strong> during approval, <strong>multi-step routing</strong>, <strong>parallel approvers</strong> (all/any must approve), <strong>dynamic approver assignment</strong>, and an <strong>approval history</strong> related list. No other declarative tool gives you formal sign-off.</p></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>When a scenario needs a <strong>human to formally approve</strong> before something proceeds (a discount, an expense, a contract) → <strong>Approval Process</strong>, not a Flow. Flow can <em>submit</em> records into an approval and can run <em>on</em> approval, but the sign-off engine itself is the approval process. Records can be <strong>locked</strong> automatically while pending.</p></div>
+<h4>Automation + approvals together</h4>
+<ul>
+<li>A record-triggered <strong>Flow can auto-submit</strong> a record for approval when criteria are met.</li>
+<li>Final approval/rejection <strong>field updates</strong> can re-trigger automation (mind recursion — see the next lessons).</li>
+</ul>
+`
+  },
+  {
+    id:'blpa_tool', nav:'Choosing the automation tool',
+    title:'Determining the right tool or action',
+    lead:'The exam constantly asks: given these requirements, which automation tool? Flow is now the default answer.',
+    body:`
+<h3>The current automation landscape</h3>
+<div class="box key"><div class="box-label">◆ Flow-first world</div><p>Salesforce has <strong>retired the ability to create new Workflow Rules and Process Builder processes</strong>. <strong>Flow is the go-to declarative automation tool</strong> for anything new. Existing Workflow/Process Builder may still appear in scenarios (for updates), but new automation = Flow.</p></div>
+
+<h3>The declarative toolset, by job</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Requirement</th><th>Tool</th></tr>
+<tr><td>Block a save when data is invalid</td><td><strong>Validation rule</strong></td></tr>
+<tr><td>Calculate/display a value (no storage)</td><td><strong>Formula field</strong></td></tr>
+<tr><td>Aggregate children onto a parent (master-detail)</td><td><strong>Roll-up summary</strong></td></tr>
+<tr><td>Formal human sign-off</td><td><strong>Approval process</strong></td></tr>
+<tr><td>Update fields / create records / send email on a trigger</td><td><strong>Record-triggered Flow</strong></td></tr>
+<tr><td>Guided, multi-screen data entry / wizard</td><td><strong>Screen Flow</strong></td></tr>
+<tr><td>Run on a schedule / batch of records</td><td><strong>Schedule-triggered Flow</strong></td></tr>
+<tr><td>React to a platform event</td><td><strong>Platform Event-triggered Flow</strong></td></tr>
+<tr><td>Reusable logic invoked from other flows/Apex</td><td><strong>Autolaunched Flow</strong></td></tr>
+<tr><td>Complex bulk logic / callouts / rollback / logic Flow can't express</td><td><strong>Apex</strong></td></tr>
+</table></div>
+
+<h3>Record-triggered Flow — before-save vs after-save</h3>
+<div class="tbl-scroll"><table>
+<tr><th></th><th>Before-save (fast field update)</th><th>After-save</th></tr>
+<tr><td>Use for</td><td>Updating fields on <strong>the same record</strong> that triggered it</td><td>Related records, emails, sending to approval, async actions</td></tr>
+<tr><td>Performance</td><td><strong>~10× faster</strong>; no extra DML</td><td>Heavier (separate save)</td></tr>
+<tr><td>Can't do</td><td>Actions, sub-flows, related-record updates, emails</td><td>—</td></tr>
+</table></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"Update a field on the <strong>same record</strong> most efficiently" → <strong>before-save record-triggered Flow</strong> (the modern equivalent of a Workflow field update, but faster). "Update a <strong>related</strong> record or send email" → after-save Flow. Choosing after-save for a same-record update is a common wrong answer.</p></div>
+`
+  },
+  {
+    id:'blpa_errors', nav:'Automating without errors',
+    title:'Automating business processes while avoiding errors',
+    lead:'When multiple automations touch the same save, order and recursion decide whether the system behaves — or loops.',
+    body:`
+<h3>Order of Execution — the map</h3>
+<p>On every save, Salesforce runs steps in a fixed order. A simplified, exam-relevant sequence:</p>
+<ol>
+<li>Loads the record and overwrites with new field values; <strong>system validation</strong> (required fields, field formats).</li>
+<li><strong>Before-save record-triggered Flows</strong>.</li>
+<li><strong>Before Apex triggers</strong>.</li>
+<li>System + <strong>custom validation rules</strong> run again; <strong>duplicate rules</strong>.</li>
+<li>Record saved (not yet committed).</li>
+<li><strong>After Apex triggers</strong>.</li>
+<li>Assignment rules, auto-response rules.</li>
+<li><strong>Workflow rules</strong> (legacy) — and if a workflow field update fires, <strong>before/after triggers re-run once</strong>.</li>
+<li><strong>After-save record-triggered Flows</strong> &amp; processes.</li>
+<li>Escalation rules; <strong>roll-up summary</strong> recalculation on parent (which can trigger the parent's own automation).</li>
+<li>Criteria-based sharing evaluation.</li>
+<li>Commit to database; then <strong>post-commit</strong> logic (emails, async/@future, etc.).</li>
+</ol>
+<div class="box key"><div class="box-label">◆ Why this matters</div><p>Two automations updating the same fields can <strong>overwrite each other</strong> or fire in an order you didn't expect. Knowing the sequence explains "why did my validation rule fire before my flow set the value?" — because the flow ran <em>after</em>, or vice-versa.</p></div>
+
+<h3>Recursion — the classic failure</h3>
+<div class="box trap"><div class="box-label">▲ The recursion loop</div><p>Automation A updates Field 1 → that update triggers Automation B, which updates Field 2 → which re-triggers A… → infinite loop, hitting governor limits and erroring. Especially easy with <strong>field updates + roll-ups + record-triggered flows</strong> all touching related records.</p></div>
+<h4>How to avoid it</h4>
+<ul>
+<li><strong>Gate with entry criteria / ISCHANGED</strong> so automation only runs when the relevant field actually changed.</li>
+<li>Prefer <strong>one before-save flow</strong> per object for same-record updates rather than several overlapping automations.</li>
+<li>Avoid multiple tools writing the <strong>same fields</strong>; consolidate logic.</li>
+<li>Watch <strong>roll-up summaries re-triggering parent automation</strong>.</li>
+<li>Test in a sandbox with realistic data volumes to surface <strong>governor-limit</strong> failures.</li>
+</ul>
+<div class="box mnem"><div class="box-label">◆ Rule of thumb</div><p><strong>One object, one before-save flow</strong> for field defaults; keep logic consolidated and entry criteria tight. Fewer tools touching a save = fewer surprises.</p></div>
+`
+  }
+  ]
+});
+</script>
+<script>
+/* ================= DOMAIN 4: USER INTERFACE ================= */
+DATA.domains.push({
+  num:'04', short:'User Interface', title:'User Interface', weight:17,
+  lessons:[
+  {
+    id:'ui_customization', nav:'UI customization options',
+    title:'User interface customization options',
+    lead:'Lightning App Builder assembles the page; page layouts and compact/list-view settings shape the record. Know which tool owns which surface.',
+    body:`
+<h3>Lightning App Builder — assembling pages</h3>
+<p>The <strong>Lightning App Builder</strong> is the declarative canvas for building three page kinds:</p>
+<ul>
+<li><strong>Record pages</strong> — the layout of a record's Lightning page (tabs, related lists, components).</li>
+<li><strong>App pages</strong> — a custom landing page inside a Lightning app.</li>
+<li><strong>Home pages</strong> — the app/home landing experience.</li>
+</ul>
+<p>You drag <strong>standard, custom, and AppExchange components</strong> onto regions, and can assign pages by <strong>app, record type, and profile</strong> (page assignment), and set <strong>component visibility</strong> with filter rules.</p>
+
+<h3>Page layout vs Lightning page — the split</h3>
+<div class="box key"><div class="box-label">◆ Who controls what</div><ul style="margin-bottom:0"><li><strong>Page layout</strong> still governs: which <strong>fields</strong> and <strong>related lists</strong> appear, field <strong>required/read-only</strong> at layout level, and the <strong>mobile/Lightning actions</strong> in the action bar.</li><li><strong>Lightning record page</strong> (App Builder) governs the overall <strong>component arrangement</strong>, tabs, and dynamic behaviour that <em>surrounds</em> the record detail.</li></ul></div>
+
+<h3>Dynamic Forms &amp; Dynamic Actions</h3>
+<ul>
+<li><strong>Dynamic Forms</strong> — place individual <strong>fields and field sections</strong> directly on the Lightning page (instead of one monolithic layout block), with per-field <strong>visibility rules</strong>. Migrates fields off the page layout.</li>
+<li><strong>Dynamic Actions</strong> — control which actions appear based on criteria (e.g. show "Escalate" only when Status = Open).</li>
+</ul>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"Show a field only when another field has a certain value, without code" → <strong>Dynamic Forms field visibility</strong> (or component visibility). Record types alone only swap whole layouts/picklists — they can't conditionally show a single field.</p></div>
+
+<h3>Other UI surfaces</h3>
+<ul>
+<li><strong>Compact layouts</strong> — the highlights panel / mobile header key fields.</li>
+<li><strong>List views</strong> — filtered, shareable record lists with inline edit and charts.</li>
+<li><strong>Apps</strong> — Lightning apps bundle tabs, utility bar items, and branding; assigned by profile.</li>
+<li><strong>Tabs</strong> — object, web, Visualforce, Lightning component tabs.</li>
+<li><strong>Utility bar</strong> — persistent footer tools (notes, history, open CTI).</li>
+</ul>
+`
+  },
+  {
+    id:'ui_actions', nav:'Custom buttons, links & actions',
+    title:'Custom buttons, links & actions',
+    lead:'Three overlapping ways to add interactivity — but the modern, mobile-friendly answer is almost always an action.',
+    body:`
+<h3>The three mechanisms</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Mechanism</th><th>What it is</th><th>Notes</th></tr>
+<tr><td><strong>Custom link</strong></td><td>A hyperlink to a URL / record / external system</td><td>Read-only navigation; can pass field values via merge fields</td></tr>
+<tr><td><strong>Custom button</strong></td><td>Button on a layout/list view: URL, Visualforce, or (legacy) JavaScript</td><td><strong>JavaScript buttons are not supported in Lightning</strong> — migrate to actions/LWC</td></tr>
+<tr><td><strong>Action (quick action)</strong></td><td>Create/update record, log a call, send email, custom (Flow/LWC/VF)</td><td>Modern, works in Lightning + mobile; can pre-fill fields</td></tr>
+</table></div>
+<div class="box key"><div class="box-label">◆ Global vs object-specific actions</div><ul style="margin-bottom:0"><li><strong>Object-specific</strong> — on one object's layout; can auto-relate and pre-populate from the parent record.</li><li><strong>Global</strong> — available anywhere (publisher, mobile nav); no parent context.</li></ul></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>Migrating from Classic and a <strong>JavaScript custom button</strong> needs to keep working in Lightning → it <strong>won't</strong>; replace it with a <strong>quick action, a Flow launched from an action, or an LWC</strong>. This is a very common scenario.</p></div>
+<p>Actions can launch a <strong>screen flow</strong> for guided input, or run an <strong>update</strong> that sets fields declaratively — no code required.</p>
+`
+  },
+  {
+    id:'ui_lightning_decl', nav:'Declarative Lightning Components',
+    title:'Declarative options for Lightning Components',
+    lead:'You can place and configure components without writing any — via the App Builder — and know which come standard.',
+    body:`
+<h3>Placing components declaratively</h3>
+<p>In the <strong>Lightning App Builder</strong>, you drag components onto a page and configure their properties in the panel — no code. Component sources:</p>
+<ul>
+<li><strong>Standard components</strong> — Salesforce-provided: Highlights Panel, Record Detail, Related Lists, Related Record, Report Chart, Tabs, Accordion, Rich Text, Flow, etc.</li>
+<li><strong>Custom components</strong> — LWC/Aura your developers build, exposed to App Builder.</li>
+<li><strong>AppExchange components</strong> — from installed managed packages.</li>
+</ul>
+<div class="box key"><div class="box-label">◆ Component visibility</div><p>Every component can have <strong>visibility filter rules</strong> — show/hide based on field values, device, or user — configured declaratively. This is how you build responsive, conditional pages without code.</p></div>
+<h4>Embedding a Flow with no code</h4>
+<p>Drop the standard <strong>Flow component</strong> onto a record or app page and pick a screen flow — a fully declarative way to add guided UI to a page.</p>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"Add interactive, guided functionality to a record page without a developer" → embed a <strong>screen Flow</strong> via the standard Flow component, or use existing standard/AppExchange components. You only need custom LWC when no available component fits.</p></div>
+`
+  },
+  {
+    id:'ui_lightning_prog', nav:'Programmatic Lightning Components',
+    title:'Programmatic (custom) Lightning Components',
+    lead:'You won\'t write them for this exam, but you must know what custom LWC/Aura are for and how they surface to admins.',
+    body:`
+<h3>LWC and Aura — the two frameworks</h3>
+<ul>
+<li><strong>Lightning Web Components (LWC)</strong> — the modern, standards-based framework (HTML, modern JavaScript). Preferred for new development.</li>
+<li><strong>Aura Components</strong> — the older framework; still supported, can contain LWC.</li>
+</ul>
+<div class="box key"><div class="box-label">◆ When custom components are justified</div><p>Reach for custom Lightning components only when standard/AppExchange components and declarative tools <strong>cannot</strong> deliver the required interface or behaviour — bespoke UI, complex client-side interactivity, custom data visualisations.</p></div>
+
+<h3>How developers expose them to admins</h3>
+<ul>
+<li>A component's <strong>metadata configuration</strong> (targets) determines <em>where</em> it can be placed — record page, app page, home page, utility bar, flow screen, etc.</li>
+<li><strong>Design attributes / properties</strong> let the admin configure the component in App Builder without touching code.</li>
+<li>Once exposed, the App Builder experience is identical to placing a standard component.</li>
+</ul>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>The exam tests the <strong>boundary</strong>: prefer declarative; use custom LWC only when nothing standard fits. And remember a custom component must be <strong>configured by the developer to appear in App Builder</strong> (correct targets) before an admin can drag it onto a page.</p></div>
+`
+  }
+  ]
+});
+
+/* ================= DOMAIN 5: APP DEPLOYMENT ================= */
+DATA.domains.push({
+  num:'05', short:'App Deployment', title:'App Deployment', weight:10,
+  lessons:[
+  {
+    id:'deploy_lifecycle', nav:'App lifecycle & sandboxes',
+    title:'Application lifecycle & sandbox types',
+    lead:'Build and test in sandboxes, promote to production. The four sandbox types differ in data copied and how often they refresh.',
+    body:`
+<h3>The application lifecycle</h3>
+<p>The healthy path keeps changes out of production until tested: <strong>develop → test → deploy</strong>, using sandboxes for build/QA/UAT/staging, then deploying to <strong>production</strong>.</p>
+
+<h3>The four sandbox types</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Sandbox</th><th>Data copied</th><th>Refresh interval</th><th>Best for</th></tr>
+<tr><td><strong>Developer</strong></td><td>Metadata only (config, no data)</td><td><strong>1 day</strong></td><td>Individual dev / basic testing</td></tr>
+<tr><td><strong>Developer Pro</strong></td><td>Metadata only; larger storage</td><td><strong>1 day</strong></td><td>Dev + more test data you load</td></tr>
+<tr><td><strong>Partial Copy</strong></td><td>Metadata + a <strong>sample</strong> of data (template-defined, ~10k records/object)</td><td><strong>5 days</strong></td><td>QA / UAT with representative data</td></tr>
+<tr><td><strong>Full</strong></td><td>Metadata + <strong>all</strong> production data</td><td><strong>29 days</strong></td><td>Staging, performance/load, full UAT</td></tr>
+</table></div>
+<div class="box key"><div class="box-label">◆ The two you must not confuse</div><p><strong>Partial Copy</strong> = a <em>sample</em> of data (sandbox template, capped per object), refresh every 5 days. <strong>Full</strong> = a <em>complete copy</em> of production, refresh every 29 days. Developer/Developer Pro carry <strong>no</strong> records — only configuration.</p></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>"Need to test against a realistic representative dataset but not the whole database" → <strong>Partial Copy</strong>. "Need production-scale data for performance testing / final staging" → <strong>Full</strong>. "Just need to build config, no data" → <strong>Developer</strong>. Refresh intervals are a frequent standalone question.</p></div>
+`
+  },
+  {
+    id:'deploy_changesets', nav:'Change sets',
+    title:'Change sets',
+    lead:'The declarative, admin-friendly way to move metadata between related orgs — with real limitations to remember.',
+    body:`
+<h3>How change sets work</h3>
+<ul>
+<li>An <strong>outbound change set</strong> is created in the <em>source</em> org (e.g. sandbox), populated with components, and uploaded.</li>
+<li>It arrives as an <strong>inbound change set</strong> in the <em>target</em> org (e.g. production), where it is validated and deployed.</li>
+<li>Requires a <strong>deployment connection</strong> between orgs — and change sets only travel between <strong>related orgs</strong> (a production org and its sandboxes).</li>
+</ul>
+<div class="box key"><div class="box-label">◆ Add dependencies</div><p>Use <strong>"View/Add Dependencies"</strong> to pull in components a change relies on (a field's object, a validation rule's fields). Missing a dependency is the top cause of failed deployments.</p></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>Change sets <strong>cannot</strong>:</p><ul style="margin-bottom:0"><li>Deploy to <strong>unrelated</strong> orgs (only between a production org and its sandboxes).</li><li><strong>Delete</strong> components in the target (you can only create/update).</li><li>Move <strong>data</strong> — metadata only.</li></ul><p>For unrelated orgs or deletions, use <strong>packages</strong> or the <strong>Metadata API / SFDX / ANT</strong>.</p></div>
+<p><strong>Validate</strong> an inbound change set (validation-only deploy) before the real deployment to catch failures early.</p>
+`
+  },
+  {
+    id:'deploy_packages', nav:'Managed vs unmanaged packages',
+    title:'Managed & unmanaged packages',
+    lead:'Packages bundle metadata for distribution. The managed/unmanaged choice hinges on upgradeability and IP protection.',
+    body:`
+<h3>The comparison</h3>
+<div class="tbl-scroll"><table>
+<tr><th></th><th>Unmanaged</th><th>Managed</th></tr>
+<tr><td>Purpose</td><td>Distribute <strong>editable templates</strong> / open-source; move metadata</td><td>Distribute a <strong>product</strong> (ISV / AppExchange)</td></tr>
+<tr><td>Editable after install?</td><td><strong>Yes</strong> — becomes the subscriber's own</td><td>Mostly <strong>locked</strong>; some components extensible</td></tr>
+<tr><td>Upgradeable by publisher?</td><td><strong>No</strong></td><td><strong>Yes</strong> — versioned upgrades</td></tr>
+<tr><td>Namespace</td><td>None</td><td><strong>Namespaced</strong> (isolated from org)</td></tr>
+<tr><td>IP protected?</td><td>No (source visible)</td><td><strong>Yes</strong> (source hidden)</td></tr>
+</table></div>
+<div class="box key"><div class="box-label">◆ Choose by intent</div><p>Distributing a maintained, upgradeable, protected app to many customers → <strong>managed</strong>. Sharing an editable starting point / open-source template, or moving metadata between your own orgs → <strong>unmanaged</strong>.</p></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>Only <strong>managed</strong> packages support <strong>publisher upgrades</strong> and <strong>IP protection</strong>. Once an unmanaged package is installed, the publisher can't push updates — the subscriber owns and edits the components. AppExchange commercial apps are almost always <strong>managed</strong>.</p></div>
+<p>Modern tooling adds <strong>unlocked packages</strong> and <strong>second-generation (2GP) packaging</strong> for source-driven development, but the managed/unmanaged distinction is the exam core.</p>
+`
+  },
+  {
+    id:'deploy_plan', nav:'Choosing a deployment plan',
+    title:'Determining the appropriate deployment plan',
+    lead:'Match the deployment mechanism to the org relationship, the change size, and whether deletions or automation are involved.',
+    body:`
+<h3>The mechanisms, matched to scenarios</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Situation</th><th>Best mechanism</th></tr>
+<tr><td>Admin moving config between a sandbox and its production org</td><td><strong>Change set</strong></td></tr>
+<tr><td>Deploying to an <strong>unrelated</strong> org / distributing to customers</td><td><strong>Package</strong> (managed/unmanaged/unlocked)</td></tr>
+<tr><td>Source-controlled, developer-driven, CI/CD deployment</td><td><strong>SFDX / Metadata API</strong> (VS Code, ANT)</td></tr>
+<tr><td>Need to <strong>delete</strong> components in target</td><td><strong>Metadata API</strong> (destructiveChanges) — not change sets</td></tr>
+<tr><td>Small, one-off declarative change</td><td>Rebuild by hand or change set</td></tr>
+</table></div>
+<div class="box key"><div class="box-label">◆ Key considerations for any plan</div><ul style="margin-bottom:0"><li><strong>Test in a sandbox</strong> and <strong>validate</strong> before deploying to production.</li><li><strong>Apex code coverage</strong> — deploying to production requires ≥75% coverage overall and all triggers with some coverage.</li><li>Watch <strong>dependencies</strong> and <strong>order</strong> (objects before the fields/rules that reference them).</li><li>Plan for <strong>data</strong> separately — deployment tools move metadata, not records.</li></ul></div>
+<div class="box trap"><div class="box-label">▲ Exam trap</div><p>Deploying anything containing <strong>Apex</strong> to <strong>production</strong> triggers the <strong>75% code coverage</strong> gate — a favourite deployment question even on this declarative-focused exam. And remember change sets can't delete or reach unrelated orgs.</p></div>
+`
+  }
+  ]
+});
+</script>
+<script>
+/* ================= SECTION CHEAT SHEETS ================= */
+function cheatHead(num,title,pct,id){
+  return `<div class="cheat-head"><div class="title"><div class="eyebrow"><span class="num">${num}</span> · Cheat Sheet <span class="wt-badge">${pct}% of exam</span></div><h2 class="title">${title}</h2></div><button class="print-btn" onclick="printCheat('${id}')">⎙ Print</button></div>`;
+}
+
+DATA.cheats.push({
+  id:'cheat_fund', nav:'01 · Fundamentals',
+  html: cheatHead('01','Salesforce Fundamentals','23','cheat_fund') + `
+<div class="cheat-grid">
+<div class="cheat-card"><h4>Declarative vs code</h4><ul><li>Always pick the <b>lowest-code</b> option that fully works.</li><li>Code only for: callouts, complex bulk logic, bespoke UI (LWC), async beyond scheduled flow.</li><li>"No code / admin-maintained" → Flow, formula, validation rule.</li></ul></div>
+<div class="cheat-card"><h4>AppExchange</h4><ul><li>Marketplace = <b>buy don't build</b> for common needs.</li><li>Installs as a (usually <b>managed</b>) package.</li><li>Test in a sandbox before installing.</li></ul></div>
+<div class="cheat-card"><h4>Security layers</h4><ul><li><b>Object</b> (CRUD) & <b>Field</b> (FLS) → Profiles + Permission Sets.</li><li><b>Record</b> → OWD, role hierarchy, sharing rules, manual, teams, Apex.</li><li>Perm sets only <b>extend</b>; tighten profile to <b>restrict</b>.</li></ul></div>
+<div class="cheat-card"><h4>Sharing (O-R-S-M-A)</h4><ul><li>OWD sets the floor; sharing only <b>opens up</b>.</li><li>Private / Public R-O / Public R-W / Controlled by Parent.</li><li>Group needs a category → <b>sharing rule</b>; one record → <b>manual</b>.</li></ul></div>
+<div class="cheat-card"><h4>Reports</h4><ul><li>Tabular · Summary · Matrix · Joined.</li><li>Charts/dashboards need <b>grouping</b> (Summary/Matrix); Tabular needs a row-limit.</li><li>Buckets, cross filters, summary formulas (PARENTGROUPVAL).</li></ul></div>
+<div class="cheat-card"><h4>Report types</h4><ul><li>Define objects + fields available.</li><li><b>"must have related"</b> = inner join; <b>"may or may not"</b> = outer join.</li><li>Custom report type joins up to <b>4 objects</b>.</li></ul></div>
+<div class="cheat-card"><h4>Dashboards</h4><ul><li>Show data of the <b>running user</b>.</li><li><b>Dynamic</b> = "logged-in user" sees own data.</li><li>Snapshot, not live; up to 3 filters.</li></ul></div>
+<div class="cheat-card"><h4>Mobile & Chatter</h4><ul><li><b>Compact layout</b> = key fields on phone / highlights.</li><li>Object-specific action <b>pre-fills</b> from parent; global has no context.</li><li><b>Feed tracking</b> ≠ field history tracking.</li></ul></div>
+</div>`
+});
+
+DATA.cheats.push({
+  id:'cheat_data', nav:'02 · Data Modeling',
+  html: cheatHead('02','Data Modeling & Management','22','cheat_data') + `
+<div class="cheat-grid">
+<div class="cheat-card"><h4>Standard objects</h4><ul><li>Account→Contact/Opportunity/Case; Campaign↔Members (M:M).</li><li>Lead converts → Account + Contact + Opportunity (map custom fields!).</li></ul></div>
+<div class="cheat-card"><h4>Record types</h4><ul><li>One object, many processes: different <b>picklists, layouts, business processes</b>.</li><li>Assigned per <b>profile</b>. Don't control FLS or record access.</li></ul></div>
+<div class="cheat-card"><h4>Master-Detail (ROCS)</h4><ul><li><b>R</b>oll-ups, <b>O</b>wnership inherited, <b>C</b>ascade delete, <b>S</b>haring by parent.</li><li>Parent required; max 2 per object.</li></ul></div>
+<div class="cheat-card"><h4>Lookup</h4><ul><li>Loose, optional, own owner/sharing, <b>no roll-up</b>, no cascade (by default).</li><li>Freely reparented.</li></ul></div>
+<div class="cheat-card"><h4>Many-to-many</h4><ul><li><b>Junction object</b> = 2 master-detail relationships.</li><li>First M-D = <b>primary</b> (owner, sharing, look/feel).</li></ul></div>
+<div class="cheat-card"><h4>Field types</h4><ul><li><b>External ID</b> → upsert / integration key.</li><li>Multi-select picklist = poor reporting.</li></ul></div>
+<div class="cheat-card"><h4>Field change = data loss</h4><ul><li>Long Text Area → Text <b>truncates</b>.</li><li>Changing to Checkbox/Number/Currency/Date can <b>wipe</b> data.</li><li>Export + sandbox-test before converting.</li></ul></div>
+<div class="cheat-card"><h4>Schema Builder & import</h4><ul><li>Builder: visualise + create objects/fields/relationships. <b>No</b> FLS/layouts/validation.</li><li>Import Wizard ≤50k; Data Loader ≤5M + <b>upsert</b>/delete.</li><li>Live external data → <b>Salesforce Connect</b> (external objects <code>__x</code>).</li></ul></div>
+</div>`
+});
+
+DATA.cheats.push({
+  id:'cheat_blpa', nav:'03 · Business Logic',
+  html: cheatHead('03','Business Logic & Process Automation','28','cheat_blpa') + `
+<div class="cheat-grid">
+<div class="cheat-card"><h4>Formula fields</h4><ul><li>Read-only, runtime, not stored.</li><li>Cross-object <b>up</b> to parent (≤10 rels); never children.</li><li>IF/CASE/ISPICKVAL/PRIORVALUE.</li></ul></div>
+<div class="cheat-card"><h4>Roll-up summary</h4><ul><li>Parent aggregates children: <b>COUNT/SUM/MIN/MAX</b>.</li><li>Needs <b>master-detail</b>. Lookup → use record-triggered Flow instead.</li></ul></div>
+<div class="cheat-card"><h4>Validation rules</h4><ul><li>Formula <b>TRUE = blocked save</b>.</li><li>ISCHANGED / PRIORVALUE / ISNEW; exempt via <code>$Profile</code>.</li><li>Fires on API/import/automation too.</li></ul></div>
+<div class="cheat-card"><h4>Approval process</h4><ul><li>Only tool for <b>formal human sign-off</b> + <b>record lock</b>.</li><li>Multi-step, parallel, dynamic approvers; approve by email/app/mobile.</li></ul></div>
+<div class="cheat-card"><h4>Choose the tool</h4><ul><li>New automation = <b>Flow</b> (Workflow/Process Builder can't be created new).</li><li>Same-record field set → <b>before-save</b> flow (fastest).</li><li>Related records/email/approval → <b>after-save</b>.</li></ul></div>
+<div class="cheat-card"><h4>Order of execution</h4><ul><li>Before-save flow → before trigger → validation/dup → save → after trigger → workflow → after-save flow → roll-up → commit → emails.</li></ul></div>
+<div class="cheat-card full"><h4>Avoid errors / recursion</h4><ul><li><b>Recursion:</b> A updates field → triggers B → updates back to A → loop → governor limits.</li><li>Gate with <b>ISCHANGED</b>/entry criteria; consolidate to <b>one before-save flow</b> per object; avoid multiple tools writing the same fields; watch roll-ups re-triggering parent automation; test at volume in a sandbox.</li></ul></div>
+</div>`
+});
+
+DATA.cheats.push({
+  id:'cheat_ui', nav:'04 · User Interface',
+  html: cheatHead('04','User Interface','17','cheat_ui') + `
+<div class="cheat-grid">
+<div class="cheat-card"><h4>Lightning App Builder</h4><ul><li>Builds <b>record / app / home</b> pages.</li><li>Assign by app, record type, profile; component <b>visibility rules</b>.</li></ul></div>
+<div class="cheat-card"><h4>Layout vs Lightning page</h4><ul><li><b>Page layout</b>: fields, related lists, actions in action bar.</li><li><b>Lightning page</b>: component arrangement around the record.</li></ul></div>
+<div class="cheat-card"><h4>Dynamic Forms / Actions</h4><ul><li>Place individual <b>fields</b> with visibility rules (no code).</li><li>Dynamic Actions show/hide actions by criteria.</li></ul></div>
+<div class="cheat-card"><h4>Buttons / links / actions</h4><ul><li><b>JavaScript buttons don't work in Lightning</b> → use action/Flow/LWC.</li><li>Object-specific action pre-fills from parent; global doesn't.</li></ul></div>
+<div class="cheat-card"><h4>Declarative components</h4><ul><li>Drag standard/custom/AppExchange components; no code.</li><li>Embed a <b>screen Flow</b> via the Flow component for guided UI.</li></ul></div>
+<div class="cheat-card"><h4>Custom LWC / Aura</h4><ul><li><b>LWC</b> = modern; Aura = legacy.</li><li>Only when nothing standard fits.</li><li>Dev must set <b>targets</b> to expose in App Builder.</li></ul></div>
+</div>`
+});
+
+DATA.cheats.push({
+  id:'cheat_deploy', nav:'05 · App Deployment',
+  html: cheatHead('05','App Deployment','10','cheat_deploy') + `
+<div class="cheat-grid">
+<div class="cheat-card"><h4>Sandbox types</h4><ul><li><b>Developer</b>: metadata only · refresh 1 day.</li><li><b>Developer Pro</b>: metadata, more storage · 1 day.</li><li><b>Partial Copy</b>: sample data (~10k/obj) · 5 days.</li><li><b>Full</b>: all prod data · 29 days.</li></ul></div>
+<div class="cheat-card"><h4>Change sets</h4><ul><li>Between <b>related orgs only</b> (prod ↔ its sandboxes).</li><li><b>Can't delete</b> components; metadata only.</li><li>Add dependencies; <b>validate</b> first.</li></ul></div>
+<div class="cheat-card"><h4>Packages</h4><ul><li><b>Managed</b>: upgradeable, namespaced, IP-protected (AppExchange/ISV).</li><li><b>Unmanaged</b>: editable template, no upgrades, no IP protection.</li></ul></div>
+<div class="cheat-card"><h4>Deployment plan</h4><ul><li>Related orgs → change set; unrelated/customers → package; CI/CD → SFDX/Metadata API.</li><li><b>Deletions</b> → Metadata API (destructiveChanges).</li><li>Apex to prod needs <b>≥75% coverage</b>.</li></ul></div>
+</div>`
+});
+</script>
+<script>
+/* ================= MASTER CHEAT SHEET ================= */
+DATA.master = `
+<div class="cheat-head"><div class="title"><div class="eyebrow"><span class="num">★</span> · One-Page Master <span class="wt-badge">whole exam</span></div><h2 class="title">Platform App Builder — everything, one page.</h2></div><button class="print-btn" onclick="printCheat('master')">⎙ Print</button></div>
+<p class="lead">60 Q + 5 unscored · 105 min · 63% to pass · scenario-based. Golden rule: <strong>lowest-code, most scalable, most maintainable</strong> answer wins.</p>
+<div class="cheat-grid">
+<div class="cheat-card"><h4>① Fundamentals — 23%</h4><ul>
+<li>Declarative first; code only for callouts, complex bulk, bespoke UI, async.</li>
+<li>Object/Field = <b>Profiles + Perm Sets</b> (perm sets only add).</li>
+<li>Record = OWD → role hierarchy → sharing rules → manual → Apex (opens up only).</li>
+<li>Reports: Tabular/Summary/Matrix/Joined; charts need grouping.</li>
+<li>Report type "must have" vs "may or may not" related.</li>
+<li>Dashboard shows <b>running user's</b> data; <b>dynamic</b> = own data.</li>
+<li>Compact layout = mobile key fields; feed tracking ≠ field history.</li></ul></div>
+
+<div class="cheat-card"><h4>② Data Modeling — 22%</h4><ul>
+<li>Record types = different picklists/layouts/process, per profile.</li>
+<li><b>Master-Detail (ROCS)</b>: Roll-ups, Owner inherited, Cascade, Sharing by parent; max 2/object.</li>
+<li>Lookup: loose, no roll-up, own sharing, reparent freely.</li>
+<li>M:M = junction w/ 2 master-details; 1st = primary.</li>
+<li>External ID → upsert key.</li>
+<li>Long Text→Text truncates; many type changes wipe data — sandbox test.</li>
+<li>Import Wizard ≤50k; Data Loader ≤5M + upsert.</li>
+<li>Live external data → Salesforce Connect / external objects.</li></ul></div>
+
+<div class="cheat-card"><h4>③ Business Logic — 28% ★</h4><ul>
+<li>Formula: read-only, up to parent, not children.</li>
+<li>Roll-up: COUNT/SUM/MIN/MAX, <b>master-detail only</b>.</li>
+<li>Validation: formula <b>TRUE = block</b>; fires on imports/API too.</li>
+<li>Approval process = only formal sign-off + record lock.</li>
+<li>New automation = <b>Flow</b>; same-record = <b>before-save</b>; related/email = after-save.</li>
+<li>Know <b>order of execution</b>; avoid <b>recursion</b> (gate w/ ISCHANGED).</li></ul></div>
+
+<div class="cheat-card"><h4>④ User Interface — 17%</h4><ul>
+<li>App Builder builds record/app/home pages; visibility rules.</li>
+<li>Layout = fields/related lists/actions; Lightning page = components.</li>
+<li>Dynamic Forms = per-field placement + visibility (no code).</li>
+<li><b>JS buttons don't work in Lightning</b> → action/Flow/LWC.</li>
+<li>Embed screen Flow via Flow component for guided UI.</li>
+<li>Custom LWC only when nothing standard fits; needs correct targets.</li></ul></div>
+
+<div class="cheat-card"><h4>⑤ App Deployment — 10%</h4><ul>
+<li>Sandboxes: Dev & Dev Pro = metadata, 1-day; Partial = sample, 5-day; Full = all data, 29-day.</li>
+<li>Change sets: related orgs only, no deletes, metadata only, add dependencies.</li>
+<li>Managed = upgradeable/namespaced/IP-protected; Unmanaged = editable template.</li>
+<li>Unrelated orgs/customers → package; deletions → Metadata API.</li>
+<li>Apex to prod → <b>≥75% coverage</b>.</li></ul></div>
+
+<div class="cheat-card"><h4>★ Highest-yield tie-breakers</h4><ul>
+<li>Two valid answers → choose <b>less code / more scalable</b>.</li>
+<li>Aggregate children → <b>roll-up (M-D)</b> or Flow if lookup.</li>
+<li>Block bad save → <b>validation rule</b>.</li>
+<li>Formal approval → <b>approval process</b>, not Flow.</li>
+<li>Same-record update fast → <b>before-save Flow</b>.</li>
+<li>Realistic-but-not-full data → <b>Partial Copy</b> sandbox.</li>
+<li>Reach unrelated org → <b>package</b>, not change set.</li></ul></div>
+</div>
+`;
+</script>
+<!-- END_INJECT -->
+<script>
+/* ================= ENGINE ================= */
+const LS_KEY='pab_progress_v1';
+let progress={};
+try{progress=JSON.parse(localStorage.getItem(LS_KEY))||{}}catch(e){progress={}}
+function saveProgress(){try{localStorage.setItem(LS_KEY,JSON.stringify(progress))}catch(e){}}
+
+// Flatten all lessons for navigation order
+let LESSONS=[];
+DATA.domains.forEach(d=>d.lessons.forEach(l=>LESSONS.push({...l,domain:d.title,dnum:d.num,weight:d.weight})));
+const TOTAL=LESSONS.length;
+
+function buildNav(){
+  const nav=document.getElementById('nav');
+  let html='';
+  html+=`<div class="nav-group"><a class="nav-link" data-view="overview" onclick="show('overview')">Exam Overview &amp; Strategy</a></div>`;
+  DATA.domains.forEach(d=>{
+    html+=`<div class="nav-group">`;
+    html+=`<div class="nav-domain"><span>${d.num} · ${d.short}</span><span class="wt">${d.weight}%</span></div>`;
+    d.lessons.forEach(l=>{
+      html+=`<a class="nav-link" data-view="${l.id}" onclick="show('${l.id}')"><span class="check" data-check="${l.id}"></span>${l.nav}</a>`;
+    });
+    html+=`</div>`;
+  });
+  html+=`<div class="nav-section-title">Cheat Sheets</div>`;
+  DATA.cheats.forEach(c=>{
+    html+=`<a class="nav-link cheat" data-view="${c.id}" onclick="show('${c.id}')">${c.nav}</a>`;
+  });
+  html+=`<a class="nav-link cheat" data-view="master" onclick="show('master')" style="font-weight:600">Master Cheat Sheet</a>`;
+  nav.innerHTML=html;
+  refreshChecks();
+}
+
+function refreshChecks(){
+  document.querySelectorAll('[data-check]').forEach(el=>{
+    el.textContent=progress[el.dataset.check]?'✓ ':'';
+    el.className='check '+(progress[el.dataset.check]?'done':'');
+  });
+  const done=LESSONS.filter(l=>progress[l.id]).length;
+  document.getElementById('progText').textContent=`${done} / ${TOTAL}`;
+  document.getElementById('progFill').style.width=(done/TOTAL*100)+'%';
+}
+
+function renderView(id){
+  // overview
+  if(id==='overview')return DATA.overview;
+  if(id==='master')return DATA.master;
+  const cheat=DATA.cheats.find(c=>c.id===id);
+  if(cheat)return cheat.html;
+  const idx=LESSONS.findIndex(l=>l.id===id);
+  if(idx<0)return '<p>Not found.</p>';
+  const l=LESSONS[idx];
+  const prev=LESSONS[idx-1], next=LESSONS[idx+1];
+  const done=progress[l.id];
+  let html=`<div class="eyebrow"><span class="num">${l.dnum}</span> · ${l.domain} <span class="wt-badge">${l.weight}% domain</span></div>`;
+  html+=`<h2 class="title">${l.title}</h2>`;
+  if(l.lead)html+=`<p class="lead">${l.lead}</p>`;
+  html+=`<div class="rule"></div>`;
+  html+=l.body;
+  html+=`<div class="lesson-foot">`;
+  html+=`<button class="mark-btn ${done?'done':''}" onclick="toggleDone('${l.id}')">${done?'✓ Completed':'Mark complete'}</button>`;
+  html+=`<div class="nav-jump">`;
+  html+=`<button ${prev?`onclick="show('${prev.id}')"`:'disabled'}>← Prev</button>`;
+  html+=`<button ${next?`onclick="show('${next.id}')"`:'disabled'}>Next →</button>`;
+  html+=`</div></div>`;
+  return html;
+}
+
+function show(id){
+  const c=document.getElementById('content');
+  c.innerHTML=renderView(id);
+  document.querySelectorAll('.nav-link').forEach(el=>el.classList.toggle('active',el.dataset.view===id));
+  window.scrollTo(0,0);
+  document.querySelector('.main').scrollTo(0,0);
+  location.hash=id;
+  if(window.innerWidth<=960)document.getElementById('sidebar').classList.remove('open');
+}
+
+function toggleDone(id){
+  progress[id]=!progress[id];
+  saveProgress();refreshChecks();
+  show(id);
+}
+function toggleMenu(){document.getElementById('sidebar').classList.toggle('open')}
+function printCheat(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('printing'));
+  // build a temp printable node
+  const tmp=document.createElement('div');
+  tmp.className='view printing';tmp.id='__print';
+  tmp.innerHTML=id==='master'?DATA.master:(DATA.cheats.find(c=>c.id===id)||{}).html;
+  document.body.appendChild(tmp);
+  window.print();
+  setTimeout(()=>tmp.remove(),200);
+}
+
+buildNav();
+const start=(location.hash||'#overview').slice(1);
+show(document.querySelector(`[data-view="${start}"]`)?start:'overview');
+</script>
+</body>
+</html>

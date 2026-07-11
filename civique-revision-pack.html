@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Examen Civique — CSP · Pack de révision</title>
+<style>
+  :root{
+    --bleu:#000091; --rouge:#e1000f; --blanc:#fff;
+    --encre:#161616; --gris:#666; --gris2:#8a8a92;
+    --fond:#f5f5fe; --carte:#ffffff; --ligne:#e3e3ef;
+    --ok:#18753c; --okbg:#e3fbe3; --err:#ce0500; --errbg:#ffe9e9;
+    --rayon:14px;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:var(--sans);color:var(--encre);background:var(--fond);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px 80px}
+
+  /* Header */
+  header{background:var(--bleu);color:#fff;padding:26px 18px 22px;position:relative;overflow:hidden}
+  .tricolore{height:5px;display:flex}
+  .tricolore i{flex:1}
+  .tricolore .b{background:var(--bleu)} .tricolore .w{background:#fff} .tricolore .r{background:var(--rouge)}
+  .hd{max-width:760px;margin:0 auto}
+  .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.8;font-weight:600;margin:0 0 6px}
+  header h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.02em}
+  header p{margin:6px 0 0;font-size:14px;opacity:.9;max-width:52ch}
+
+  /* Toolbar */
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 10px}
+  .seg{display:inline-flex;background:#ececf6;border-radius:10px;padding:3px}
+  .seg button{border:0;background:transparent;padding:8px 14px;border-radius:8px;font:inherit;font-size:13px;font-weight:600;color:var(--gris);cursor:pointer}
+  .seg button.on{background:#fff;color:var(--bleu);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .spacer{flex:1}
+  .lang{border:1px solid var(--ligne);background:#fff;border-radius:8px;padding:8px 12px;font:inherit;font-size:13px;font-weight:600;color:var(--encre);cursor:pointer}
+  select.theme{border:1px solid var(--ligne);background:#fff;border-radius:8px;padding:9px 12px;font:inherit;font-size:13px;color:var(--encre);max-width:100%}
+
+  /* Stats */
+  .stats{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--gris);margin:2px 0 14px}
+  .stats b{color:var(--encre)}
+  .progress{height:6px;border-radius:6px;background:#e6e6f2;overflow:hidden;margin-bottom:16px}
+  .progress > i{display:block;height:100%;width:0;background:var(--bleu);transition:width .3s}
+
+  /* Card */
+  .card{background:var(--carte);border:1px solid var(--ligne);border-radius:var(--rayon);padding:22px 22px 20px;position:relative;box-shadow:0 1px 2px rgba(20,20,40,.04)}
+  .card::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:4px;border-radius:4px;
+    background:linear-gradient(var(--bleu) 0 33%,#c9c9dd 33% 66%,var(--rouge) 66% 100%)}
+  .chip{display:inline-block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--bleu);background:#e9e9fb;padding:4px 9px;border-radius:20px;margin-bottom:12px}
+  .q{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:0 0 4px}
+  .qe{font-size:14px;color:var(--gris);margin:0 0 6px;font-weight:500}
+  .opts{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:9px}
+  .opt{border:1.5px solid var(--ligne);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:15px;background:#fff;text-align:left;width:100%;font-family:inherit;transition:border-color .15s,background .15s}
+  .opt:hover{border-color:#b9b9d6}
+  .opt .oe{display:block;font-size:12.5px;color:var(--gris2);margin-top:2px}
+  .opt.correct{border-color:var(--ok);background:var(--okbg)}
+  .opt.wrong{border-color:var(--err);background:var(--errbg)}
+  .opt:disabled{cursor:default}
+  .opt .mark{float:right;font-weight:800;margin-left:10px}
+  .opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--err)}
+
+  .explain{margin-top:14px;padding:13px 15px;border-radius:10px;background:#f3f3fb;border:1px solid #e6e6f4;font-size:14px;display:none}
+  .explain.show{display:block}
+  .explain .lab{font-weight:700;color:var(--bleu);font-size:12px;letter-spacing:.05em;text-transform:uppercase;display:block;margin-bottom:3px}
+  .explain .ee{color:var(--gris);display:block;margin-top:5px}
+  .flag{margin-top:8px;font-size:12.5px;color:#8a5a00;background:#fff6e5;border:1px solid #ffe4ad;border-radius:8px;padding:8px 11px;display:none}
+  .flag.show{display:block}
+
+  /* Flashcard */
+  .flip .answer{display:none;margin-top:16px;padding-top:16px;border-top:1px dashed var(--ligne)}
+  .flip.revealed .answer{display:block}
+  .flip .ans-fr{font-size:18px;font-weight:700;color:var(--bleu)}
+  .flip .ans-en{font-size:14px;color:var(--gris);margin-top:3px}
+
+  /* Nav */
+  .nav{display:flex;gap:10px;align-items:center;margin-top:18px}
+  .btn{border:0;border-radius:10px;padding:12px 18px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--bleu);color:#fff}
+  .btn.ghost{background:#ececf6;color:var(--bleu)}
+  .btn.rouge{background:var(--rouge);color:#fff}
+  .btn:disabled{opacity:.45;cursor:default}
+  .count{margin-left:auto;font-size:13px;color:var(--gris);font-variant-numeric:tabular-nums}
+
+  /* Exam */
+  .exam-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+  .timer{font-variant-numeric:tabular-nums;font-weight:800;font-size:20px;color:var(--bleu);background:#fff;border:1px solid var(--ligne);border-radius:10px;padding:6px 14px}
+  .timer.low{color:var(--rouge);border-color:#f3b4b4}
+  .exam-meta{font-size:13px;color:var(--gris)}
+  .result{text-align:center;padding:30px 20px}
+  .result .score{font-size:52px;font-weight:800;letter-spacing:-.03em}
+  .result .verdict{font-size:20px;font-weight:800;margin-top:4px}
+  .result .pass{color:var(--ok)} .result .fail{color:var(--rouge)}
+  .result .sub{color:var(--gris);font-size:14px;margin-top:8px}
+  .breakdown{margin:22px auto 0;max-width:420px;text-align:left}
+  .brow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--ligne);font-size:14px}
+  .brow b{font-variant-numeric:tabular-nums}
+
+  .intro{background:#fff;border:1px solid var(--ligne);border-radius:var(--rayon);padding:20px 22px;font-size:14px;color:var(--gris);margin-bottom:16px}
+  .intro b{color:var(--encre)}
+  footer{margin-top:24px;font-size:12px;color:var(--gris2);text-align:center;line-height:1.6}
+  @media (max-width:520px){ header h1{font-size:22px} .q{font-size:17px} }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  :focus-visible{outline:3px solid #6a6aff;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="tricolore"><i class="b"></i><i class="w"></i><i class="r"></i></div>
+<header>
+  <div class="hd">
+    <p class="eyebrow">Examen civique · Mention carte de séjour pluriannuelle</p>
+    <h1>Pack de révision — CSP</h1>
+    <p>QCM bilingue français / anglais couvrant les 5 thématiques officielles. Bilingual practice for France's civic exam · réussite : 32/40 (80 %).</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="bar">
+    <div class="seg" role="tablist" aria-label="Mode">
+      <button id="m-practice" class="on" onclick="setMode('practice')">Réviser</button>
+      <button id="m-cards" onclick="setMode('cards')">Flashcards</button>
+      <button id="m-exam" onclick="setMode('exam')">Examen blanc</button>
+    </div>
+    <span class="spacer"></span>
+    <button class="lang" id="langBtn" onclick="toggleLang()">FR + EN</button>
+  </div>
+
+  <div id="filterRow" class="bar" style="margin-top:0">
+    <select class="theme" id="themeSel" onchange="applyFilter()">
+      <option value="all">Toutes les thématiques · All themes</option>
+      <option value="pv">Principes et valeurs de la République</option>
+      <option value="si">Système institutionnel et politique</option>
+      <option value="dd">Droits et devoirs</option>
+      <option value="hg">Histoire, géographie et culture</option>
+      <option value="vs">Vivre dans la société française</option>
+    </select>
+  </div>
+
+  <div id="statsRow" class="stats"></div>
+  <div id="progressRow" class="progress"><i id="progressBar"></i></div>
+
+  <div id="stage"></div>
+
+  <footer>
+    Questions de connaissance issues de la liste officielle du ministère de l'Intérieur
+    (formation-civique.interieur.gouv.fr), sous licence ouverte Etalab 2.0. Réponses et explications rédigées pour la révision.<br>
+    Les mises en situation de l'examen réel ne sont pas publiques. Outil d'entraînement non officiel · bonne chance pour le 14 juillet et au-delà.
+  </footer>
+</div>
+
+<script>
+/* ---------- DATA ----------
+ t = theme, q/qe = question FR/EN, o/oe = options FR/EN, a = correct index, x/xe = explanation FR/EN, n = note flag */
+const THEMES = {
+  pv:{fr:"Principes et valeurs de la République", en:"Principles & values of the Republic"},
+  si:{fr:"Système institutionnel et politique", en:"Institutions & politics"},
+  dd:{fr:"Droits et devoirs", en:"Rights & duties"},
+  hg:{fr:"Histoire, géographie et culture", en:"History, geography & culture"},
+  vs:{fr:"Vivre dans la société française", en:"Living in French society"}
+};
+const EXAM_WEIGHTS = {pv:11, si:8, dd:7, hg:7, vs:7}; // 40 total, official-style split
+
+const Q = [
+/* ===== PRINCIPES ET VALEURS ===== */
+{t:"pv",q:"À quoi correspond la date du 14 juillet ?",qe:"What does 14 July correspond to?",o:["La fête nationale française","La fête du travail","La fête de la musique","L'armistice de 1918"],oe:["The French national day","Labour Day","Music Day","The 1918 armistice"],a:0,x:"Le 14 juillet est la fête nationale ; elle commémore la prise de la Bastille (1789).",xe:"14 July is the national day, marking the storming of the Bastille (1789)."},
+{t:"pv",q:"Quel est l'un des symboles de la République française ?",qe:"Which is a symbol of the French Republic?",o:["Marianne","L'aigle impérial","La statue de la Liberté","Le lion"],oe:["Marianne","The imperial eagle","The Statue of Liberty","The lion"],a:0,x:"Marianne incarne la République. Autres symboles : le drapeau tricolore, La Marseillaise, la devise, le 14 juillet.",xe:"Marianne embodies the Republic. Other symbols: the tricolour flag, La Marseillaise, the motto, 14 July."},
+{t:"pv",q:"Le principe d'égalité signifie que :",qe:"The principle of equality means that:",o:["tous les citoyens sont égaux devant la loi","tout le monde a le même salaire","tout le monde a la même religion","tout le monde pense la même chose"],oe:["all citizens are equal before the law","everyone earns the same wage","everyone has the same religion","everyone thinks alike"],a:0,x:"L'égalité : mêmes droits et devoirs pour tous, sans distinction, et égalité devant la loi.",xe:"Equality: the same rights and duties for all, without distinction, and equality before the law."},
+{t:"pv",q:"« Liberté, égalité, fraternité », c'est :",qe:"\"Liberty, equality, fraternity\" is:",o:["la devise de la République française","l'hymne national","une loi récente","le nom d'un parti"],oe:["the motto of the French Republic","the national anthem","a recent law","a political party"],a:0,x:"C'est la devise de la République, héritée de la Révolution française.",xe:"It is the Republic's motto, inherited from the French Revolution."},
+{t:"pv",q:"A-t-on le droit d'insulter publiquement quelqu'un parce qu'il est différent (handicap, apparence, sexe…) ?",qe:"May you publicly insult someone for being different (disability, appearance, sex…)?",o:["Non, c'est puni par la loi","Oui, c'est la liberté d'expression","Oui, si c'est vrai","Oui, sur internet"],oe:["No, it is punished by law","Yes, it's free speech","Yes, if it's true","Yes, online"],a:0,x:"L'injure et les discriminations sont interdites et sanctionnées pénalement.",xe:"Insults and discrimination are prohibited and criminally punishable."},
+{t:"pv",q:"Certains métiers peuvent-ils être réservés aux hommes ?",qe:"Can some jobs be reserved for men only?",o:["Non, l'accès aux métiers est égal","Oui, les métiers physiques","Oui, les métiers de l'armée","Oui, les métiers politiques"],oe:["No, access to jobs is equal","Yes, physical jobs","Yes, army jobs","Yes, political jobs"],a:0,x:"Femmes et hommes ont un accès égal à tous les emplois.",xe:"Women and men have equal access to all jobs."},
+{t:"pv",q:"De quand date la Constitution de la Ve République ?",qe:"When does the Fifth Republic's Constitution date from?",o:["1958","1789","1905","1946"],oe:["1958","1789","1905","1946"],a:0,x:"La Constitution de la Ve République a été adoptée en 1958.",xe:"The Fifth Republic's Constitution was adopted in 1958."},
+{t:"pv",q:"Le régime de la France est :",qe:"France's system of government is:",o:["une République","une monarchie","une dictature","un empire"],oe:["a Republic","a monarchy","a dictatorship","an empire"],a:0,x:"La France est une République démocratique.",xe:"France is a democratic Republic."},
+{t:"pv",q:"Lequel de ces symboles représente officiellement la République française ?",qe:"Which symbol officially represents the French Republic?",o:["Le drapeau bleu-blanc-rouge","La fleur de lys","L'aigle impérial","Le croissant"],oe:["The blue-white-red flag","The fleur-de-lys","The imperial eagle","The crescent"],a:0,x:"Le drapeau tricolore est un symbole officiel de la République.",xe:"The tricolour flag is an official symbol of the Republic."},
+{t:"pv",q:"Où peut-on voir la devise de la République ?",qe:"Where can you see the Republic's motto?",o:["Sur les mairies et les écoles","Sur les billets de banque seulement","Sur les voitures","Nulle part"],oe:["On town halls and schools","On banknotes only","On cars","Nowhere"],a:0,x:"On la trouve sur le fronton des bâtiments publics (mairies, écoles).",xe:"It appears on public buildings such as town halls and schools."},
+{t:"pv",q:"Quels sont des symboles officiels de la République française ?",qe:"Which are official symbols of the French Republic?",o:["Le drapeau tricolore et La Marseillaise","La baguette et le béret","La tour Eiffel et le fromage","Le coq en peluche"],oe:["The tricolour flag and La Marseillaise","Baguette and beret","Eiffel Tower and cheese","A toy rooster"],a:0,x:"Symboles officiels : drapeau tricolore, La Marseillaise, Marianne, la devise, le 14 juillet.",xe:"Official symbols: the tricolour flag, La Marseillaise, Marianne, the motto, 14 July."},
+{t:"pv",q:"Qu'est-ce que l'égalité ?",qe:"What is equality?",o:["Les mêmes droits et devoirs pour tous","Avoir le même salaire","Avoir la même maison","Penser pareil"],oe:["The same rights and duties for all","Earning the same wage","Owning the same house","Thinking alike"],a:0,x:"Chacun a les mêmes droits et devoirs, sans distinction d'origine, de sexe ou de religion.",xe:"Everyone has the same rights and duties, regardless of origin, sex or religion."},
+{t:"pv",q:"Que signifie la liberté ?",qe:"What does liberty mean?",o:["Agir librement dans le respect de la loi et des autres","Faire absolument tout","Ne jamais travailler","Ne pas respecter la loi"],oe:["Acting freely within the law and respect for others","Doing absolutely anything","Never working","Ignoring the law"],a:0,x:"La liberté s'exerce dans le respect de la loi et des droits d'autrui.",xe:"Liberty is exercised within the law and respect for others' rights."},
+{t:"pv",q:"Que signifie le mot « fraternité » dans la devise française ?",qe:"What does \"fraternity\" mean in the French motto?",o:["La solidarité entre les personnes","Être de la même famille","Avoir des frères","Être ami avec tout le monde"],oe:["Solidarity between people","Being related","Having brothers","Being everyone's friend"],a:0,x:"La fraternité, c'est la solidarité et l'entraide entre les membres de la société.",xe:"Fraternity means solidarity and mutual support within society."},
+{t:"pv",q:"Quel animal est un symbole de la France ?",qe:"Which animal is a symbol of France?",o:["Le coq","L'aigle","Le lion","L'ours"],oe:["The rooster","The eagle","The lion","The bear"],a:0,x:"Le coq gaulois est un symbole traditionnel de la France.",xe:"The Gallic rooster is a traditional symbol of France."},
+{t:"pv",q:"Quel est l'un des rôles des associations ?",qe:"What is one role of associations?",o:["Permettre aux personnes de s'engager pour une cause","Faire les lois","Juger les gens","Collecter les impôts"],oe:["Letting people act together for a cause","Making laws","Judging people","Collecting taxes"],a:0,x:"Les associations (loi 1901) permettent aux citoyens de s'engager et d'agir ensemble.",xe:"Associations (1901 law) let citizens get involved and act together."},
+{t:"pv",q:"Quel est le nom de l'hymne national ?",qe:"What is the national anthem called?",o:["La Marseillaise","La Parisienne","L'Internationale","Le Chant du départ"],oe:["La Marseillaise","La Parisienne","The Internationale","Le Chant du départ"],a:0,x:"L'hymne national est La Marseillaise.",xe:"The national anthem is La Marseillaise."},
+{t:"pv",q:"Quel symbole de la République française est tricolore ?",qe:"Which symbol of the Republic is tricolour?",o:["Le drapeau","Marianne","Le coq","La Marseillaise"],oe:["The flag","Marianne","The rooster","La Marseillaise"],a:0,x:"Le drapeau est bleu, blanc, rouge.",xe:"The flag is blue, white and red."},
+{t:"pv",q:"Quelle est la date de la fête nationale française ?",qe:"What is the date of the French national day?",o:["Le 14 juillet","Le 1er mai","Le 11 novembre","Le 8 mai"],oe:["14 July","1 May","11 November","8 May"],a:0,x:"La fête nationale est le 14 juillet.",xe:"The national day is 14 July."},
+{t:"pv",q:"Quelle est la devise de la République française ?",qe:"What is the motto of the French Republic?",o:["Liberté, Égalité, Fraternité","Travail, Famille, Patrie","Unité, Progrès, Paix","Dieu, Roi, Nation"],oe:["Liberty, Equality, Fraternity","Work, Family, Homeland","Unity, Progress, Peace","God, King, Nation"],a:0,x:"La devise est « Liberté, Égalité, Fraternité ».",xe:"The motto is \"Liberty, Equality, Fraternity\"."},
+{t:"pv",q:"Quelle est la langue officielle de la République française ?",qe:"What is the official language of the French Republic?",o:["Le français","L'anglais","Le breton","L'occitan"],oe:["French","English","Breton","Occitan"],a:0,x:"Le français est la langue de la République (article 2 de la Constitution).",xe:"French is the language of the Republic (Article 2 of the Constitution)."},
+{t:"pv",q:"Quelle est la place de la langue française dans la République ?",qe:"What is the status of French in the Republic?",o:["C'est la langue de la République","C'est une langue régionale","C'est une langue étrangère","Elle n'a aucun statut"],oe:["It is the language of the Republic","A regional language","A foreign language","It has no status"],a:0,x:"L'article 2 de la Constitution dispose que la langue de la République est le français.",xe:"Article 2 of the Constitution states the language of the Republic is French."},
+{t:"pv",q:"Quelle liberté permet à chacun d'exprimer ses idées ?",qe:"Which freedom lets everyone express their ideas?",o:["La liberté d'expression","La liberté de circulation","La liberté de religion","La liberté du commerce"],oe:["Freedom of expression","Freedom of movement","Freedom of religion","Freedom of trade"],a:0,x:"La liberté d'expression permet d'exprimer ses opinions dans le respect de la loi.",xe:"Freedom of expression lets you voice opinions within the law."},
+{t:"pv",q:"Quelle proposition est correcte ? La liberté d'expression :",qe:"Which is correct? Freedom of expression:",o:["permet d'exprimer ses opinions dans le respect de la loi","permet de dire n'importe quoi","permet d'insulter les gens","n'existe pas en France"],oe:["lets you express opinions within the law","lets you say anything at all","lets you insult people","does not exist in France"],a:0,x:"Elle a des limites : injure, diffamation et incitation à la haine sont interdites.",xe:"It has limits: insult, defamation and incitement to hatred are prohibited."},
+{t:"pv",q:"Quelles sont les couleurs du drapeau français ?",qe:"What are the colours of the French flag?",o:["Bleu, blanc, rouge","Rouge, jaune, vert","Bleu et blanc","Rouge et blanc"],oe:["Blue, white, red","Red, yellow, green","Blue and white","Red and white"],a:0,x:"Le drapeau tricolore est bleu, blanc, rouge.",xe:"The tricolour flag is blue, white and red."},
+{t:"pv",q:"Qu'est-ce que La Marseillaise ?",qe:"What is La Marseillaise?",o:["L'hymne national","Une danse","Un plat régional","Une ville"],oe:["The national anthem","A dance","A regional dish","A town"],a:0,x:"La Marseillaise est l'hymne national français.",xe:"La Marseillaise is the French national anthem."},
+{t:"pv",q:"Qu'est-ce qui est traditionnellement organisé sur les Champs-Élysées le 14 juillet ?",qe:"What is traditionally held on the Champs-Élysées on 14 July?",o:["Un défilé militaire","Un marché","Un concert de rock","Une course de vélo"],oe:["A military parade","A market","A rock concert","A cycling race"],a:0,x:"Un grand défilé militaire a lieu chaque 14 juillet.",xe:"A large military parade takes place every 14 July."},
+{t:"pv",q:"Qui est Marianne ?",qe:"Who is Marianne?",o:["Le symbole de la République française","Une présidente","Une chanteuse","Une reine"],oe:["The symbol of the French Republic","A president","A singer","A queen"],a:0,x:"Marianne est l'allégorie de la République ; son buste orne les mairies.",xe:"Marianne is the allegory of the Republic; her bust appears in town halls."},
+{t:"pv",q:"Une personne peut-elle changer librement de religion ?",qe:"May a person freely change religion?",o:["Oui, c'est un droit","Non, c'est interdit","Seulement avec autorisation","Seulement à 18 ans"],oe:["Yes, it's a right","No, it's forbidden","Only with permission","Only at 18"],a:0,x:"La liberté de conscience permet de croire, de ne pas croire ou de changer de religion.",xe:"Freedom of conscience lets you believe, not believe, or change religion."},
+{t:"pv",q:"« La France est une République indivisible, …, démocratique et sociale. » Complétez (article 1er) :",qe:"\"France is an indivisible, …, democratic and social Republic.\" Complete (Article 1):",o:["laïque","royale","religieuse","militaire"],oe:["secular","royal","religious","military"],a:0,x:"Le mot manquant est « laïque » : la France est une République laïque.",xe:"The missing word is \"secular\": France is a secular Republic."},
+{t:"pv",q:"En quelle année la loi de séparation des Églises et de l'État a-t-elle été votée ?",qe:"In which year was the law separating Church and State passed?",o:["1905","1789","1958","1848"],oe:["1905","1789","1958","1848"],a:0,x:"La loi de 1905 établit la séparation des Églises et de l'État — fondement de la laïcité.",xe:"The 1905 law established the separation of Church and State — the basis of laïcité."},
+{t:"pv",q:"Que permet le principe de laïcité ?",qe:"What does the principle of laïcité allow?",o:["La liberté de croire ou de ne pas croire","D'interdire toutes les religions","D'imposer une religion","De ne pas respecter les lois"],oe:["Freedom to believe or not to believe","Banning all religions","Imposing one religion","Ignoring the law"],a:0,x:"La laïcité garantit la liberté de conscience et la neutralité de l'État.",xe:"Laïcité guarantees freedom of conscience and State neutrality."},
+{t:"pv",q:"Quel droit est garanti par la laïcité ?",qe:"Which right does laïcité guarantee?",o:["La liberté de conscience et de religion","Le droit au travail","Le droit de vote","Le droit à la propriété"],oe:["Freedom of conscience and religion","The right to work","The right to vote","The right to property"],a:0,x:"La laïcité protège la liberté de conscience et l'égalité des croyances.",xe:"Laïcité protects freedom of conscience and equality of beliefs."},
+{t:"pv",q:"Pourquoi le principe de laïcité doit-il être respecté à l'école ?",qe:"Why must laïcité be respected at school?",o:["Pour que chaque élève soit respecté quelle que soit sa croyance","Pour exclure les élèves croyants","Pour imposer une religion","Pour supprimer les cours"],oe:["So every pupil is respected whatever their belief","To exclude religious pupils","To impose a religion","To cancel lessons"],a:0,x:"L'école publique est neutre : elle garantit l'égalité et le respect de toutes les convictions.",xe:"State schools are neutral, ensuring equality and respect for all convictions."},
+{t:"pv",q:"Qu'est-ce que la laïcité ?",qe:"What is laïcité (secularism)?",o:["La séparation de l'État et des religions","L'interdiction de croire","La religion officielle de l'État","Un parti politique"],oe:["The separation of State and religions","A ban on believing","The State's official religion","A political party"],a:0,x:"La laïcité sépare l'État des religions et garantit la liberté de conscience.",xe:"Laïcité separates State from religions and guarantees freedom of conscience."},
+{t:"pv",q:"Un enfant peut-il refuser d'aller à l'école pour une raison religieuse ?",qe:"May a child refuse school for a religious reason?",o:["Non, l'instruction est obligatoire","Oui, toujours","Oui, le vendredi","Oui, avec l'accord d'un religieux"],oe:["No, education is compulsory","Yes, always","Yes, on Fridays","Yes, with a cleric's approval"],a:0,x:"L'instruction est obligatoire de 3 à 16 ans, sans dérogation religieuse.",xe:"Education is compulsory from 3 to 16, with no religious exemption."},
+{t:"pv",q:"Une personne a-t-elle le droit de ne pas croire en une religion ?",qe:"Does a person have the right not to believe in any religion?",o:["Oui","Non","Seulement en privé","Seulement à l'étranger"],oe:["Yes","No","Only in private","Only abroad"],a:0,x:"La liberté de conscience inclut le droit de ne pas avoir de religion (athéisme).",xe:"Freedom of conscience includes the right to have no religion (atheism)."},
+
+/* ===== SYSTÈME INSTITUTIONNEL ET POLITIQUE ===== */
+{t:"si",q:"Qui nomme le Premier ministre ?",qe:"Who appoints the Prime Minister?",o:["Le président de la République","Le Parlement","Le peuple","Le maire"],oe:["The President of the Republic","Parliament","The people","The mayor"],a:0,x:"Le président de la République nomme le Premier ministre.",xe:"The President of the Republic appoints the Prime Minister."},
+{t:"si",q:"Le Parlement est composé :",qe:"Parliament is made up of:",o:["de l'Assemblée nationale et du Sénat","du gouvernement","des maires","du Conseil constitutionnel"],oe:["the National Assembly and the Senate","the government","the mayors","the Constitutional Council"],a:0,x:"Le Parlement = Assemblée nationale (députés) + Sénat (sénateurs).",xe:"Parliament = National Assembly (deputies) + Senate (senators)."},
+{t:"si",q:"Qu'est-ce que le pouvoir exécutif ? Le pouvoir :",qe:"What is executive power? The power to:",o:["d'appliquer les lois","de voter les lois","de juger","d'écrire la presse"],oe:["apply the laws","vote the laws","judge","run the press"],a:0,x:"L'exécutif (Président + gouvernement) applique et fait exécuter les lois.",xe:"The executive (President + government) applies and enforces the laws."},
+{t:"si",q:"Les dirigeants sont élus par les citoyens dans :",qe:"Leaders are elected by citizens in:",o:["une démocratie","une dictature","une monarchie absolue","une anarchie"],oe:["a democracy","a dictatorship","an absolute monarchy","anarchy"],a:0,x:"En démocratie, les citoyens élisent leurs représentants.",xe:"In a democracy, citizens elect their representatives."},
+{t:"si",q:"A-t-on le droit de ne pas respecter une loi ?",qe:"May you choose not to obey a law?",o:["Non, la loi s'impose à tous","Oui, si on n'est pas d'accord","Oui, si on est étranger","Oui, la nuit"],oe:["No, the law applies to everyone","Yes, if you disagree","Yes, if you're a foreigner","Yes, at night"],a:0,x:"Nul n'est au-dessus de la loi ; chacun doit la respecter.",xe:"No one is above the law; everyone must obey it."},
+{t:"si",q:"Qui doit respecter la loi ?",qe:"Who must obey the law?",o:["Toutes les personnes","Seulement les Français","Seulement les adultes","Seulement les élus"],oe:["Everyone","Only French people","Only adults","Only elected officials"],a:0,x:"La loi s'applique à toute personne présente sur le territoire.",xe:"The law applies to everyone on French soil."},
+{t:"si",q:"Quel est le rôle de l'autorité judiciaire ?",qe:"What is the role of the judiciary?",o:["Juger et faire respecter la loi","Voter les lois","Diriger le pays","Nommer le président"],oe:["To judge and enforce the law","To vote laws","To run the country","To appoint the president"],a:0,x:"La justice tranche les litiges et sanctionne les infractions.",xe:"The judiciary settles disputes and punishes offences."},
+{t:"si",q:"Quel pouvoir détient un juge ? Le pouvoir :",qe:"Which power does a judge hold? The … power:",o:["judiciaire","législatif","exécutif","militaire"],oe:["judicial","legislative","executive","military"],a:0,x:"Le juge exerce le pouvoir judiciaire.",xe:"A judge exercises judicial power."},
+{t:"si",q:"L'autorité judiciaire est exercée par :",qe:"Judicial authority is exercised by:",o:["les juges et magistrats","les députés","les ministres","la police seule"],oe:["judges and magistrates","deputies","ministers","the police alone"],a:0,x:"Les magistrats (juges et procureurs) rendent la justice.",xe:"Magistrates (judges and prosecutors) administer justice."},
+{t:"si",q:"Que se passe-t-il si un ministre ne respecte pas la loi ?",qe:"What happens if a minister breaks the law?",o:["Il peut être poursuivi en justice","Rien, il est protégé","Il perd sa nationalité","Il paie une amende à lui-même"],oe:["He can be prosecuted","Nothing, he is protected","He loses his nationality","He fines himself"],a:0,x:"Nul n'est au-dessus des lois, y compris les ministres.",xe:"No one is above the law, including ministers."},
+{t:"si",q:"Qui est élu lors des élections législatives ?",qe:"Who is elected in legislative elections?",o:["Les députés","Le président","Les maires","Les sénateurs"],oe:["Deputies","The president","Mayors","Senators"],a:0,x:"Les élections législatives élisent les députés de l'Assemblée nationale.",xe:"Legislative elections choose the deputies of the National Assembly."},
+{t:"si",q:"Combien de députés composent l'Assemblée nationale ?",qe:"How many deputies sit in the National Assembly?",o:["577","348","100","925"],oe:["577","348","100","925"],a:0,x:"L'Assemblée nationale compte 577 députés (le Sénat en compte 348).",xe:"The National Assembly has 577 deputies (the Senate has 348)."},
+{t:"si",q:"Quand sont élus les sénateurs ?",qe:"How are senators elected?",o:["Lors des élections sénatoriales, au suffrage indirect","Par le président","Tous les ans","Par tirage au sort"],oe:["At senatorial elections, by indirect vote","By the president","Every year","By lottery"],a:0,x:"Les sénateurs sont élus au suffrage indirect par de « grands électeurs ».",xe:"Senators are elected indirectly by \"grands électeurs\"."},
+{t:"si",q:"Qui est élu lors des élections municipales ?",qe:"Who is elected in municipal elections?",o:["Les conseillers municipaux","Les députés","Le président","Les sénateurs"],oe:["Municipal councillors","Deputies","The president","Senators"],a:0,x:"On élit le conseil municipal, qui élit ensuite le maire.",xe:"Voters elect the municipal council, which then elects the mayor."},
+{t:"si",q:"Qui est élu lors des élections présidentielles ?",qe:"Who is elected in presidential elections?",o:["Le président de la République","Le Premier ministre","Les députés","Le maire"],oe:["The President of the Republic","The Prime Minister","Deputies","The mayor"],a:0,x:"Le président est élu au suffrage universel direct.",xe:"The president is elected by direct universal suffrage."},
+{t:"si",q:"À partir de quel âge a-t-on le droit de voter ?",qe:"From what age can you vote?",o:["18 ans","16 ans","21 ans","15 ans"],oe:["18","16","21","15"],a:0,x:"On peut voter à partir de 18 ans, si l'on est inscrit sur les listes.",xe:"You can vote from age 18 if registered on the electoral roll."},
+{t:"si",q:"Pour combien de temps est élu le président de la République ?",qe:"For how long is the President elected?",o:["5 ans","7 ans","4 ans","6 ans"],oe:["5 years","7 years","4 years","6 years"],a:0,x:"Le mandat présidentiel est de 5 ans (quinquennat).",xe:"The presidential term is 5 years."},
+{t:"si",q:"Pour combien de temps sont élus les députés ?",qe:"For how long are deputies elected?",o:["5 ans","6 ans","4 ans","7 ans"],oe:["5 years","6 years","4 years","7 years"],a:0,x:"Les députés sont élus pour 5 ans.",xe:"Deputies are elected for 5 years."},
+{t:"si",q:"Pour combien de temps sont élus les sénateurs ?",qe:"For how long are senators elected?",o:["6 ans","5 ans","9 ans","4 ans"],oe:["6 years","5 years","9 years","4 years"],a:0,x:"Les sénateurs sont élus pour 6 ans, renouvelés par moitié tous les 3 ans.",xe:"Senators serve 6 years, renewed by half every 3 years."},
+{t:"si",q:"Qui possède le pouvoir exécutif ?",qe:"Who holds executive power?",o:["Le président et le gouvernement","Le Parlement","Les juges","Le peuple"],oe:["The president and government","Parliament","Judges","The people"],a:0,x:"L'exécutif est partagé entre le président et le gouvernement.",xe:"Executive power is shared between the president and the government."},
+{t:"si",q:"Quelle condition est nécessaire pour voter aux élections ?",qe:"What is required to vote in elections?",o:["Être inscrit sur les listes électorales","Payer une taxe","Être propriétaire","Être un homme"],oe:["Being on the electoral roll","Paying a tax","Owning property","Being a man"],a:0,x:"Il faut être majeur, remplir les conditions de nationalité et être inscrit.",xe:"You must be of age, meet nationality rules and be registered."},
+{t:"si",q:"Qui peut voter aux élections en France ?",qe:"Who can vote in French elections?",o:["Les citoyens français majeurs et inscrits","Tous les habitants","Seulement les riches","Seulement les élus"],oe:["French citizens of age who are registered","All residents","Only the wealthy","Only officials"],a:0,x:"Les citoyens français majeurs inscrits votent à toutes les élections ; les citoyens de l'UE peuvent voter aux municipales et européennes.",xe:"Registered French adults vote in all elections; EU citizens may vote in municipal and European ones."},
+{t:"si",q:"Que signifie « suffrage universel » ?",qe:"What does \"universal suffrage\" mean?",o:["Tous les citoyens ont le droit de vote","Seuls les hommes votent","Seuls les riches votent","On vote plusieurs fois"],oe:["All citizens have the right to vote","Only men vote","Only the rich vote","You vote several times"],a:0,x:"Le suffrage universel : tout citoyen majeur peut voter, une personne = une voix.",xe:"Universal suffrage: every adult citizen may vote, one person = one vote."},
+{t:"si",q:"Concernant les partis politiques, quelle proposition est correcte ?",qe:"Regarding political parties, which is correct?",o:["On peut librement créer un parti ou y adhérer","Un seul parti est autorisé","Les partis sont interdits","Seul le président a un parti"],oe:["You may freely create or join a party","Only one party is allowed","Parties are banned","Only the president has a party"],a:0,x:"Les partis se forment et agissent librement (pluralisme politique).",xe:"Parties form and act freely (political pluralism)."},
+{t:"si",q:"Quel est le rôle des députés ?",qe:"What is the role of deputies?",o:["Voter les lois et contrôler le gouvernement","Juger les criminels","Nommer le président","Diriger la police"],oe:["Voting laws and overseeing government","Judging criminals","Appointing the president","Running the police"],a:0,x:"Les députés font la loi et contrôlent l'action du gouvernement.",xe:"Deputies make laws and scrutinise the government."},
+{t:"si",q:"La séparation des pouvoirs est un principe fondamental. Quels sont les trois pouvoirs ?",qe:"Separation of powers is fundamental. Which are the three powers?",o:["Exécutif, législatif, judiciaire","Militaire, religieux, civil","Local, national, européen","Riche, moyen, pauvre"],oe:["Executive, legislative, judicial","Military, religious, civil","Local, national, European","Rich, middle, poor"],a:0,x:"Les trois pouvoirs sont l'exécutif, le législatif et le judiciaire.",xe:"The three powers are executive, legislative and judicial."},
+{t:"si",q:"Qui possède le pouvoir législatif ?",qe:"Who holds legislative power?",o:["Le Parlement","Le président seul","Les juges","Les maires"],oe:["Parliament","The president alone","Judges","Mayors"],a:0,x:"Le Parlement (Assemblée nationale + Sénat) détient le pouvoir législatif.",xe:"Parliament (Assembly + Senate) holds legislative power."},
+{t:"si",q:"Qui sanctionne l'auteur d'un vol ?",qe:"Who punishes a thief?",o:["La justice","La victime","Le maire","Le voisin"],oe:["The justice system","The victim","The mayor","The neighbour"],a:0,x:"Seule la justice peut juger et sanctionner ; on ne se fait pas justice soi-même.",xe:"Only the courts may judge and punish; no one takes justice into their own hands."},
+{t:"si",q:"Qui élit les députés ?",qe:"Who elects the deputies?",o:["Les citoyens","Le président","Les sénateurs","Les juges"],oe:["The citizens","The president","The senators","The judges"],a:0,x:"Les citoyens élisent les députés au suffrage universel direct.",xe:"Citizens elect deputies by direct universal suffrage."},
+{t:"si",q:"Qui vote les lois ?",qe:"Who votes the laws?",o:["Le Parlement","Le président","Le peuple directement","Les juges"],oe:["Parliament","The president","The people directly","The judges"],a:0,x:"Les lois sont votées par le Parlement.",xe:"Laws are voted by Parliament."},
+{t:"si",q:"Qui réside au palais de l'Élysée ?",qe:"Who resides at the Élysée Palace?",o:["Le président de la République","Le Premier ministre","Le roi","Le maire de Paris"],oe:["The President of the Republic","The Prime Minister","The king","The mayor of Paris"],a:0,x:"L'Élysée est la résidence officielle du président.",xe:"The Élysée is the president's official residence."},
+{t:"si",q:"Combien y a-t-il de départements en France ?",qe:"How many departments does France have?",o:["101","96","100","36"],oe:["101","96","100","36"],a:0,x:"La France compte 101 départements (dont 5 d'outre-mer).",xe:"France has 101 departments (5 of them overseas)."},
+{t:"si",q:"Qui représente l'État dans un département ?",qe:"Who represents the State in a department?",o:["Le préfet","Le maire","Le député","Le juge"],oe:["The prefect","The mayor","The deputy","The judge"],a:0,x:"Le préfet est le représentant de l'État dans le département.",xe:"The prefect represents the State in the department."},
+{t:"si",q:"Qui dirige la commune ?",qe:"Who runs the commune (town)?",o:["Le maire","Le préfet","Le président","Le député"],oe:["The mayor","The prefect","The president","The deputy"],a:0,x:"Le maire dirige la commune ; il est élu par le conseil municipal.",xe:"The mayor runs the commune, elected by the municipal council."},
+{t:"si",q:"Est-ce que le président de la République a tous les pouvoirs ?",qe:"Does the President hold all the powers?",o:["Non","Oui","Oui, en cas de guerre seulement","Oui, sur l'économie"],oe:["No","Yes","Only in wartime","Only over the economy"],a:0,x:"Non : la séparation des pouvoirs limite les pouvoirs du président.",xe:"No: separation of powers limits the president's authority."},
+{t:"si",q:"Qui est le préfet ?",qe:"Who is the prefect?",o:["Le représentant de l'État dans le département","Le chef de la commune","Un juge","Un député"],oe:["The State's representative in the department","The head of the commune","A judge","A deputy"],a:0,x:"Nommé par l'État, le préfet applique les décisions du gouvernement localement.",xe:"Appointed by the State, the prefect applies government decisions locally."},
+{t:"si",q:"Quel est le rôle du Parlement ?",qe:"What is Parliament's role?",o:["Voter les lois et contrôler le gouvernement","Juger les criminels","Diriger l'armée","Élire le maire"],oe:["Voting laws and overseeing government","Judging criminals","Running the army","Electing the mayor"],a:0,x:"Le Parlement légifère et contrôle l'exécutif.",xe:"Parliament legislates and scrutinises the executive."},
+{t:"si",q:"Quel est le régime politique de la France aujourd'hui ?",qe:"What is France's political system today?",o:["Une République démocratique (la Ve République)","Une monarchie","Un empire","Une dictature"],oe:["A democratic Republic (the Fifth Republic)","A monarchy","An empire","A dictatorship"],a:0,x:"La France vit sous la Ve République depuis 1958.",xe:"France has lived under the Fifth Republic since 1958."},
+{t:"si",q:"Combien d'États font partie de l'Union européenne au 1er janvier 2025 ?",qe:"How many States are in the EU as of 1 January 2025?",o:["27","28","25","12"],oe:["27","28","25","12"],a:0,x:"L'Union européenne compte 27 États membres (après le départ du Royaume-Uni).",xe:"The EU has 27 member States (after the UK's departure)."},
+{t:"si",q:"Quel État n'est pas membre de l'Union européenne ?",qe:"Which State is NOT an EU member?",o:["La Suisse","La France","L'Allemagne","L'Italie"],oe:["Switzerland","France","Germany","Italy"],a:0,x:"La Suisse n'est pas membre de l'UE.",xe:"Switzerland is not an EU member."},
+{t:"si",q:"Quelle condition est nécessaire pour voter aux élections européennes ?",qe:"What is required to vote in European elections?",o:["Être citoyen de l'UE, majeur et inscrit","Être né en Europe","Parler anglais","Être propriétaire"],oe:["Being an EU citizen, of age, registered","Being born in Europe","Speaking English","Owning property"],a:0,x:"Tout citoyen de l'UE majeur et inscrit peut voter aux européennes.",xe:"Any registered adult EU citizen may vote in European elections."},
+{t:"si",q:"À quelle fréquence les élections européennes sont-elles organisées ?",qe:"How often are European elections held?",o:["Tous les 5 ans","Tous les ans","Tous les 7 ans","Tous les 10 ans"],oe:["Every 5 years","Every year","Every 7 years","Every 10 years"],a:0,x:"Les députés européens sont élus tous les 5 ans.",xe:"Members of the European Parliament are elected every 5 years."},
+{t:"si",q:"Quel pays est un pays fondateur de l'Union européenne ?",qe:"Which country is a founding member of the EU?",o:["La France","La Suède","La Pologne","L'Espagne"],oe:["France","Sweden","Poland","Spain"],a:0,x:"Les 6 fondateurs (CEE, 1957) : France, Allemagne, Italie, Belgique, Pays-Bas, Luxembourg.",xe:"The 6 founders (EEC, 1957): France, Germany, Italy, Belgium, Netherlands, Luxembourg."},
+{t:"si",q:"Quelle est la monnaie utilisée en France ?",qe:"What currency is used in France?",o:["L'euro","Le franc","La livre","Le dollar"],oe:["The euro","The franc","The pound","The dollar"],a:0,x:"La France utilise l'euro depuis 2002.",xe:"France has used the euro since 2002."},
+{t:"si",q:"Qui élit les députés européens ?",qe:"Who elects the members of the European Parliament?",o:["Les citoyens","Le président","Les gouvernements","La Commission européenne"],oe:["The citizens","The president","Governments","The European Commission"],a:0,x:"Les députés européens sont élus au suffrage universel direct par les citoyens.",xe:"MEPs are elected by direct universal suffrage."},
+{t:"si",q:"Quand célèbre-t-on la journée de l'Europe ?",qe:"When is Europe Day celebrated?",o:["Le 9 mai","Le 14 juillet","Le 1er janvier","Le 8 mai"],oe:["9 May","14 July","1 January","8 May"],a:0,x:"La journée de l'Europe est le 9 mai (déclaration Schuman, 1950).",xe:"Europe Day is 9 May (Schuman declaration, 1950)."},
+
+/* ===== DROITS ET DEVOIRS ===== */
+{t:"dd",q:"Comment s'appelle la Constitution actuelle de la France ?",qe:"What is France's current Constitution called?",o:["La Constitution de la Ve République","La Constitution de 1789","La Grande Charte","La Déclaration universelle"],oe:["The Fifth Republic's Constitution","The 1789 Constitution","The Great Charter","The Universal Declaration"],a:0,x:"C'est la Constitution de la Ve République, adoptée en 1958.",xe:"It is the Fifth Republic's Constitution, adopted in 1958."},
+{t:"dd",q:"Comment s'appelle le texte qui énonce les droits et devoirs des personnes résidant en France ?",qe:"What is the text setting out the rights and duties of people living in France?",o:["La Constitution","Le code de la route","Un contrat de travail","Le règlement d'une association"],oe:["The Constitution","The highway code","An employment contract","An association's rules"],a:0,x:"La Constitution (avec la DDHC et son préambule) fixe droits et devoirs. Note : cette question voisine avec « texte fondateur des droits et devoirs du citoyen » → là, la réponse est la DDHC de 1789. À revoir côte à côte.",xe:"The Constitution (with the 1789 Declaration in its preamble) sets rights and duties. Note: a neighbouring question on the \"founding text of citizens' rights and duties\" → that answer is the 1789 Declaration. Review both together.",n:1},
+{t:"dd",q:"Concernant les droits individuels, quelle proposition est correcte ?",qe:"Regarding individual rights, which is correct?",o:["Chacun a des droits qu'il exerce dans le respect des autres","Les droits dépendent de la richesse","Seuls les Français ont des droits","Les droits n'existent pas"],oe:["Everyone has rights, exercised with respect for others","Rights depend on wealth","Only French people have rights","Rights do not exist"],a:0,x:"Les droits individuels s'exercent dans le respect des droits d'autrui.",xe:"Individual rights are exercised with respect for others' rights."},
+{t:"dd",q:"De quelle année date la Déclaration des droits de l'homme et du citoyen ?",qe:"What year is the Declaration of the Rights of Man and of the Citizen?",o:["1789","1848","1905","1958"],oe:["1789","1848","1905","1958"],a:0,x:"La DDHC date de 1789, en pleine Révolution française.",xe:"The Declaration dates from 1789, during the Revolution."},
+{t:"dd",q:"Lequel de ces droits est un droit fondamental ?",qe:"Which of these is a fundamental right?",o:["La liberté d'expression","Le droit de ne pas payer d'impôts","Le droit de rouler vite","Le droit d'insulter"],oe:["Freedom of expression","The right to avoid taxes","The right to speed","The right to insult"],a:0,x:"La liberté d'expression est un droit fondamental garanti par la DDHC.",xe:"Freedom of expression is a fundamental right guaranteed by the 1789 Declaration."},
+{t:"dd",q:"Parmi ces textes, lequel garantit les droits et libertés en France ?",qe:"Which of these texts guarantees rights and freedoms in France?",o:["La Déclaration des droits de l'homme et du citoyen","Le code de la route","Un contrat de travail","Un règlement intérieur"],oe:["The Declaration of the Rights of Man and Citizen","The highway code","An employment contract","Internal rules"],a:0,x:"La DDHC (1789), intégrée au bloc de constitutionnalité, garantit droits et libertés.",xe:"The 1789 Declaration, part of constitutional law, guarantees rights and freedoms."},
+{t:"dd",q:"Qu'est-ce que la liberté d'expression ?",qe:"What is freedom of expression?",o:["Le droit d'exprimer ses opinions dans le respect de la loi","Le droit de mentir","Le droit d'insulter","Le droit de frapper"],oe:["The right to voice opinions within the law","The right to lie","The right to insult","The right to hit"],a:0,x:"Elle permet d'exprimer ses idées, sans injure, diffamation ni incitation à la haine.",xe:"It lets you express ideas, without insult, defamation or incitement to hatred."},
+{t:"dd",q:"Quel droit permet à une personne de se défendre devant la justice ?",qe:"Which right lets a person defend themselves in court?",o:["Le droit à un avocat et à un procès équitable","Le droit de fuir","Le droit de se venger","Aucun droit"],oe:["The right to a lawyer and a fair trial","The right to flee","The right to revenge","No right"],a:0,x:"Les droits de la défense garantissent un procès équitable et l'accès à un avocat.",xe:"Rights of defence guarantee a fair trial and access to a lawyer."},
+{t:"dd",q:"Quel est le texte fondateur établissant en France les droits et les devoirs de chaque citoyen ?",qe:"Which founding text sets out each citizen's rights and duties in France?",o:["La Déclaration des droits de l'homme et du citoyen","Le code civil","La Charte de l'environnement","Le règlement de l'Assemblée"],oe:["The Declaration of the Rights of Man and Citizen","The civil code","The Environmental Charter","The Assembly's rules"],a:0,x:"La DDHC de 1789 est le texte fondateur des droits et devoirs.",xe:"The 1789 Declaration is the founding text of rights and duties."},
+{t:"dd",q:"Quel texte a été adopté pendant la Révolution française ?",qe:"Which text was adopted during the French Revolution?",o:["La Déclaration des droits de l'homme et du citoyen","La Constitution de 1958","La Charte de l'environnement","Le traité de Rome"],oe:["The Declaration of the Rights of Man and Citizen","The 1958 Constitution","The Environmental Charter","The Treaty of Rome"],a:0,x:"La DDHC a été adoptée en 1789, pendant la Révolution.",xe:"The Declaration was adopted in 1789, during the Revolution."},
+{t:"dd",q:"Quelle liberté permet à une personne de ne pas avoir de religion ?",qe:"Which freedom lets a person have no religion?",o:["La liberté de conscience","La liberté de circulation","La liberté du commerce","La liberté de la presse"],oe:["Freedom of conscience","Freedom of movement","Freedom of trade","Freedom of the press"],a:0,x:"La liberté de conscience inclut le droit de ne pas croire.",xe:"Freedom of conscience includes the right not to believe."},
+{t:"dd",q:"Une femme peut avorter :",qe:"A woman may have an abortion:",o:["librement, dans les conditions prévues par la loi","jamais","seulement avec l'accord du mari","seulement à l'étranger"],oe:["freely, within the conditions set by law","never","only with her husband's consent","only abroad"],a:0,x:"L'IVG est un droit encadré par la loi ; la liberté d'y recourir est garantie par la Constitution depuis 2024.",xe:"Abortion is a legal right; the freedom to access it has been in the Constitution since 2024."},
+{t:"dd",q:"Est-il toujours possible de divorcer ?",qe:"Is it always possible to divorce?",o:["Oui","Non","Seulement pour les hommes","Seulement après 10 ans de mariage"],oe:["Yes","No","Only for men","Only after 10 years of marriage"],a:0,x:"Le divorce est un droit ouvert aux deux époux.",xe:"Divorce is a right available to both spouses."},
+{t:"dd",q:"La peine de mort est :",qe:"The death penalty is:",o:["abolie","autorisée","réservée aux crimes graves","décidée par le président"],oe:["abolished","allowed","reserved for serious crimes","decided by the president"],a:0,x:"La peine de mort est abolie en France depuis 1981.",xe:"The death penalty has been abolished in France since 1981."},
+{t:"dd",q:"Concernant les limites aux libertés individuelles, quelle proposition est correcte ?",qe:"Regarding limits on individual freedoms, which is correct?",o:["Les libertés sont limitées par la loi et le respect d'autrui","Il n'y a aucune limite","Le voisin fixe les limites","Elles changent chaque jour"],oe:["Freedoms are limited by law and respect for others","There are no limits","The neighbour sets the limits","They change daily"],a:0,x:"La liberté de chacun s'arrête là où commence celle des autres.",xe:"Each person's freedom ends where another's begins."},
+{t:"dd",q:"En France, est-ce légal d'être marié à plusieurs personnes en même temps ?",qe:"In France, is it legal to be married to several people at once?",o:["Non, c'est interdit","Oui","Oui, avec autorisation","Oui, si c'est à l'étranger"],oe:["No, it is forbidden","Yes","Yes, with permission","Yes, if abroad"],a:0,x:"La polygamie est interdite en France.",xe:"Polygamy is forbidden in France."},
+{t:"dd",q:"Faut-il réduire ses déchets ?",qe:"Should you reduce your waste?",o:["Oui, pour protéger l'environnement","Non","Seulement le dimanche","C'est interdit"],oe:["Yes, to protect the environment","No","Only on Sundays","It is forbidden"],a:0,x:"Protéger l'environnement est un devoir inscrit dans la Charte de l'environnement.",xe:"Protecting the environment is a duty set out in the Environmental Charter."},
+{t:"dd",q:"Jeter une bouteille dans la rue est :",qe:"Throwing a bottle in the street is:",o:["interdit et sanctionné","autorisé","obligatoire","recommandé"],oe:["forbidden and fined","allowed","compulsory","recommended"],a:0,x:"Abandonner des déchets sur la voie publique est puni d'une amende.",xe:"Littering in public is punishable by a fine."},
+{t:"dd",q:"Pourquoi les libertés individuelles peuvent-elles être limitées ?",qe:"Why can individual freedoms be limited?",o:["Pour respecter les droits des autres et l'ordre public","Pour embêter les gens","Pour faire payer","Sans raison"],oe:["To respect others' rights and public order","To annoy people","To make people pay","For no reason"],a:0,x:"Les limites protègent l'ordre public et les droits d'autrui.",xe:"Limits protect public order and others' rights."},
+{t:"dd",q:"Que doit faire une personne en cas d'accident ?",qe:"What must a person do if they witness an accident?",o:["Porter secours et appeler les secours","Partir discrètement","Filmer la scène","Ne rien faire"],oe:["Help and call emergency services","Quietly leave","Film it","Do nothing"],a:0,x:"Ne pas porter assistance à une personne en danger est un délit (non-assistance).",xe:"Failing to help someone in danger is an offence (failure to assist)."},
+{t:"dd",q:"Que permet la citoyenneté française ?",qe:"What does French citizenship allow?",o:["De voter et participer à la vie démocratique","De ne pas payer d'impôts","De ne pas respecter la loi","Rien de particulier"],oe:["Voting and taking part in democratic life","Avoiding taxes","Ignoring the law","Nothing special"],a:0,x:"La citoyenneté ouvre le droit de vote, d'éligibilité et la participation civique.",xe:"Citizenship grants the right to vote, to stand for office and to take part in civic life."},
+{t:"dd",q:"Que risque une personne qui ne respecte pas la loi ?",qe:"What does a person who breaks the law risk?",o:["Une sanction pénale","Rien","Une récompense","Un diplôme"],oe:["A criminal penalty","Nothing","A reward","A diploma"],a:0,x:"Selon l'infraction : amende, peine de prison, etc.",xe:"Depending on the offence: a fine, imprisonment, etc."},
+{t:"dd",q:"Quel est le rôle de la gendarmerie ?",qe:"What is the role of the gendarmerie?",o:["Assurer la sécurité et faire respecter la loi","Voter les lois","Juger les gens","Soigner les malades"],oe:["Ensuring safety and enforcing the law","Voting laws","Judging people","Treating the sick"],a:0,x:"La gendarmerie assure la sécurité, souvent en zones rurales.",xe:"The gendarmerie ensures safety, often in rural areas."},
+{t:"dd",q:"Quel est le rôle de la police ?",qe:"What is the role of the police?",o:["Protéger les personnes et faire respecter la loi","Faire les lois","Juger les gens","Collecter les impôts"],oe:["Protecting people and enforcing the law","Making laws","Judging people","Collecting taxes"],a:0,x:"La police protège les personnes et les biens et fait respecter la loi.",xe:"The police protect people and property and enforce the law."},
+{t:"dd",q:"Qu'est-ce qu'une infraction ?",qe:"What is an offence (infraction)?",o:["Un acte interdit par la loi","Un accident","Un droit","Une opinion"],oe:["An act forbidden by law","An accident","A right","An opinion"],a:0,x:"Une infraction est un comportement puni par la loi (contravention, délit ou crime).",xe:"An offence is conduct punished by law (petty offence, misdemeanour or crime)."},
+{t:"dd",q:"Comment peut-on réduire ses déchets ?",qe:"How can you reduce your waste?",o:["En triant et en recyclant","En brûlant tout","En jetant dans la rue","En achetant plus"],oe:["By sorting and recycling","By burning everything","By littering","By buying more"],a:0,x:"Trier, recycler, composter et réutiliser réduisent les déchets.",xe:"Sorting, recycling, composting and reusing reduce waste."},
+{t:"dd",q:"Déposer une machine à laver cassée sur le trottoir est :",qe:"Leaving a broken washing machine on the pavement is:",o:["interdit, il faut aller en déchetterie","autorisé","obligatoire","recommandé"],oe:["forbidden — take it to the tip","allowed","compulsory","recommended"],a:0,x:"Les dépôts sauvages sont interdits ; les encombrants vont en déchetterie.",xe:"Fly-tipping is banned; bulky items go to the recycling centre."},
+{t:"dd",q:"En quoi consiste la traite des êtres humains ?",qe:"What does human trafficking involve?",o:["L'exploitation de personnes ; c'est un crime","Un commerce légal","Un métier","Un sport"],oe:["Exploiting people; it is a crime","A legal trade","A profession","A sport"],a:0,x:"La traite (travail forcé, esclavage, exploitation) est un crime sévèrement puni.",xe:"Trafficking (forced labour, slavery, exploitation) is a severely punished crime."},
+{t:"dd",q:"Que doit faire une victime de violences ?",qe:"What should a victim of violence do?",o:["Demander de l'aide et porter plainte","Se taire","Se venger","Payer"],oe:["Seek help and file a complaint","Stay silent","Take revenge","Pay"],a:0,x:"Se mettre en sécurité, appeler les secours (17, 3919) et porter plainte.",xe:"Get to safety, call for help (17, 3919) and file a complaint."},
+{t:"dd",q:"Quelle est l'infraction la plus grave ?",qe:"Which is the most serious offence?",o:["Le crime","La contravention","Le délit mineur","Le retard"],oe:["A crime (crime)","A petty offence","A minor misdemeanour","Being late"],a:0,x:"Par gravité croissante : contravention, délit, crime.",xe:"In rising severity: petty offence, misdemeanour, crime."},
+
+/* ===== HISTOIRE, GÉOGRAPHIE ET CULTURE ===== */
+{t:"hg",q:"En quelle année a débuté la Révolution française ?",qe:"In which year did the French Revolution begin?",o:["1789","1848","1918","1958"],oe:["1789","1848","1918","1958"],a:0,x:"La Révolution française a commencé en 1789.",xe:"The French Revolution began in 1789."},
+{t:"hg",q:"Qui était Napoléon Ier ?",qe:"Who was Napoleon I?",o:["Un empereur des Français","Un roi du Moyen Âge","Un président de la République","Un peintre"],oe:["An Emperor of the French","A medieval king","A president","A painter"],a:0,x:"Napoléon Ier fut empereur des Français au début du XIXe siècle.",xe:"Napoleon I was Emperor of the French in the early 19th century."},
+{t:"hg",q:"Lequel de ces personnages historiques est français ?",qe:"Which of these historical figures is French?",o:["Charles de Gaulle","Winston Churchill","George Washington","Jules César"],oe:["Charles de Gaulle","Winston Churchill","George Washington","Julius Caesar"],a:0,x:"Charles de Gaulle, chef de la France libre puis fondateur de la Ve République.",xe:"Charles de Gaulle, leader of Free France and founder of the Fifth Republic."},
+{t:"hg",q:"Dans quelle République est-on aujourd'hui ?",qe:"Which Republic are we in today?",o:["La Ve République","La IIIe République","La Ire République","La VIIe République"],oe:["The Fifth Republic","The Third Republic","The First Republic","The Seventh Republic"],a:0,x:"Nous sommes dans la Ve République depuis 1958.",xe:"We have been in the Fifth Republic since 1958."},
+{t:"hg",q:"Qu'est-ce que la Shoah ?",qe:"What was the Shoah?",o:["Le génocide des Juifs durant la Seconde Guerre mondiale","Une bataille","Un traité de paix","Une fête"],oe:["The genocide of the Jews in WWII","A battle","A peace treaty","A festival"],a:0,x:"La Shoah désigne l'extermination des Juifs d'Europe par les nazis (1941-1945).",xe:"The Shoah is the Nazi extermination of Europe's Jews (1941-1945)."},
+{t:"hg",q:"Quel pays ou région du monde a été colonisé par la France ?",qe:"Which country or region was colonised by France?",o:["L'Algérie","Le Japon","L'Australie","La Chine entière"],oe:["Algeria","Japan","Australia","All of China"],a:0,x:"L'Algérie, comme d'autres territoires d'Afrique et d'Asie, fut colonisée par la France.",xe:"Algeria, like other African and Asian territories, was colonised by France."},
+{t:"hg",q:"Qui a rendu l'école gratuite, laïque et obligatoire ?",qe:"Who made schooling free, secular and compulsory?",o:["Jules Ferry","Napoléon","Charles de Gaulle","Victor Hugo"],oe:["Jules Ferry","Napoleon","Charles de Gaulle","Victor Hugo"],a:0,x:"Les lois Jules Ferry (1881-1882) ont rendu l'école gratuite, laïque et obligatoire.",xe:"The Jules Ferry laws (1881-1882) made schooling free, secular and compulsory."},
+{t:"hg",q:"Quand a eu lieu la Seconde Guerre mondiale ?",qe:"When did the Second World War take place?",o:["1939-1945","1914-1918","1870-1871","1958-1962"],oe:["1939-1945","1914-1918","1870-1871","1958-1962"],a:0,x:"La Seconde Guerre mondiale s'est déroulée de 1939 à 1945.",xe:"The Second World War lasted from 1939 to 1945."},
+{t:"hg",q:"Quand a eu lieu la Première Guerre mondiale ?",qe:"When did the First World War take place?",o:["1914-1918","1939-1945","1789-1799","1900-1910"],oe:["1914-1918","1939-1945","1789-1799","1900-1910"],a:0,x:"La Première Guerre mondiale s'est déroulée de 1914 à 1918.",xe:"The First World War lasted from 1914 to 1918."},
+{t:"hg",q:"En quelle année a été créée la Communauté Économique Européenne (CEE) ?",qe:"In which year was the European Economic Community (EEC) created?",o:["1957","1992","1945","1968"],oe:["1957","1992","1945","1968"],a:0,x:"La CEE a été créée en 1957 par le traité de Rome.",xe:"The EEC was created in 1957 by the Treaty of Rome."},
+{t:"hg",q:"Le 11 novembre est un jour férié. À quoi correspond cette date ?",qe:"11 November is a public holiday. What does it mark?",o:["L'armistice de 1918","La fin de la Seconde Guerre mondiale","La fête nationale","La Révolution"],oe:["The 1918 armistice","The end of WWII","The national day","The Revolution"],a:0,x:"Le 11 novembre commémore l'armistice de 1918, fin de la Première Guerre mondiale.",xe:"11 November marks the 1918 armistice, the end of WWI."},
+{t:"hg",q:"Qui a été le premier Président élu sous la Ve République ?",qe:"Who was the first President elected under the Fifth Republic?",o:["Charles de Gaulle","François Mitterrand","Georges Pompidou","Jacques Chirac"],oe:["Charles de Gaulle","François Mitterrand","Georges Pompidou","Jacques Chirac"],a:0,x:"Charles de Gaulle fut le premier président de la Ve République.",xe:"Charles de Gaulle was the first president of the Fifth Republic."},
+{t:"hg",q:"En quelle année l'esclavage a-t-il été aboli définitivement en France ?",qe:"In which year was slavery definitively abolished in France?",o:["1848","1789","1905","1794"],oe:["1848","1789","1905","1794"],a:0,x:"Aboli une première fois en 1794 puis rétabli, l'esclavage est définitivement aboli en 1848.",xe:"First abolished in 1794 then restored, slavery was definitively abolished in 1848."},
+{t:"hg",q:"Depuis quelle année l'école publique est-elle gratuite ?",qe:"Since which year has state schooling been free?",o:["1881","1905","1936","1958"],oe:["1881","1905","1936","1958"],a:0,x:"L'école publique est gratuite depuis la loi de 1881 (Jules Ferry).",xe:"State schooling has been free since the 1881 law (Jules Ferry)."},
+{t:"hg",q:"Combien y a-t-il eu de républiques en France ?",qe:"How many Republics has France had?",o:["Cinq","Trois","Deux","Dix"],oe:["Five","Three","Two","Ten"],a:0,x:"La France en est à sa cinquième République.",xe:"France is on its fifth Republic."},
+{t:"hg",q:"Qui était le roi de France au moment de la Révolution française ?",qe:"Who was king of France at the time of the Revolution?",o:["Louis XVI","Louis XIV","Napoléon","Henri IV"],oe:["Louis XVI","Louis XIV","Napoleon","Henri IV"],a:0,x:"Louis XVI régnait en 1789 ; il fut guillotiné en 1793.",xe:"Louis XVI reigned in 1789 and was guillotined in 1793."},
+{t:"hg",q:"Qui a fondé la Ve République ?",qe:"Who founded the Fifth Republic?",o:["Charles de Gaulle","Napoléon","Jules Ferry","François Mitterrand"],oe:["Charles de Gaulle","Napoleon","Jules Ferry","François Mitterrand"],a:0,x:"Charles de Gaulle a fondé la Ve République en 1958.",xe:"Charles de Gaulle founded the Fifth Republic in 1958."},
+{t:"hg",q:"Que célèbre-t-on le 14 juillet ?",qe:"What is celebrated on 14 July?",o:["La fête nationale","Noël","L'armistice","La fête du travail"],oe:["The national day","Christmas","The armistice","Labour Day"],a:0,x:"Le 14 juillet célèbre la prise de la Bastille (1789) et la Fête de la Fédération (1790).",xe:"14 July marks the storming of the Bastille (1789) and the Fête de la Fédération (1790)."},
+{t:"hg",q:"Quelle guerre a eu lieu entre 1914 et 1918 ?",qe:"Which war took place between 1914 and 1918?",o:["La Première Guerre mondiale","La Seconde Guerre mondiale","La guerre d'Algérie","La guerre de Cent Ans"],oe:["The First World War","The Second World War","The Algerian War","The Hundred Years' War"],a:0,x:"La Première Guerre mondiale (« Grande Guerre ») s'est déroulée de 1914 à 1918.",xe:"The First World War (\"Great War\") took place from 1914 to 1918."},
+{t:"hg",q:"Pourquoi l'année 1958 est-elle importante pour la France ?",qe:"Why is 1958 important for France?",o:["C'est le début de la Ve République","La fin de la Seconde Guerre mondiale","La Révolution française","L'entrée dans l'euro"],oe:["It marks the start of the Fifth Republic","The end of WWII","The French Revolution","Joining the euro"],a:0,x:"En 1958, une nouvelle Constitution instaure la Ve République (avec de Gaulle).",xe:"In 1958 a new Constitution established the Fifth Republic (with de Gaulle)."},
+{t:"hg",q:"Quel fleuve coule en France ?",qe:"Which river flows in France?",o:["La Loire","Le Nil","Le Danube","La Tamise"],oe:["The Loire","The Nile","The Danube","The Thames"],a:0,x:"La Loire est le plus long fleuve de France (elle passe par Nantes).",xe:"The Loire is France's longest river (it runs through Nantes)."},
+{t:"hg",q:"Quelle ville est française ?",qe:"Which city is French?",o:["Marseille","Genève","Barcelone","Bruxelles"],oe:["Marseille","Geneva","Barcelona","Brussels"],a:0,x:"Marseille est une grande ville française, sur la Méditerranée.",xe:"Marseille is a major French city on the Mediterranean."},
+{t:"hg",q:"Quel océan borde la côte ouest française ?",qe:"Which ocean borders France's west coast?",o:["L'océan Atlantique","L'océan Pacifique","L'océan Indien","L'océan Arctique"],oe:["The Atlantic Ocean","The Pacific Ocean","The Indian Ocean","The Arctic Ocean"],a:0,x:"La façade ouest de la France donne sur l'océan Atlantique.",xe:"France's west coast faces the Atlantic Ocean."},
+{t:"hg",q:"Qu'est-ce que Paris ?",qe:"What is Paris?",o:["La capitale de la France","Une région","Un fleuve","Un pays"],oe:["The capital of France","A region","A river","A country"],a:0,x:"Paris est la capitale de la France.",xe:"Paris is the capital of France."},
+{t:"hg",q:"Quelle est la capitale de la France ?",qe:"What is the capital of France?",o:["Paris","Lyon","Marseille","Bordeaux"],oe:["Paris","Lyon","Marseille","Bordeaux"],a:0,x:"La capitale de la France est Paris.",xe:"The capital of France is Paris."},
+{t:"hg",q:"Sur quel continent se situe la France métropolitaine ?",qe:"On which continent is mainland France?",o:["L'Europe","L'Afrique","L'Asie","L'Amérique"],oe:["Europe","Africa","Asia","America"],a:0,x:"La France métropolitaine se situe en Europe de l'Ouest.",xe:"Mainland France is in Western Europe."},
+{t:"hg",q:"Quelle île est un département d'outre-mer français ?",qe:"Which island is a French overseas department?",o:["La Réunion","La Sicile","La Corse","Madagascar"],oe:["Réunion","Sicily","Corsica","Madagascar"],a:0,x:"La Réunion est un DOM. La Corse, elle, fait partie de la France métropolitaine.",xe:"Réunion is an overseas department. Corsica is part of mainland France."},
+{t:"hg",q:"Combien y a-t-il de régions en France métropolitaine ?",qe:"How many regions does mainland France have?",o:["13","18","22","27"],oe:["13","18","22","27"],a:0,x:"La France métropolitaine compte 13 régions depuis 2016.",xe:"Mainland France has had 13 regions since 2016."},
+{t:"hg",q:"Quelle ville est un grand port maritime ?",qe:"Which city is a major seaport?",o:["Marseille","Toulouse","Paris","Strasbourg"],oe:["Marseille","Toulouse","Paris","Strasbourg"],a:0,x:"Marseille (et Le Havre) sont de grands ports maritimes français.",xe:"Marseille (and Le Havre) are major French seaports."},
+{t:"hg",q:"Quelle est la mer au sud de la France métropolitaine ?",qe:"Which sea lies to the south of mainland France?",o:["La mer Méditerranée","La mer du Nord","La Manche","La mer Baltique"],oe:["The Mediterranean Sea","The North Sea","The Channel","The Baltic Sea"],a:0,x:"Le sud de la France borde la mer Méditerranée.",xe:"Southern France borders the Mediterranean Sea."},
+{t:"hg",q:"Quelle ville est située au bord de la mer Méditerranée ?",qe:"Which city sits on the Mediterranean Sea?",o:["Nice","Lille","Nantes","Strasbourg"],oe:["Nice","Lille","Nantes","Strasbourg"],a:0,x:"Nice (comme Marseille) borde la Méditerranée.",xe:"Nice (like Marseille) lies on the Mediterranean."},
+{t:"hg",q:"Où se situe la Corse ?",qe:"Where is Corsica located?",o:["En mer Méditerranée","Dans l'océan Atlantique","Dans la Manche","En outre-mer lointain"],oe:["In the Mediterranean Sea","In the Atlantic","In the Channel","Far overseas"],a:0,x:"La Corse est une île de la mer Méditerranée.",xe:"Corsica is an island in the Mediterranean Sea."},
+{t:"hg",q:"Quelle chaîne de montagnes est située entre la France et l'Italie ?",qe:"Which mountain range lies between France and Italy?",o:["Les Alpes","Les Pyrénées","Le Jura","Les Vosges"],oe:["The Alps","The Pyrenees","The Jura","The Vosges"],a:0,x:"Les Alpes séparent la France de l'Italie ; les Pyrénées, de l'Espagne.",xe:"The Alps separate France from Italy; the Pyrenees from Spain."},
+{t:"hg",q:"Qui était Molière ?",qe:"Who was Molière?",o:["Un auteur de théâtre","Un roi","Un peintre","Un chanteur"],oe:["A playwright","A king","A painter","A singer"],a:0,x:"Molière est un célèbre dramaturge du XVIIe siècle.",xe:"Molière is a famous 17th-century playwright."},
+{t:"hg",q:"Qui était Charles Baudelaire ?",qe:"Who was Charles Baudelaire?",o:["Un poète","Un peintre","Un général","Un roi"],oe:["A poet","A painter","A general","A king"],a:0,x:"Baudelaire est un poète, auteur des « Fleurs du mal ».",xe:"Baudelaire is a poet, author of \"Les Fleurs du mal\"."},
+{t:"hg",q:"Qui était George Sand ?",qe:"Who was George Sand?",o:["Une écrivaine","Un roi","Une chanteuse","Une peintre"],oe:["A writer (woman)","A king","A singer","A painter"],a:0,x:"George Sand est une grande écrivaine du XIXe siècle.",xe:"George Sand is a major 19th-century writer."},
+{t:"hg",q:"Qui était Simone de Beauvoir ?",qe:"Who was Simone de Beauvoir?",o:["Une écrivaine et philosophe","Une reine","Une actrice","Une sportive"],oe:["A writer and philosopher","A queen","An actress","An athlete"],a:0,x:"Simone de Beauvoir, écrivaine et philosophe, figure du féminisme.",xe:"Simone de Beauvoir, writer and philosopher, a figure of feminism."},
+{t:"hg",q:"Qui était Albert Camus ?",qe:"Who was Albert Camus?",o:["Un écrivain","Un peintre","Un roi","Un chanteur"],oe:["A writer","A painter","A king","A singer"],a:0,x:"Albert Camus, écrivain et philosophe, prix Nobel de littérature (1957).",xe:"Albert Camus, writer and philosopher, Nobel laureate (1957)."},
+{t:"hg",q:"Qui était Paul Cézanne ?",qe:"Who was Paul Cézanne?",o:["Un peintre","Un écrivain","Un musicien","Un roi"],oe:["A painter","A writer","A musician","A king"],a:0,x:"Cézanne est un grand peintre français (post-impressionnisme).",xe:"Cézanne is a great French painter (post-Impressionism)."},
+{t:"hg",q:"Qui était Marc Chagall ?",qe:"Who was Marc Chagall?",o:["Un peintre","Un écrivain","Un chanteur","Un scientifique"],oe:["A painter","A writer","A singer","A scientist"],a:0,x:"Chagall est un peintre du XXe siècle, naturalisé français.",xe:"Chagall is a 20th-century painter, a naturalised French citizen."},
+{t:"hg",q:"Qui était Joséphine Baker ?",qe:"Who was Joséphine Baker?",o:["Une artiste et résistante","Une reine","Une scientifique","Une sportive"],oe:["An artist and Resistance figure","A queen","A scientist","An athlete"],a:0,x:"Artiste et résistante, Joséphine Baker est entrée au Panthéon en 2021.",xe:"Artist and Resistance member, Joséphine Baker entered the Panthéon in 2021."},
+{t:"hg",q:"Qui était une chanteuse française célèbre ?",qe:"Who was a famous French singer?",o:["Édith Piaf","Marie Curie","Jeanne d'Arc","George Sand"],oe:["Édith Piaf","Marie Curie","Joan of Arc","George Sand"],a:0,x:"Édith Piaf est une chanteuse française mondialement connue.",xe:"Édith Piaf is a world-famous French singer."},
+{t:"hg",q:"Qu'est-ce que le Louvre ?",qe:"What is the Louvre?",o:["Un musée","Un château royal habité","Une gare","Un stade"],oe:["A museum","An inhabited royal palace","A train station","A stadium"],a:0,x:"Le Louvre, à Paris, est l'un des plus grands musées du monde.",xe:"The Louvre in Paris is one of the world's largest museums."},
+{t:"hg",q:"Qui était Jean de la Fontaine ?",qe:"Who was Jean de La Fontaine?",o:["Un écrivain (fabuliste)","Un peintre","Un roi","Un explorateur"],oe:["A writer (fabulist)","A painter","A king","An explorer"],a:0,x:"La Fontaine est célèbre pour ses Fables (« Le Corbeau et le Renard »…).",xe:"La Fontaine is famous for his Fables (\"The Crow and the Fox\"…)."},
+{t:"hg",q:"Quel écrivain est français ?",qe:"Which writer is French?",o:["Victor Hugo","William Shakespeare","Miguel de Cervantès","Goethe"],oe:["Victor Hugo","William Shakespeare","Miguel de Cervantes","Goethe"],a:0,x:"Victor Hugo, auteur des « Misérables », est un écrivain français majeur.",xe:"Victor Hugo, author of \"Les Misérables\", is a major French writer."},
+{t:"hg",q:"Dans quelle ville se trouve la tour Eiffel ?",qe:"In which city is the Eiffel Tower?",o:["Paris","Lyon","Marseille","Nice"],oe:["Paris","Lyon","Marseille","Nice"],a:0,x:"La tour Eiffel se dresse à Paris depuis 1889.",xe:"The Eiffel Tower has stood in Paris since 1889."},
+{t:"hg",q:"Quand célèbre-t-on Noël ?",qe:"When is Christmas celebrated?",o:["Le 25 décembre","Le 1er janvier","Le 6 janvier","Le 24 novembre"],oe:["25 December","1 January","6 January","24 November"],a:0,x:"Noël est célébré le 25 décembre.",xe:"Christmas is celebrated on 25 December."},
+
+/* ===== VIVRE DANS LA SOCIÉTÉ FRANÇAISE ===== */
+{t:"vs",q:"Quel numéro d'urgence permet d'appeler le SAMU ?",qe:"Which emergency number calls the SAMU (medical)?",o:["Le 15","Le 17","Le 18","Le 112"],oe:["15","17","18","112"],a:0,x:"Le 15 joint le SAMU (urgences médicales).",xe:"15 reaches the SAMU (medical emergencies)."},
+{t:"vs",q:"Quel numéro d'urgence permet d'appeler les pompiers ?",qe:"Which emergency number calls the fire brigade?",o:["Le 18","Le 15","Le 17","Le 115"],oe:["18","15","17","115"],a:0,x:"Le 18 joint les pompiers.",xe:"18 reaches the fire brigade."},
+{t:"vs",q:"Après avoir obtenu le permis de conduire, que faut-il faire pour pouvoir conduire sa voiture ?",qe:"After getting your licence, what must you do to drive your car?",o:["Assurer le véhicule","Repasser le permis","Payer une taxe unique","Rien"],oe:["Insure the vehicle","Retake the test","Pay a one-off tax","Nothing"],a:0,x:"L'assurance automobile est obligatoire pour circuler.",xe:"Car insurance is compulsory to drive."},
+{t:"vs",q:"À quelles conditions un mariage est-il reconnu juridiquement ?",qe:"On what condition is a marriage legally recognised?",o:["S'il est célébré à la mairie par un officier d'état civil","S'il est seulement religieux","S'il est fêté","S'il dure un an"],oe:["If held at the town hall by a registrar","If only religious","If celebrated","If it lasts a year"],a:0,x:"Seul le mariage civil, célébré en mairie, a une valeur juridique.",xe:"Only civil marriage, held at the town hall, has legal value."},
+{t:"vs",q:"Quand faut-il déclarer son enfant au service d'état civil de la mairie ?",qe:"When must you register a newborn at the town hall?",o:["Dans les 5 jours après la naissance","Dans l'année","À ses 3 ans","Jamais"],oe:["Within 5 days of birth","Within a year","At age 3","Never"],a:0,x:"La déclaration de naissance se fait dans les 5 jours suivant la naissance.",xe:"A birth must be declared within 5 days."},
+{t:"vs",q:"Le travail non déclaré est :",qe:"Undeclared work is:",o:["illégal","autorisé","obligatoire","recommandé"],oe:["illegal","allowed","compulsory","recommended"],a:0,x:"Le travail « au noir » est illégal et sanctionné.",xe:"Undeclared (\"cash-in-hand\") work is illegal and punishable."},
+{t:"vs",q:"Que doit faire un employeur pour fixer un salaire ?",qe:"What must an employer respect when setting a wage?",o:["Respecter au moins le SMIC","Payer ce qu'il veut","Ne rien payer la 1re année","Payer en nature"],oe:["At least the minimum wage (SMIC)","Whatever they like","Nothing the first year","In goods"],a:0,x:"Le salaire ne peut être inférieur au SMIC.",xe:"Pay cannot be below the SMIC (minimum wage)."},
+{t:"vs",q:"Qu'est-ce que le SMIC ?",qe:"What is the SMIC?",o:["Le salaire minimum légal","Un impôt","Une prime","Une retraite"],oe:["The legal minimum wage","A tax","A bonus","A pension"],a:0,x:"Le SMIC est le salaire minimum interprofessionnel de croissance.",xe:"The SMIC is France's legal minimum wage."},
+{t:"vs",q:"Quelle est la première démarche à réaliser pour chercher un emploi ?",qe:"What is a first step when looking for a job?",o:["S'inscrire à France Travail","Ouvrir une entreprise","Acheter un local","Ne rien faire"],oe:["Registering with France Travail","Opening a business","Buying premises","Doing nothing"],a:0,x:"S'inscrire à France Travail (ex-Pôle emploi) aide dans la recherche.",xe:"Registering with France Travail (formerly Pôle emploi) supports the job search."},
+{t:"vs",q:"Quelle est la durée légale du temps de travail par semaine ?",qe:"What is the legal weekly working time?",o:["35 heures","40 heures","30 heures","48 heures"],oe:["35 hours","40 hours","30 hours","48 hours"],a:0,x:"La durée légale est de 35 heures par semaine.",xe:"The legal working week is 35 hours."},
+{t:"vs",q:"Qui est aidé par France Travail ?",qe:"Who does France Travail help?",o:["Les demandeurs d'emploi","Les retraités","Les enfants","Les touristes"],oe:["Jobseekers","Pensioners","Children","Tourists"],a:0,x:"France Travail accompagne les demandeurs d'emploi.",xe:"France Travail supports jobseekers."},
+{t:"vs",q:"Une personne étrangère en situation régulière peut créer son entreprise :",qe:"A lawfully-resident foreigner may start a business:",o:["oui, dans les conditions prévues par la loi","non","seulement après 10 ans","seulement si elle est française"],oe:["yes, under the conditions set by law","no","only after 10 years","only if French"],a:0,x:"Un étranger en situation régulière peut entreprendre, comme tout résident.",xe:"A lawfully-resident foreigner may start a business, like any resident."},
+{t:"vs",q:"Une femme peut-elle créer son entreprise ?",qe:"May a woman start a business?",o:["Oui","Non","Avec l'accord de son mari","Seulement dans certains métiers"],oe:["Yes","No","Only with her husband's consent","Only in certain trades"],a:0,x:"Oui, au nom de l'égalité entre les femmes et les hommes.",xe:"Yes — by virtue of equality between women and men."},
+{t:"vs",q:"À partir de quel âge un mineur peut-il travailler ?",qe:"From what age may a minor work?",o:["16 ans","18 ans","12 ans","21 ans"],oe:["16","18","12","21"],a:0,x:"En règle générale à 16 ans (dès 14 ans pour des travaux légers encadrés).",xe:"Generally at 16 (from 14 for light, supervised work)."},
+{t:"vs",q:"Auprès de quel organisme faut-il demander le remboursement des frais de santé ?",qe:"Which body reimburses your health costs?",o:["L'Assurance Maladie (Sécurité sociale)","La mairie","La police","Les impôts"],oe:["Health Insurance (Social Security)","The town hall","The police","The tax office"],a:0,x:"L'Assurance Maladie rembourse une partie des frais de santé.",xe:"Health Insurance reimburses part of your health costs."},
+{t:"vs",q:"Qu'est-ce qu'un numéro d'urgence ?",qe:"What is an emergency number?",o:["Un numéro gratuit pour appeler les secours","Un numéro payant","Un numéro pour réserver","Un code secret"],oe:["A free number to call for help","A paid number","A booking line","A secret code"],a:0,x:"Les numéros d'urgence (15, 17, 18, 112) sont gratuits.",xe:"Emergency numbers (15, 17, 18, 112) are free."},
+{t:"vs",q:"Concernant l'accès aux soins, quelle proposition est correcte ?",qe:"Regarding access to healthcare, which is correct?",o:["Toute personne peut être soignée en France","Seuls les riches sont soignés","Il faut toujours payer d'avance","Les soins sont interdits aux étrangers"],oe:["Anyone can receive care in France","Only the wealthy are treated","You must always pay upfront","Foreigners cannot be treated"],a:0,x:"Le système de santé permet à toute personne d'être soignée.",xe:"The health system allows anyone to be treated."},
+{t:"vs",q:"En cas de problème de santé non urgent, à qui faut-il s'adresser en premier ?",qe:"For a non-urgent health issue, who do you see first?",o:["À son médecin traitant","Aux urgences","Aux pompiers","À la police"],oe:["Your regular doctor","A&E","The fire brigade","The police"],a:0,x:"On consulte d'abord son médecin traitant (généraliste).",xe:"You first see your regular GP (médecin traitant)."},
+{t:"vs",q:"Quel est le rôle du médecin traitant ?",qe:"What is the role of the médecin traitant?",o:["Suivre et coordonner les soins","Vendre des médicaments","Faire seulement les vaccins","Gérer l'hôpital"],oe:["Follow up and coordinate care","Sell medicines","Only give vaccines","Run the hospital"],a:0,x:"Le médecin traitant suit le patient et l'oriente vers les spécialistes.",xe:"The médecin traitant follows the patient and refers to specialists."},
+{t:"vs",q:"Dans quelles situations doit-on se rendre aux urgences de l'hôpital ?",qe:"When should you go to hospital A&E?",o:["En cas d'urgence grave ou vitale","Pour un rhume","Pour renouveler une ordonnance","Pour un simple certificat"],oe:["For a serious or life-threatening emergency","For a cold","To renew a prescription","For a simple certificate"],a:0,x:"Les urgences sont réservées aux situations graves ou vitales.",xe:"A&E is for serious or life-threatening situations."},
+{t:"vs",q:"Quel est l'objectif des vaccinations obligatoires ?",qe:"What is the aim of compulsory vaccinations?",o:["Protéger la santé de tous","Gagner de l'argent","Contrôler la population","Aucun objectif"],oe:["Protecting everyone's health","Making money","Controlling the population","No aim"],a:0,x:"Les vaccins obligatoires protègent l'individu et limitent la propagation des maladies.",xe:"Compulsory vaccines protect the individual and limit disease spread."},
+{t:"vs",q:"À quoi sert la carte Vitale ?",qe:"What is the carte Vitale for?",o:["À se faire rembourser les soins","À voter","À conduire","À voyager"],oe:["To be reimbursed for care","To vote","To drive","To travel"],a:0,x:"La carte Vitale atteste des droits à l'Assurance Maladie et permet le remboursement.",xe:"The carte Vitale proves your Health Insurance rights and enables reimbursement."},
+{t:"vs",q:"À quoi sert une mutuelle santé ?",qe:"What is a health mutuelle for?",o:["À compléter les remboursements de la Sécurité sociale","À payer les impôts","À louer un logement","À voter"],oe:["To top up Social Security reimbursements","To pay taxes","To rent housing","To vote"],a:0,x:"La mutuelle (complémentaire) rembourse la part non couverte par la Sécu.",xe:"A mutuelle (top-up cover) reimburses what Social Security does not."},
+{t:"vs",q:"Jusqu'à quel âge l'école est-elle obligatoire ?",qe:"Up to what age is schooling compulsory?",o:["16 ans","18 ans","14 ans","12 ans"],oe:["16","18","14","12"],a:0,x:"L'instruction est obligatoire de 3 à 16 ans.",xe:"Education is compulsory from 3 to 16."},
+{t:"vs",q:"L'autorité parentale prévoit l'obligation :",qe:"Parental authority entails the duty to:",o:["de protéger et éduquer son enfant","de le faire travailler","de choisir sa religion à sa place à vie","de ne rien faire"],oe:["protect and educate the child","make them work","choose their lifelong religion","do nothing"],a:0,x:"Les parents doivent protéger, entretenir et éduquer leur enfant.",xe:"Parents must protect, provide for and educate their child."},
+{t:"vs",q:"Pour qui l'école est-elle obligatoire ?",qe:"For whom is school compulsory?",o:["Pour tous les enfants de 3 à 16 ans","Seulement les garçons","Seulement les Français","Seulement les filles"],oe:["All children aged 3 to 16","Only boys","Only French children","Only girls"],a:0,x:"L'instruction est obligatoire pour tous les enfants vivant en France.",xe:"Education is compulsory for every child living in France."},
+{t:"vs",q:"Quel diplôme obtient-on à la fin du lycée ?",qe:"Which diploma do you get at the end of lycée?",o:["Le baccalauréat","Le brevet","La licence","Le doctorat"],oe:["The baccalauréat","The brevet","The bachelor's","The doctorate"],a:0,x:"Le baccalauréat (« bac ») clôt les études au lycée.",xe:"The baccalauréat (\"bac\") completes lycée studies."},
+{t:"vs",q:"Dans quels établissements scolaires vont les élèves après l'école élémentaire ?",qe:"Where do pupils go after primary (élémentaire) school?",o:["Au collège","À l'université","Directement au lycée","En maternelle"],oe:["To collège (middle school)","To university","Straight to lycée","To nursery"],a:0,x:"Après l'élémentaire, les élèves entrent au collège, puis au lycée.",xe:"After primary, pupils enter collège, then lycée."},
+{t:"vs",q:"Un enfant inscrit à l'école :",qe:"A child enrolled at school:",o:["doit suivre les cours régulièrement","peut venir quand il veut","paie chaque jour","choisit seul ses matières"],oe:["must attend regularly","can come whenever","pays daily","picks subjects alone"],a:0,x:"L'assiduité est obligatoire : l'enfant doit aller à l'école régulièrement.",xe:"Regular attendance is compulsory."},
+{t:"vs",q:"Les enfants qui ne parlent pas français :",qe:"Children who do not speak French:",o:["sont accueillis et aidés pour apprendre le français","sont refusés à l'école","doivent rester à la maison","paient plus cher"],oe:["are welcomed and helped to learn French","are refused","must stay home","pay more"],a:0,x:"Des dispositifs spécifiques aident les élèves allophones à apprendre le français.",xe:"Special support helps non-French-speaking pupils learn the language."},
+
+/* ===== RENFORT / REINFORCEMENT (drilling key facts) ===== */
+{t:"pv",q:"Le drapeau français se compose de trois bandes verticales, de gauche à droite :",qe:"The French flag has three vertical bands, left to right:",o:["bleu, blanc, rouge","rouge, blanc, bleu","blanc, bleu, rouge","bleu, rouge, blanc"],oe:["blue, white, red","red, white, blue","white, blue, red","blue, red, white"],a:0,x:"De la hampe vers l'extérieur : bleu, blanc, rouge.",xe:"From the pole outward: blue, white, red."},
+{t:"pv",q:"Combien de valeurs figurent dans la devise française ?",qe:"How many values are in the French motto?",o:["Trois","Deux","Quatre","Cinq"],oe:["Three","Two","Four","Five"],a:0,x:"Trois : liberté, égalité, fraternité.",xe:"Three: liberty, equality, fraternity."},
+{t:"pv",q:"La neutralité religieuse s'impose surtout :",qe:"Religious neutrality applies above all to:",o:["à l'État et aux services publics","aux citoyens chez eux","aux commerces privés","aux touristes"],oe:["the State and public services","citizens at home","private shops","tourists"],a:0,x:"La laïcité impose la neutralité de l'État et des agents publics.",xe:"Laïcité requires neutrality of the State and its public officials."},
+{t:"pv",q:"Peut-on critiquer le gouvernement en France ?",qe:"May you criticise the government in France?",o:["Oui, c'est la liberté d'expression","Non, c'est interdit","Seulement en votant","Seulement à l'étranger"],oe:["Yes, that's free speech","No, it's banned","Only by voting","Only abroad"],a:0,x:"La critique du pouvoir est protégée par la liberté d'expression.",xe:"Criticising those in power is protected by freedom of expression."},
+{t:"si",q:"Le président de la République est élu au suffrage :",qe:"The President is elected by … suffrage:",o:["universel direct","indirect","par le Parlement","par tirage au sort"],oe:["direct universal","indirect","by Parliament","by lottery"],a:0,x:"Le président est élu directement par les citoyens.",xe:"The president is elected directly by citizens."},
+{t:"si",q:"Où siège le Sénat ?",qe:"Where does the Senate sit?",o:["Au palais du Luxembourg","Au palais Bourbon","À l'Élysée","À Matignon"],oe:["At the Luxembourg Palace","At the Bourbon Palace","At the Élysée","At Matignon"],a:0,x:"Le Sénat siège au palais du Luxembourg ; l'Assemblée, au palais Bourbon.",xe:"The Senate sits at the Luxembourg Palace; the Assembly at the Bourbon Palace."},
+{t:"si",q:"Où siège l'Assemblée nationale ?",qe:"Where does the National Assembly sit?",o:["Au palais Bourbon","Au palais du Luxembourg","À l'Élysée","À Matignon"],oe:["At the Bourbon Palace","At the Luxembourg Palace","At the Élysée","At Matignon"],a:0,x:"L'Assemblée nationale siège au palais Bourbon, à Paris.",xe:"The National Assembly sits at the Bourbon Palace in Paris."},
+{t:"si",q:"Où réside et travaille le Premier ministre ?",qe:"Where does the Prime Minister reside and work?",o:["À l'hôtel de Matignon","À l'Élysée","Au Luxembourg","Au palais Bourbon"],oe:["At the Hôtel de Matignon","At the Élysée","At the Luxembourg","At the Bourbon Palace"],a:0,x:"Matignon est la résidence du Premier ministre ; l'Élysée, celle du président.",xe:"Matignon is the PM's residence; the Élysée is the president's."},
+{t:"si",q:"Combien d'étoiles compte le drapeau de l'Union européenne ?",qe:"How many stars are on the EU flag?",o:["12","27","15","24"],oe:["12","27","15","24"],a:0,x:"Le drapeau européen porte 12 étoiles (symbole d'unité), quel que soit le nombre d'États.",xe:"The EU flag has 12 stars (a symbol of unity), whatever the number of States."},
+{t:"si",q:"Le conseil municipal est élu pour combien de temps ?",qe:"For how long is a municipal council elected?",o:["6 ans","5 ans","4 ans","7 ans"],oe:["6 years","5 years","4 years","7 years"],a:0,x:"Les conseillers municipaux sont élus pour 6 ans.",xe:"Municipal councillors are elected for 6 years."},
+{t:"dd",q:"Payer ses impôts est :",qe:"Paying your taxes is:",o:["une obligation","un choix","interdit","réservé aux riches"],oe:["a duty","a choice","forbidden","only for the rich"],a:0,x:"Contribuer aux dépenses publiques par l'impôt est un devoir.",xe:"Contributing to public spending through tax is a duty."},
+{t:"dd",q:"Respecter les lois de la République est :",qe:"Obeying the Republic's laws is:",o:["une obligation pour toute personne en France","facultatif","réservé aux Français","réservé aux adultes"],oe:["a duty for everyone in France","optional","only for the French","only for adults"],a:0,x:"Toute personne vivant en France doit respecter la loi.",xe:"Everyone living in France must obey the law."},
+{t:"dd",q:"La liberté de la presse permet :",qe:"Freedom of the press allows:",o:["d'informer librement dans le respect de la loi","de publier des mensonges","d'insulter","rien du tout"],oe:["free reporting within the law","publishing lies","insulting people","nothing"],a:0,x:"La presse informe librement, dans les limites fixées par la loi.",xe:"The press reports freely, within legal limits."},
+{t:"dd",q:"L'égalité entre les femmes et les hommes est :",qe:"Equality between women and men is:",o:["garantie par la loi","facultative","réservée au travail","inexistante"],oe:["guaranteed by law","optional","only at work","non-existent"],a:0,x:"L'égalité femmes-hommes est un principe garanti et protégé par la loi.",xe:"Gender equality is a principle guaranteed and protected by law."},
+{t:"dd",q:"Le racisme et les discriminations sont :",qe:"Racism and discrimination are:",o:["interdits et punis par la loi","tolérés","une opinion libre","encouragés"],oe:["forbidden and punished by law","tolerated","a free opinion","encouraged"],a:0,x:"Racisme et discriminations sont des infractions pénales.",xe:"Racism and discrimination are criminal offences."},
+{t:"hg",q:"Quelle est la plus haute montagne des Alpes françaises ?",qe:"What is the highest mountain in the French Alps?",o:["Le mont Blanc","Le mont Ventoux","Le Puy de Dôme","Le pic du Midi"],oe:["Mont Blanc","Mont Ventoux","Puy de Dôme","Pic du Midi"],a:0,x:"Le mont Blanc (~4 807 m) est le plus haut sommet des Alpes.",xe:"Mont Blanc (~4,807 m) is the highest Alpine peak."},
+{t:"hg",q:"Les Pyrénées séparent la France de quel pays ?",qe:"The Pyrenees separate France from which country?",o:["L'Espagne","L'Italie","L'Allemagne","La Belgique"],oe:["Spain","Italy","Germany","Belgium"],a:0,x:"Les Pyrénées forment la frontière avec l'Espagne.",xe:"The Pyrenees form the border with Spain."},
+{t:"hg",q:"Marie Curie était :",qe:"Marie Curie was:",o:["une scientifique","une reine","une chanteuse","une actrice"],oe:["a scientist","a queen","a singer","an actress"],a:0,x:"Marie Curie, scientifique, a reçu deux prix Nobel (physique et chimie).",xe:"Marie Curie, a scientist, won two Nobel Prizes (physics and chemistry)."},
+{t:"hg",q:"Le 8 mai commémore :",qe:"8 May commemorates:",o:["la fin de la Seconde Guerre mondiale en Europe","l'armistice de 1918","la Révolution","la fête du travail"],oe:["the end of WWII in Europe","the 1918 armistice","the Revolution","Labour Day"],a:0,x:"Le 8 mai 1945 marque la victoire et la fin de la guerre en Europe.",xe:"8 May 1945 marks victory and the end of the war in Europe."},
+{t:"hg",q:"Le 1er mai est :",qe:"1 May is:",o:["la fête du Travail","la fête nationale","la fête de la Victoire","Noël"],oe:["Labour Day","the national day","Victory Day","Christmas"],a:0,x:"Le 1er mai est la fête du Travail, jour férié en France.",xe:"1 May is Labour Day, a public holiday in France."},
+{t:"vs",q:"Le numéro d'urgence européen est :",qe:"The single European emergency number is:",o:["le 112","le 15","le 17","le 911"],oe:["112","15","17","911"],a:0,x:"Le 112 fonctionne dans toute l'Union européenne.",xe:"112 works throughout the European Union."},
+{t:"vs",q:"Pour appeler la police, on compose le :",qe:"To call the police, dial:",o:["17","15","18","112"],oe:["17","15","18","112"],a:0,x:"Le 17 joint la police ou la gendarmerie.",xe:"17 reaches the police or gendarmerie."},
+{t:"vs",q:"L'école maternelle accueille les enfants à partir de :",qe:"Nursery school (maternelle) takes children from:",o:["3 ans","6 ans","2 ans","5 ans"],oe:["age 3","age 6","age 2","age 5"],a:0,x:"L'instruction étant obligatoire dès 3 ans, la maternelle accueille les enfants à cet âge.",xe:"Since education is compulsory from age 3, maternelle takes children from then."},
+{t:"vs",q:"En cas de violences conjugales, quel numéro peut-on appeler ?",qe:"For domestic violence, which number can you call?",o:["le 3919","le 118","le 3615","le 12"],oe:["3919","118","3615","12"],a:0,x:"Le 3919 est le numéro d'écoute pour les violences faites aux femmes (17 en urgence).",xe:"3919 is the helpline for violence against women (17 in an emergency)."},
+{t:"vs",q:"La Sécurité sociale sert principalement à :",qe:"Social Security mainly serves to:",o:["protéger contre la maladie et les risques sociaux","prêter de l'argent","assurer les voitures","gérer les impôts"],oe:["cover illness and social risks","lend money","insure cars","manage taxes"],a:0,x:"La Sécurité sociale couvre maladie, famille, retraite et accidents du travail.",xe:"Social Security covers illness, family, pensions and work accidents."},
+{t:"vs",q:"Le harcèlement à l'école est :",qe:"Bullying at school is:",o:["interdit et puni","toléré","normal","obligatoire"],oe:["forbidden and punished","tolerated","normal","compulsory"],a:0,x:"Le harcèlement scolaire est interdit et sanctionné par la loi.",xe:"School bullying is forbidden and punishable by law."}
+];
+
+/* ---------- STATE ---------- */
+let mode = "practice";
+let lang = "bi";            // 'fr' or 'bi'
+let filter = "all";
+let pool = [];              // current working list of indices
+let idx = 0;
+let answered = {};          // questionRef -> bool correct  (practice session)
+let seen = 0, right = 0;
+let byTheme = {};           // theme -> {seen, right}
+Object.keys(THEMES).forEach(t=>byTheme[t]={seen:0,right:0});
+
+/* exam state */
+let exam = null; // {items:[], answers:[], i, timer, remaining}
+
+/* ---------- HELPERS ---------- */
+const $ = s => document.querySelector(s);
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function themeChip(t){return `<span class="chip">${THEMES[t].fr}</span>`;}
+
+function buildPool(){
+  pool = [];
+  Q.forEach((q,i)=>{ if(filter==="all"||q.t===filter) pool.push(i); });
+  shuffle(pool);
+  idx = 0;
+}
+
+/* ---------- RENDER SHELL BITS ---------- */
+function setMode(m){
+  mode=m;
+  $("#m-practice").classList.toggle("on",m==="practice");
+  $("#m-cards").classList.toggle("on",m==="cards");
+  $("#m-exam").classList.toggle("on",m==="exam");
+  $("#filterRow").style.display = (m==="exam")?"none":"flex";
+  if(exam&&exam.timer){clearInterval(exam.timer);} exam=null;
+  if(m==="exam"){ renderExamIntro(); }
+  else { buildPool(); render(); }
+  updateStats();
+}
+function toggleLang(){ lang = (lang==="bi")?"fr":"bi"; $("#langBtn").textContent = (lang==="bi")?"FR + EN":"FR seul"; render(); }
+function applyFilter(){ filter=$("#themeSel").value; buildPool(); render(); updateStats(); }
+
+function updateStats(){
+  const total = pool.length || Q.filter(q=>filter==="all"||q.t===filter).length;
+  if(mode==="exam"){ $("#statsRow").innerHTML = ""; $("#progressBar").style.width="0%"; return; }
+  const pct = seen? Math.round(right/seen*100):0;
+  $("#statsRow").innerHTML =
+    `<span>Session : <b>${right}/${seen}</b> correctes (${pct}%)</span>`+
+    `<span>Banque : <b>${Q.length}</b> questions</span>`+
+    `<span>Filtre : <b>${filter==="all"?"toutes":THEMES[filter].fr}</b></span>`;
+  const prog = total? Math.round((idx)/total*100):0;
+  $("#progressBar").style.width = Math.min(prog,100)+"%";
+}
+
+/* ---------- PRACTICE ---------- */
+function render(){
+  if(mode==="practice") return renderPractice();
+  if(mode==="cards") return renderCard();
+}
+
+function renderPractice(){
+  if(!pool.length){ $("#stage").innerHTML="<div class='card'>Aucune question.</div>"; return; }
+  if(idx>=pool.length){ return renderDone(); }
+  const q = Q[pool[idx]];
+  const order = shuffle([0,1,2,3]);
+  const opts = order.map(oi=>{
+    const en = lang==="bi"?`<span class="oe">${q.oe[oi]}</span>`:"";
+    return `<button class="opt" data-oi="${oi}" onclick="pick(this,${oi},${q.a})">${q.o[oi]}${en}</button>`;
+  }).join("");
+  $("#stage").innerHTML = `
+    <div class="card">
+      ${themeChip(q.t)}
+      <p class="q">${q.q}</p>
+      ${lang==="bi"?`<p class="qe">${q.qe}</p>`:""}
+      <div class="opts">${opts}</div>
+      <div class="explain"><span class="lab">Explication</span><span id="exFr"></span>${lang==="bi"?'<span class="ee" id="exEn"></span>':''}</div>
+      <div class="flag" id="flag">⚠︎ Réponse à vérifier avec vos sources officielles — question voisine d'une autre du même thème.</div>
+      <div class="nav">
+        <button class="btn ghost" onclick="prev()" ${idx===0?'disabled':''}>← Précédent</button>
+        <button class="btn primary" id="nextBtn" onclick="next()" disabled>Suivant →</button>
+        <span class="count">${idx+1} / ${pool.length}</span>
+      </div>
+    </div>`;
+  updateStats();
+}
+
+function pick(btn,chosen,correct){
+  const card = btn.closest(".card");
+  if(card.dataset.done) return;
+  card.dataset.done="1";
+  const q = Q[pool[idx]];
+  const buttons = card.querySelectorAll(".opt");
+  buttons.forEach(b=>{
+    b.disabled=true;
+    const oi=+b.dataset.oi;
+    if(oi===correct){ b.classList.add("correct"); b.querySelector(".mark")||b.insertAdjacentHTML("afterbegin",'<span class="mark">✓</span>'); }
+    if(oi===chosen && chosen!==correct){ b.classList.add("wrong"); b.insertAdjacentHTML("afterbegin",'<span class="mark">✗</span>'); }
+  });
+  const ok = chosen===correct;
+  seen++; if(ok) right++;
+  byTheme[q.t].seen++; if(ok) byTheme[q.t].right++;
+  card.querySelector(".explain").classList.add("show");
+  $("#exFr").textContent = q.x;
+  if(lang==="bi" && $("#exEn")) $("#exEn").textContent = q.xe;
+  if(q.n) $("#flag").classList.add("show");
+  $("#nextBtn").disabled=false;
+}
+function next(){ idx++; render(); }
+function prev(){ if(idx>0){idx--; render();} }
+
+function renderDone(){
+  const pct = seen?Math.round(right/seen*100):0;
+  $("#stage").innerHTML = `
+    <div class="card"><div class="result">
+      <div class="score">${pct}%</div>
+      <div class="sub">Vous avez parcouru le lot filtré (${right}/${seen} correctes cette session).</div>
+      <div class="nav" style="justify-content:center;margin-top:18px">
+        <button class="btn primary" onclick="restartPool()">Recommencer ce lot</button>
+      </div>
+    </div></div>`;
+}
+function restartPool(){ buildPool(); render(); }
+
+/* ---------- FLASHCARDS ---------- */
+function renderCard(){
+  if(!pool.length){ $("#stage").innerHTML="<div class='card'>Aucune carte.</div>"; return; }
+  if(idx>=pool.length) idx=0;
+  const q = Q[pool[idx]];
+  const correctFr = q.o[q.a], correctEn = q.oe[q.a];
+  $("#stage").innerHTML = `
+    <div class="card flip" id="flipCard">
+      ${themeChip(q.t)}
+      <p class="q">${q.q}</p>
+      ${lang==="bi"?`<p class="qe">${q.qe}</p>`:""}
+      <div class="answer">
+        <div class="ans-fr">${correctFr}</div>
+        ${lang==="bi"?`<div class="ans-en">${correctEn}</div>`:""}
+        <div class="explain show" style="margin-top:12px"><span class="lab">Pourquoi</span><span>${q.x}</span>${lang==="bi"?`<span class="ee">${q.xe}</span>`:""}</div>
+      </div>
+      <div class="nav">
+        <button class="btn ghost" onclick="prevCard()" ${idx===0?'disabled':''}>←</button>
+        <button class="btn primary" id="revealBtn" onclick="reveal()">Voir la réponse</button>
+        <button class="btn ghost" onclick="nextCard()">→</button>
+        <span class="count">${idx+1} / ${pool.length}</span>
+      </div>
+    </div>`;
+  updateStats();
+}
+function reveal(){ $("#flipCard").classList.add("revealed"); $("#revealBtn").textContent="Réponse affichée"; $("#revealBtn").disabled=true; }
+function nextCard(){ idx=(idx+1)%pool.length; renderCard(); }
+function prevCard(){ if(idx>0){idx--; renderCard();} }
+
+/* ---------- EXAM BLANC ---------- */
+function renderExamIntro(){
+  $("#stage").innerHTML = `
+    <div class="intro">
+      <b>Examen blanc — conditions réelles.</b> 40 questions tirées au sort et réparties comme à l'examen officiel
+      (Principes et valeurs ×11, Institutions ×8, Droits et devoirs ×7, Histoire-géo-culture ×7, Vivre en société ×7).
+      Chrono de <b>45 minutes</b>, pas de correction avant la fin. Il faut <b>32/40 (80 %)</b> pour réussir.
+    </div>
+    <div class="card"><div class="result" style="padding-top:14px">
+      <div class="nav" style="justify-content:center">
+        <button class="btn rouge" onclick="startExam()">Démarrer l'examen blanc</button>
+      </div>
+    </div></div>`;
+  $("#progressBar").style.width="0%";
+}
+
+function drawExam(){
+  const chosen=[];
+  Object.keys(EXAM_WEIGHTS).forEach(t=>{
+    const bank = Q.map((q,i)=>({q,i})).filter(o=>o.q.t===t);
+    shuffle(bank);
+    for(let k=0;k<EXAM_WEIGHTS[t] && k<bank.length;k++) chosen.push(bank[k].i);
+  });
+  shuffle(chosen);
+  return chosen;
+}
+function startExam(){
+  exam = {items:drawExam(), answers:[], i:0, remaining:45*60, timer:null,
+          order:{}};
+  exam.timer = setInterval(()=>{
+    exam.remaining--;
+    if(exam.remaining<=0){ clearInterval(exam.timer); finishExam(); }
+    else drawTimer();
+  },1000);
+  renderExamQ();
+}
+function drawTimer(){
+  const el=$("#timer"); if(!el) return;
+  const m=Math.floor(exam.remaining/60), s=exam.remaining%60;
+  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.classList.toggle("low",exam.remaining<=300);
+}
+function renderExamQ(){
+  const qi = exam.items[exam.i];
+  const q = Q[qi];
+  if(!exam.order[exam.i]) exam.order[exam.i]=shuffle([0,1,2,3]);
+  const order=exam.order[exam.i];
+  const chosen = exam.answers[exam.i];
+  const opts = order.map(oi=>{
+    const en = lang==="bi"?`<span class="oe">${q.oe[oi]}</span>`:"";
+    const on = (chosen===oi)?'style="border-color:var(--bleu);background:#eef0ff"':'';
+    return `<button class="opt" ${on} onclick="answerExam(${oi})">${q.o[oi]}${en}</button>`;
+  }).join("");
+  const answeredCount = exam.answers.filter(a=>a!==undefined && a!==null).length;
+  $("#stage").innerHTML = `
+    <div class="exam-top">
+      <span class="timer" id="timer">45:00</span>
+      <span class="exam-meta">Question <b>${exam.i+1}</b> / 40 · répondues : ${answeredCount}/40</span>
+    </div>
+    <div class="progress"><i style="width:${(exam.i+1)/40*100}%;background:var(--rouge)"></i></div>
+    <div class="card">
+      ${themeChip(q.t)}
+      <p class="q">${q.q}</p>
+      ${lang==="bi"?`<p class="qe">${q.qe}</p>`:""}
+      <div class="opts">${opts}</div>
+      <div class="nav">
+        <button class="btn ghost" onclick="examNav(-1)" ${exam.i===0?'disabled':''}>← Précédent</button>
+        ${exam.i<39?'<button class="btn primary" onclick="examNav(1)">Suivant →</button>'
+                  :'<button class="btn rouge" onclick="finishExam()">Terminer</button>'}
+        <span class="count">${answeredCount<40?(40-answeredCount)+' restante(s)':'toutes répondues'}</span>
+      </div>
+    </div>`;
+  drawTimer();
+}
+function answerExam(oi){ exam.answers[exam.i]=oi; renderExamQ(); }
+function examNav(d){ const n=exam.i+d; if(n>=0&&n<40){ exam.i=n; renderExamQ(); } }
+
+function finishExam(){
+  if(exam.timer) clearInterval(exam.timer);
+  let score=0; const themeScore={}; Object.keys(THEMES).forEach(t=>themeScore[t]={r:0,n:0});
+  const wrong=[];
+  exam.items.forEach((qi,k)=>{
+    const q=Q[qi]; themeScore[q.t].n++;
+    if(exam.answers[k]===q.a){ score++; themeScore[q.t].r++; }
+    else wrong.push({q,chosen:exam.answers[k]});
+  });
+  const pass = score>=32;
+  const bd = Object.keys(THEMES).map(t=>`<div class="brow"><span>${THEMES[t].fr}</span><b>${themeScore[t].r}/${themeScore[t].n}</b></div>`).join("");
+  const wrongHtml = wrong.length? wrong.map(w=>{
+    const yourAns = (w.chosen===undefined||w.chosen===null)?"—":w.q.o[w.chosen];
+    return `<div class="brow" style="display:block"><div style="font-weight:600">${w.q.q}</div>
+      <div style="font-size:13px;color:var(--err)">Votre réponse : ${yourAns}</div>
+      <div style="font-size:13px;color:var(--ok)">Bonne réponse : ${w.q.o[w.q.a]}</div></div>`;
+  }).join("") : "<div class='brow'>Sans faute — parfait.</div>";
+  $("#stage").innerHTML = `
+    <div class="card"><div class="result">
+      <div class="score ${pass?'pass':'fail'}">${score}/40</div>
+      <div class="verdict ${pass?'pass':'fail'}">${pass?'Réussi ✓':'Non validé'}</div>
+      <div class="sub">Seuil de réussite : 32/40 (80 %). ${pass?'Vous seriez reçu dans ces conditions.':'Continuez à réviser les thèmes faibles ci-dessous.'}</div>
+      <div class="breakdown"><h3 style="font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--gris)">Par thématique</h3>${bd}</div>
+      <div class="breakdown"><h3 style="font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--gris)">À revoir (${wrong.length})</h3>${wrongHtml}</div>
+      <div class="nav" style="justify-content:center;margin-top:22px">
+        <button class="btn rouge" onclick="startExam()">Nouvel examen blanc</button>
+        <button class="btn ghost" onclick="setMode('practice')">Retour à la révision</button>
+      </div>
+    </div></div>`;
+  $("#progressBar").style.width="100%";
+}
+
+/* ---------- INIT ---------- */
+buildPool(); render(); updateStats();
+</script>
+</body>
+</html>

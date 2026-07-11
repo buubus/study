@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-201 Cheat Sheet — Cornish Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#F7F7F5;
+    --carbon:#141415;
+    --indigo:#0047FF;
+    --flint:#8E8E8B;
+    --hair:rgba(20,20,21,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{
+    background:var(--canvas);
+    color:var(--carbon);
+    font-family:"Inter",system-ui,sans-serif;
+    font-size:9.2px;
+    line-height:1.42;
+    letter-spacing:-.005em;
+  }
+  .sheet{
+    max-width:1080px;
+    margin:0 auto;
+    padding:26px 30px 30px;
+  }
+  h1,h2,h3,.eyebrow{font-family:"Inter Tight",sans-serif}
+  header{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:0.5px solid var(--carbon);
+    padding-bottom:12px;margin-bottom:16px;
+  }
+  .eyebrow{
+    font-size:8px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--flint);margin-bottom:7px;
+  }
+  .eyebrow .n{color:var(--indigo)}
+  h1{font-size:25px;font-weight:700;letter-spacing:-.04em;line-height:1.02}
+  .facts{text-align:right;font-size:9px;color:var(--flint);line-height:1.7}
+  .facts b{color:var(--carbon);font-weight:600}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:0;
+    border-left:0.5px solid var(--hair);
+    border-top:0.5px solid var(--hair);
+  }
+  .cell{
+    border-right:0.5px solid var(--hair);
+    border-bottom:0.5px solid var(--hair);
+    padding:11px 13px 12px;
+  }
+  .cell.wide{grid-column:span 2}
+  .ch{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+  .ch .idx{font-family:"Inter Tight";font-size:8px;font-weight:600;letter-spacing:.12em;color:var(--indigo)}
+  .ch h2{font-family:"Inter Tight";font-size:12.5px;font-weight:600;letter-spacing:-.02em}
+  .ch .wt{margin-left:auto;font-family:"Inter Tight";font-size:12.5px;font-weight:700;color:var(--carbon)}
+  ul{list-style:none}
+  li{position:relative;padding-left:11px;margin-bottom:3px}
+  li::before{content:"";position:absolute;left:0;top:6px;width:3px;height:0.5px;background:var(--carbon)}
+  .k{font-weight:600}
+  .gotcha{
+    margin-top:8px;padding-top:7px;border-top:0.5px solid var(--hair);
+    font-size:8.6px;color:var(--flint);
+  }
+  .gotcha .lbl{font-family:"Inter Tight";font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:7.4px;color:var(--indigo);display:block;margin-bottom:2px}
+  table{width:100%;border-collapse:collapse;margin-top:2px}
+  td,th{text-align:left;padding:2.5px 6px 2.5px 0;vertical-align:top;border-bottom:0.5px solid var(--hair)}
+  th{font-family:"Inter Tight";font-weight:600;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--flint)}
+  td .k{white-space:nowrap}
+  .flow{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:3px}
+  .flow span{font-weight:600}
+  .flow em{color:var(--indigo);font-style:normal;font-weight:600}
+  footer{
+    margin-top:14px;display:flex;justify-content:space-between;
+    font-size:8px;color:var(--flint);
+    border-top:0.5px solid var(--carbon);padding-top:9px;
+  }
+  footer b{color:var(--carbon);font-weight:600}
+  @media print{
+    @page{size:A4 landscape;margin:8mm}
+    body{font-size:8.6px}
+    .sheet{padding:0;max-width:none}
+    h1{font-size:22px}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <div>
+      <div class="eyebrow"><span class="n">01</span> &nbsp;Salesforce Certified Agentforce Specialist &nbsp;·&nbsp; Exam Cheat Sheet</div>
+      <h1>The AI-201, on one page.</h1>
+    </div>
+    <div class="facts">
+      <div><b>60</b> questions &nbsp;·&nbsp; <b>105</b> min</div>
+      <div>Pass <b>73%</b> &nbsp;·&nbsp; <b>$200</b> (retake $100)</div>
+      <div>MCQ + scenario &nbsp;·&nbsp; no prerequisites</div>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <div class="cell">
+      <div class="ch"><span class="idx">D1</span><h2>AI Agents</h2><span class="wt">35%</span></div>
+      <ul>
+        <li><span class="k">Hierarchy:</span> Agent → Topics → Actions; <span class="k">Atlas</span> routes.</li>
+        <li><span class="k">Actions:</span> standard, or custom via <span class="k">Flow / Apex / Prompt</span>.</li>
+        <li><span class="k">Types:</span> Service, Sales/SDR, Employee, custom — sort by who it serves + auth.</li>
+        <li><span class="k">Agent User</span> = the running user; its perms bound all access.</li>
+        <li><span class="k">Determinism:</span> variables + guard filters. Var must be mutable & updated at runtime.</li>
+        <li><span class="k">Channels:</span> Messaging, email, Slack, Agent API.</li>
+      </ul>
+      <div class="gotcha"><span class="lbl">Debug order</span>
+        <div class="flow"><span>Topic routing</span> → <span>Action selection</span> → <span>Action logic</span></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="ch"><span class="idx">D2</span><h2>Prompt Engineering</h2><span class="wt">20%</span></div>
+      <ul>
+        <li><span class="k">Author</span> reusable templates in <span class="k">Prompt Builder</span>.</li>
+        <li><span class="k">Ground</span> to kill hallucination — grounding beats re-wording.</li>
+      </ul>
+      <table>
+        <tr><th>Template</th><th>Use for</th></tr>
+        <tr><td class="k">Sales Email</td><td>record-tied email copy</td></tr>
+        <tr><td class="k">Field Generation</td><td>write into a field</td></tr>
+        <tr><td class="k">Record Summary</td><td>summarise a record</td></tr>
+        <tr><td class="k">Flex</td><td>general / catch-all</td></tr>
+      </table>
+      <div class="gotcha"><span class="lbl">Permission split</span>
+        Manage (build/edit) ≠ Execute (run) a template.
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="ch"><span class="idx">·</span><h2>Einstein Trust Layer</h2></div>
+      <ul>
+        <li><span class="k">Secure retrieval</span> — respects Agent User perms.</li>
+        <li><span class="k">Dynamic grounding</span> — trusted data at runtime.</li>
+        <li><span class="k">Data masking</span> — PII tokenised, then restored.</li>
+        <li><span class="k">Zero retention</span> — provider stores/ trains on nothing.</li>
+        <li><span class="k">Toxicity + audit</span> — scored & logged.</li>
+      </ul>
+      <div class="gotcha"><span class="lbl">Answer map</span>
+        PII → masking &nbsp;·&nbsp; "not used to train" → zero retention &nbsp;·&nbsp; logging → audit trail.
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="ch"><span class="idx">D3</span><h2>Data 360</h2><span class="wt">20%</span></div>
+      <ul>
+        <li><span class="k">Data Library</span> sources: Knowledge, Files, Data 360 (DMOs).</li>
+        <li><span class="k">Knowledge</span> → set Identifying Fields.</li>
+        <li><span class="k">Chunking:</span> larger = context, smaller = precision; semantic splits on meaning.</li>
+        <li><span class="k">Retrievers:</span> individual (one index) vs ensemble (blended).</li>
+      </ul>
+      <table>
+        <tr><th>Search</th><th>Pick for</th></tr>
+        <tr><td class="k">Keyword</td><td>codes, SKUs, exact tokens</td></tr>
+        <tr><td class="k">Vector</td><td>natural-language intent</td></tr>
+        <tr><td class="k">Hybrid</td><td>both — mixed content</td></tr>
+      </table>
+    </div>
+
+    <div class="cell">
+      <div class="ch"><span class="idx">D4</span><h2>Deployment Lifecycle</h2><span class="wt">20%</span></div>
+      <div class="flow" style="margin-bottom:7px"><span>Build</span> → <span>Test</span> → <span>Deploy</span> → <span>Monitor</span> <em>↺</em></div>
+      <ul>
+        <li><span class="k">Testing Center:</span> batch utterances validate topic + action + response at scale.</li>
+        <li><span class="k">Deploy</span> sandbox → prod via Change Sets or Metadata API. Never build in prod.</li>
+        <li><span class="k">Monitor:</span> adoption dashboards, event logs, CSAT / NPS.</li>
+      </ul>
+      <div class="gotcha"><span class="lbl">"Works in sandbox, not prod"</span>
+        Missing <span class="k">Agent User permission set</span>, or inactive <span class="k">Search Index</span>.
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="ch"><span class="idx">D5</span><h2>Multi-Agent</h2><span class="wt">5%</span></div>
+      <table>
+        <tr><th>Mechanism</th><th>For</th></tr>
+        <tr><td class="k">MCP</td><td>external tools / data</td></tr>
+        <tr><td class="k">A2A</td><td>agent→agent (Platform Events)</td></tr>
+        <tr><td class="k">Agent API</td><td>external programmatic call</td></tr>
+      </table>
+      <ul style="margin-top:6px">
+        <li><span class="k">Handoffs:</span> agent knows its scope, escalates to agent or human.</li>
+        <li><span class="k">Role clarity:</span> no overlapping ownership between agents.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <footer>
+    <div><b>Strategy:</b> AI Agents (35%) + hands-on Agent Builder is where it's won. Two recurring distractors: Agent User permission set, active Search Index.</div>
+    <div><b>Cornish Consulting</b> &nbsp;·&nbsp; jeanmichel@cornish-consulting.org</div>
+  </footer>
+</div>
+</body>
+</html>
