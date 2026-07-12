@@ -288,22 +288,22 @@ const MODULES = [
   {
     id:"dict", title:"Dictée.", desc:"Hear a sentence, write it down — listening and spelling.",
     ex:[
-      {type:"dictation", answer:["j'habite en france depuis cinq ans","j'habite en france depuis 5 ans"], tts:"J'habite en France depuis cinq ans.", note:"depuis + duration = 'for'. A key phrase for proving length of residence."},
-      {type:"dictation", answer:["je voudrais prendre un rendez-vous","je voudrais prendre un rendez vous"], tts:"Je voudrais prendre un rendez-vous.", note:"Mind the hyphen: rendez-vous."},
-      {type:"dictation", answer:["mes enfants vont à l'école publique","mes enfants vont a l'ecole publique"], tts:"Mes enfants vont à l'école publique.", note:"aller → ils/elles vont."},
-      {type:"dictation", answer:["je travaille à nantes depuis deux ans","je travaille a nantes depuis 2 ans"], tts:"Je travaille à Nantes depuis deux ans.", note:"travailler à + city."},
-      {type:"dictation", answer:["j'ai besoin d'un justificatif de domicile"], tts:"J'ai besoin d'un justificatif de domicile.", note:"justificatif de domicile = proof of address — you'll produce it constantly."},
-      {type:"dictation", answer:["la liberté et l'égalité sont des valeurs importantes","la liberte et l'egalite sont des valeurs importantes"], tts:"La liberté et l'égalité sont des valeurs importantes.", note:"Republican-values vocabulary in a full sentence."}
+      {type:"dictation", answer:["j'habite en france depuis cinq ans","j'habite en france depuis 5 ans"], audio:"audio/dict-1.mp3", tts:"J'habite en France depuis cinq ans.", note:"depuis + duration = 'for'. A key phrase for proving length of residence."},
+      {type:"dictation", answer:["je voudrais prendre un rendez-vous","je voudrais prendre un rendez vous"], audio:"audio/dict-2.mp3", tts:"Je voudrais prendre un rendez-vous.", note:"Mind the hyphen: rendez-vous."},
+      {type:"dictation", answer:["mes enfants vont à l'école publique","mes enfants vont a l'ecole publique"], audio:"audio/dict-3.mp3", tts:"Mes enfants vont à l'école publique.", note:"aller → ils/elles vont."},
+      {type:"dictation", answer:["je travaille à nantes depuis deux ans","je travaille a nantes depuis 2 ans"], audio:"audio/dict-4.mp3", tts:"Je travaille à Nantes depuis deux ans.", note:"travailler à + city."},
+      {type:"dictation", answer:["j'ai besoin d'un justificatif de domicile"], audio:"audio/dict-5.mp3", tts:"J'ai besoin d'un justificatif de domicile.", note:"justificatif de domicile = proof of address — you'll produce it constantly."},
+      {type:"dictation", answer:["la liberté et l'égalité sont des valeurs importantes","la liberte et l'egalite sont des valeurs importantes"], audio:"audio/dict-6.mp3", tts:"La liberté et l'égalité sont des valeurs importantes.", note:"Republican-values vocabulary in a full sentence."}
     ]
   },
   {
     id:"comp-o", title:"Compréhension orale.", desc:"Short spoken passages, then multiple choice.",
     ex:[
-      {type:"listen", q:"Où travaille Sophie ?", options:["Dans une école","Dans un hôpital","Dans un magasin","Dans une banque"], answer:"Dans une école", tts:"Bonjour, je m'appelle Sophie. J'habite à Lyon avec ma famille. Je travaille dans une école. J'aime beaucoup mon travail.", note:"« Je travaille dans une école. »"},
-      {type:"listen", q:"Pourquoi va-t-il à la préfecture ?", options:["Pour renouveler son titre de séjour","Pour trouver un travail","Pour inscrire ses enfants","Pour ouvrir un compte"], answer:"Pour renouveler son titre de séjour", tts:"Aujourd'hui, je vais à la préfecture. J'ai un rendez-vous à quatorze heures pour renouveler mon titre de séjour. Je dois apporter mon passeport et un justificatif de domicile.", note:"« ...pour renouveler mon titre de séjour. »"},
-      {type:"listen", q:"Que doit-il apporter au rendez-vous ?", options:["Son passeport et un justificatif de domicile","Une photo et un stylo","Son passeport seulement","Un billet de train"], answer:"Son passeport et un justificatif de domicile", tts:"Aujourd'hui, je vais à la préfecture. J'ai un rendez-vous à quatorze heures pour renouveler mon titre de séjour. Je dois apporter mon passeport et un justificatif de domicile.", note:"« ...mon passeport et un justificatif de domicile. »"},
-      {type:"listen", q:"Quelle est la devise de la République ?", options:["Liberté, Égalité, Fraternité","Travail, Famille, Patrie","Paix, Ordre et Justice","Union, Force et Vertu"], answer:"Liberté, Égalité, Fraternité", tts:"En France, tous les citoyens sont égaux. La devise de la République est Liberté, Égalité, Fraternité. Le 14 juillet est la fête nationale.", note:"« Travail, Famille, Patrie » was the Vichy motto — a common trap. The Republic's is Liberté, Égalité, Fraternité."},
-      {type:"listen", q:"Qu'est-ce qu'ils achètent au marché ?", options:["Des fruits, des légumes et du pain","Des vêtements","Des livres","Du poisson et de la viande"], answer:"Des fruits, des légumes et du pain", tts:"Le week-end, nous faisons les courses au marché. J'achète des fruits, des légumes et du pain. Ensuite, nous prenons un café ensemble.", note:"« ...des fruits, des légumes et du pain. »"}
+      {type:"listen", q:"Où travaille Sophie ?", options:["Dans une école","Dans un hôpital","Dans un magasin","Dans une banque"], answer:"Dans une école", audio:"audio/co-1.mp3", tts:"Bonjour, je m'appelle Sophie. J'habite à Lyon avec ma famille. Je travaille dans une école. J'aime beaucoup mon travail.", note:"« Je travaille dans une école. »"},
+      {type:"listen", q:"Pourquoi va-t-il à la préfecture ?", options:["Pour renouveler son titre de séjour","Pour trouver un travail","Pour inscrire ses enfants","Pour ouvrir un compte"], answer:"Pour renouveler son titre de séjour", audio:"audio/co-2.mp3", tts:"Aujourd'hui, je vais à la préfecture. J'ai un rendez-vous à quatorze heures pour renouveler mon titre de séjour. Je dois apporter mon passeport et un justificatif de domicile.", note:"« ...pour renouveler mon titre de séjour. »"},
+      {type:"listen", q:"Que doit-il apporter au rendez-vous ?", options:["Son passeport et un justificatif de domicile","Une photo et un stylo","Son passeport seulement","Un billet de train"], answer:"Son passeport et un justificatif de domicile", audio:"audio/co-2.mp3", tts:"Aujourd'hui, je vais à la préfecture. J'ai un rendez-vous à quatorze heures pour renouveler mon titre de séjour. Je dois apporter mon passeport et un justificatif de domicile.", note:"« ...mon passeport et un justificatif de domicile. »"},
+      {type:"listen", q:"Quelle est la devise de la République ?", options:["Liberté, Égalité, Fraternité","Travail, Famille, Patrie","Paix, Ordre et Justice","Union, Force et Vertu"], answer:"Liberté, Égalité, Fraternité", audio:"audio/co-4.mp3", tts:"En France, tous les citoyens sont égaux. La devise de la République est Liberté, Égalité, Fraternité. Le 14 juillet est la fête nationale.", note:"« Travail, Famille, Patrie » was the Vichy motto — a common trap. The Republic's is Liberté, Égalité, Fraternité."},
+      {type:"listen", q:"Qu'est-ce qu'ils achètent au marché ?", options:["Des fruits, des légumes et du pain","Des vêtements","Des livres","Du poisson et de la viande"], answer:"Des fruits, des légumes et du pain", audio:"audio/co-5.mp3", tts:"Le week-end, nous faisons les courses au marché. J'achète des fruits, des légumes et du pain. Ensuite, nous prenons un café ensemble.", note:"« ...des fruits, des légumes et du pain. »"}
     ]
   }
 ];
@@ -312,11 +312,11 @@ const MODULES = [
 const EXAM = {
   durationMin:20,
   listening:[
-    {q:"Quand la mairie est-elle ouverte le samedi ?", options:["Le matin seulement","Toute la journée","Elle est fermée","L'après-midi seulement"], answer:"Le matin seulement", tts:"Bonjour, vous êtes bien à la mairie de Nantes. Nos bureaux sont ouverts du lundi au vendredi, de neuf heures à dix-sept heures. Le samedi, nous sommes ouverts le matin seulement."},
-    {q:"Pourquoi Julie annule-t-elle le dîner ?", options:["Elle est malade","Elle travaille tard","Elle est en retard","Elle n'a pas faim"], answer:"Elle est malade", tts:"Salut Marc, c'est Julie. Je ne peux pas venir dîner ce soir, je suis malade. On peut se voir demain midi au café ?"},
-    {q:"Comment reçoit-on le rendez-vous ?", options:["Par courriel","Par téléphone","Par la poste","En personne"], answer:"Par courriel", tts:"Pour votre demande de titre de séjour, vous devez créer un compte en ligne, remplir le formulaire et payer les frais. Ensuite, vous recevrez un rendez-vous par courriel."},
-    {q:"Quel temps fera-t-il ce soir ?", options:["Il pleuvra peut-être","Il fera très chaud","Il neigera","Il y aura du soleil"], answer:"Il pleuvra peut-être", tts:"Aujourd'hui il fait beau à Nantes. Cet après-midi, le ciel sera nuageux, et il y aura peut-être de la pluie ce soir."},
-    {q:"Combien coûte le billet pour un adulte, un mardi ?", options:["Huit euros","C'est gratuit","Vingt euros","Cinq euros"], answer:"Huit euros", tts:"Le musée est gratuit le premier dimanche du mois. Les autres jours, le billet coûte huit euros pour les adultes, et il est gratuit pour les enfants."}
+    {q:"Quand la mairie est-elle ouverte le samedi ?", options:["Le matin seulement","Toute la journée","Elle est fermée","L'après-midi seulement"], answer:"Le matin seulement", audio:"audio/exam-1.mp3", tts:"Bonjour, vous êtes bien à la mairie de Nantes. Nos bureaux sont ouverts du lundi au vendredi, de neuf heures à dix-sept heures. Le samedi, nous sommes ouverts le matin seulement."},
+    {q:"Pourquoi Julie annule-t-elle le dîner ?", options:["Elle est malade","Elle travaille tard","Elle est en retard","Elle n'a pas faim"], answer:"Elle est malade", audio:"audio/exam-2.mp3", tts:"Salut Marc, c'est Julie. Je ne peux pas venir dîner ce soir, je suis malade. On peut se voir demain midi au café ?"},
+    {q:"Comment reçoit-on le rendez-vous ?", options:["Par courriel","Par téléphone","Par la poste","En personne"], answer:"Par courriel", audio:"audio/exam-3.mp3", tts:"Pour votre demande de titre de séjour, vous devez créer un compte en ligne, remplir le formulaire et payer les frais. Ensuite, vous recevrez un rendez-vous par courriel."},
+    {q:"Quel temps fera-t-il ce soir ?", options:["Il pleuvra peut-être","Il fera très chaud","Il neigera","Il y aura du soleil"], answer:"Il pleuvra peut-être", audio:"audio/exam-4.mp3", tts:"Aujourd'hui il fait beau à Nantes. Cet après-midi, le ciel sera nuageux, et il y aura peut-être de la pluie ce soir."},
+    {q:"Combien coûte le billet pour un adulte, un mardi ?", options:["Huit euros","C'est gratuit","Vingt euros","Cinq euros"], answer:"Huit euros", audio:"audio/exam-5.mp3", tts:"Le musée est gratuit le premier dimanche du mois. Les autres jours, le billet coûte huit euros pour les adultes, et il est gratuit pour les enfants."}
   ],
   reading:{
     text:"Chère Madame,\nNous vous informons que votre carte de séjour est prête. Vous pouvez venir la chercher à la préfecture, du lundi au jeudi, entre 9h et 12h. N'oubliez pas d'apporter votre passeport et un timbre fiscal de 25 euros. La carte est valable pendant un an. Si vous ne pouvez pas venir, prenez un nouveau rendez-vous sur le site internet.\nCordialement,\nLe service des étrangers",
@@ -360,6 +360,20 @@ function speak(text){
   }catch(e){}
 }
 if("speechSynthesis" in window){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}
+let currentAudio=null;
+// Play a pre-rendered French clip if the item has one; fall back to the browser voice.
+function playClip(item){
+  try{if(currentAudio){currentAudio.pause();currentAudio=null;}}catch(e){}
+  try{if("speechSynthesis" in window)window.speechSynthesis.cancel();}catch(e){}
+  if(item&&item.audio){
+    const a=new Audio(item.audio);currentAudio=a;
+    let fell=false;const fb=()=>{if(!fell){fell=true;speak(item.tts);}};
+    a.addEventListener("error",fb);
+    a.play().catch(fb);
+    return;
+  }
+  speak(item&&item.tts?item.tts:"");
+}
 const SPKR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 function gapify(q){return q.replace(/___/g,'<span class="gap">&nbsp;&nbsp;&nbsp;</span>');}
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
@@ -550,7 +564,7 @@ function mod(){
     </div>
     <button class="btn ghost" style="margin-top:22px" onclick="skipToDash()">Leave module</button>
   </div>`;
-  document.getElementById("listenBtn").onclick=()=>speak(item.tts);
+  document.getElementById("listenBtn").onclick=()=>playClip(item);
   const body=document.getElementById("body");
   let html="";
   if(audioFirst){
@@ -577,8 +591,8 @@ function mod(){
     keyMode=null;
   }
   if(audioFirst){
-    document.getElementById("playBig").onclick=()=>speak(item.tts);
-    setTimeout(()=>speak(item.tts),350);
+    document.getElementById("playBig").onclick=()=>playClip(item);
+    setTimeout(()=>playClip(item),350);
   }
 }
 
@@ -625,7 +639,7 @@ function showFb(right,item,accentNote){
       <div class="note" style="margin-top:8px">${esc(item.note||"")}</div>
       <button class="btn primary" style="margin-top:16px" onclick="nextEx()">${last?'Finish module':'Next'}</button>
     </div>`;
-  speak(item.tts);
+  playClip(item);
   enterAction=nextEx;
 }
 
@@ -757,8 +771,8 @@ function exam(){
     ta.addEventListener("input",upd);upd();ta.focus();
   }
   if(step.sec==="listening"){
-    document.getElementById("playBig").onclick=()=>speak(step.data.tts);
-    setTimeout(()=>speak(step.data.tts),350);
+    document.getElementById("playBig").onclick=()=>playClip(step.data);
+    setTimeout(()=>playClip(step.data),350);
   }
 }
 
