@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F5">
+<title>App Deployment — App Builder Textbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#F7F7F5;--carbon:#141415;--indigo:#0047FF;--flint:#8E8E8B;
+  --hair:rgba(20,20,21,.15);--hair-soft:rgba(20,20,21,.08);--paper:#FFFFFF;
+  --wash:rgba(0,71,255,.06);--amber:#B45309;--amber-wash:rgba(180,83,9,.07);
+  --green:#1a7f52;--green-wash:rgba(26,127,82,.07);
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --disp:'Inter Tight',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--carbon);font-family:var(--sans);font-size:16px;line-height:1.62;letter-spacing:-.003em;-webkit-font-smoothing:antialiased}
+.page{max-width:1080px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1fr 232px;gap:56px}
+.col{min-width:0;padding:44px 0 120px}
+/* top bar */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(247,247,245,.9);backdrop-filter:blur(8px);border-bottom:.5px solid var(--hair);padding:12px 24px;display:flex;align-items:center;gap:16px;max-width:1080px;margin:0 auto}
+.topbar a.back{font-family:var(--disp);font-size:12.5px;font-weight:600;color:var(--carbon);text-decoration:none;display:inline-flex;align-items:center;gap:7px;letter-spacing:-.01em}
+.topbar a.back svg{transform:rotate(180deg)}
+.topbar .sp{margin-left:auto}
+.topbar .pr{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:8px 13px;border:.5px solid var(--carbon);background:transparent;cursor:pointer;color:var(--carbon)}
+.topbar .pr:hover{background:var(--carbon);color:var(--canvas)}
+/* header */
+header.doc{border-bottom:.5px solid var(--carbon);padding-bottom:30px;margin-bottom:8px}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--flint);margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.eyebrow .n{color:var(--indigo)}
+.eyebrow .badge{margin-left:auto;padding:3px 9px;border:.5px solid var(--hair);color:var(--carbon);letter-spacing:.08em}
+h1{font-family:var(--disp);font-size:40px;font-weight:700;letter-spacing:-.045em;line-height:1.03}
+header.doc .lead{margin-top:16px;font-size:17px;max-width:62ch;color:#2a2a2e}
+/* toc rail */
+.rail{padding:52px 0 0}
+.rail-inner{position:sticky;top:70px}
+.rail .rlabel{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--flint);margin-bottom:14px}
+.rail a{display:block;font-size:13px;color:var(--flint);text-decoration:none;padding:5px 0 5px 14px;border-left:1.5px solid var(--hair-soft);line-height:1.35;transition:color .15s,border-color .15s}
+.rail a:hover{color:var(--carbon)}
+.rail a.on{color:var(--carbon);border-left-color:var(--indigo);font-weight:500}
+.rail a .rn{font-family:var(--mono);font-size:10px;color:var(--indigo);margin-right:7px}
+/* chapters */
+.chapter{padding-top:46px;scroll-margin-top:64px}
+.chapter+.chapter{border-top:.5px solid var(--hair)}
+.ch-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--flint);margin-bottom:10px}
+.ch-eyebrow .n{color:var(--indigo)}
+.chapter h2{font-family:var(--disp);font-size:27px;font-weight:600;letter-spacing:-.035em;line-height:1.1;margin-bottom:8px}
+.obj{font-size:14px;color:var(--flint);font-style:italic;margin-bottom:20px;max-width:64ch}
+h3{font-family:var(--disp);font-size:19px;font-weight:600;letter-spacing:-.02em;margin:30px 0 10px}
+h4{font-family:var(--disp);font-size:15.5px;font-weight:600;letter-spacing:-.01em;margin:22px 0 6px}
+p{margin-bottom:13px;max-width:68ch}
+ul,ol{margin:0 0 15px 22px}li{margin-bottom:6px;max-width:66ch}
+strong{font-weight:600}em{font-style:italic}
+code{font-family:var(--mono);font-size:13px;background:var(--wash);padding:1px 5px;border-radius:2px}
+.rule{height:.5px;background:var(--hair);margin:30px 0}
+/* callouts */
+.box{border:.5px solid var(--hair);padding:16px 18px;margin:20px 0;background:var(--paper)}
+.box .bl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.box.key{background:var(--wash);border-color:rgba(0,71,255,.22)}.box.key .bl{color:var(--indigo)}
+.box.trap{background:var(--amber-wash);border-color:rgba(180,83,9,.25)}.box.trap .bl{color:var(--amber)}
+.box.mnem{background:var(--green-wash);border-color:rgba(26,127,82,.25)}.box.mnem .bl{color:var(--green)}
+.box p:last-child,.box ul:last-child,.box li:last-child{margin-bottom:0}
+/* scenario */
+.scn{border:.5px solid var(--carbon);margin:22px 0;background:var(--paper)}
+.scn .sh{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--canvas);background:var(--carbon);padding:8px 14px}
+.scn .sb{padding:15px 18px}
+.scn .q{font-weight:500;margin-bottom:10px}
+.scn .a{border-top:.5px solid var(--hair);margin-top:12px;padding-top:12px}
+.scn .a .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo);margin-bottom:5px}
+/* tables */
+.tw{overflow-x:auto;margin:20px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--paper);border:.5px solid var(--hair)}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--flint);text-align:left;padding:10px 13px;border-bottom:.5px solid var(--hair);background:var(--canvas);vertical-align:top}
+td{padding:10px 13px;border-bottom:.5px solid var(--hair-soft);vertical-align:top;color:#26262b}
+tr:last-child td{border-bottom:none}td strong{color:var(--carbon)}
+/* recap + self-check */
+.recap{background:var(--paper);border:.5px solid var(--hair);padding:18px 20px;margin:28px 0 8px}
+.recap .bl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);margin-bottom:10px}
+.recap ul{margin:0 0 0 18px;font-size:14px}.recap li{margin-bottom:6px}
+details.sc{border:.5px solid var(--hair);background:var(--paper);margin:10px 0;padding:0}
+details.sc summary{cursor:pointer;padding:13px 16px;font-weight:500;font-size:14.5px;list-style:none;display:flex;gap:10px;align-items:baseline}
+details.sc summary::-webkit-details-marker{display:none}
+details.sc summary .qn{font-family:var(--mono);font-size:11px;color:var(--indigo)}
+details.sc[open] summary{border-bottom:.5px solid var(--hair-soft)}
+details.sc .ans{padding:12px 16px 15px 40px;font-size:14px;color:#26262b}
+details.sc .ans b{color:var(--indigo)}
+.selfcheck-h{font-family:var(--disp);font-size:15.5px;font-weight:600;margin:28px 0 6px;letter-spacing:-.01em}
+footer.doc{margin-top:80px;padding-top:20px;border-top:.5px solid var(--hair);display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--flint);flex-wrap:wrap;gap:8px}
+footer.doc b{color:var(--carbon)}
+@media(max-width:900px){
+  .page{grid-template-columns:1fr;gap:0}.rail{display:none}
+  h1{font-size:30px}.chapter h2{font-size:23px}
+  .col{padding:32px 0 90px}
+}
+@media print{
+  .topbar,.rail,details.sc summary{display:none!important}
+  details.sc[open] .ans,details.sc .ans{display:block!important}
+  details.sc{border:none}details.sc .ans{padding-left:0}
+  body{background:#fff;font-size:11px}.page{display:block;padding:0}
+  .box,.scn,.recap,table,.chapter{break-inside:avoid}
+  a[href]::after{content:''}
+  h1{font-size:22px}.chapter h2{font-size:17px}
+  @page{margin:1.3cm}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="back" href="index.html"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M4 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg> Study Desk</a>
+  <span class="sp"></span>
+  <button class="pr" onclick="window.print()">⎙ Print / PDF</button>
+</div>
+<div class="page">
+  <div class="col">
+    <header class="doc">
+      <div class="eyebrow"><span class="n">05</span> · Platform App Builder — Deep Dive <span class="badge">10% of exam</span></div>
+      <h1>App Deployment.</h1>
+      <p class="lead">The smallest domain, but rich in crisp, memorisable facts: the four sandbox types and their refresh intervals, what change sets can and can't do, managed vs unmanaged packages, and the deployment mechanism for each situation.</p>
+    </header>
+    <section class="chapter" id="ch1"><div class="ch-eyebrow"><span class="n">01</span> · Objective</div><h2>Application lifecycle & sandbox types</h2><p class="obj">Given a set of business requirements, recommend a solution for key milestones and considerations when managing the application lifecycle and various types of sandboxes.</p>
+<p>The healthy lifecycle keeps changes out of production until tested. You build and test in sandboxes, then promote to production. The four sandbox types differ in the <strong>data</strong> they copy and how often they <strong>refresh</strong> — both are frequently tested.</p>
+<h3>The lifecycle</h3>
+<p><strong>Develop → test → deploy.</strong> Use sandboxes for build, QA, UAT, and staging; deploy tested changes to <strong>production</strong>. Never build directly in production where it can be avoided.</p>
+<h3>The four sandbox types</h3>
+<div class="tw"><table>
+<tr><th>Sandbox</th><th>Data copied</th><th>Refresh interval</th><th>Best for</th></tr>
+<tr><td><strong>Developer</strong></td><td>Metadata only (config, no records)</td><td><strong>1 day</strong></td><td>Individual development / basic testing</td></tr>
+<tr><td><strong>Developer Pro</strong></td><td>Metadata only; larger storage</td><td><strong>1 day</strong></td><td>Development with more test data you load</td></tr>
+<tr><td><strong>Partial Copy</strong></td><td>Metadata + a <strong>sample</strong> of data (sandbox template, ~10k records/object)</td><td><strong>5 days</strong></td><td>QA / UAT with representative data</td></tr>
+<tr><td><strong>Full</strong></td><td>Metadata + <strong>all</strong> production data</td><td><strong>29 days</strong></td><td>Staging, performance/load, full UAT</td></tr>
+</table></div>
+<div class="box key"><div class="bl">◆ The two everyone confuses</div><p><strong>Partial Copy</strong> = a <em>sample</em> of data (template-defined, capped per object), refresh every 5 days. <strong>Full</strong> = a <em>complete copy</em> of production, refresh every 29 days. Developer and Developer Pro carry <strong>no records</strong> — only configuration.</p></div>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>"Realistic, representative dataset but not the whole database" → <strong>Partial Copy</strong>. "Production-scale data for performance testing / final staging" → <strong>Full</strong>. "Just configuration, no data" → <strong>Developer</strong>. The refresh intervals (1 / 1 / 5 / 29 days) are a favourite standalone question.</p></div>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">Before a major release, the team needs a final staging environment that mirrors production data volumes to test performance and run full UAT. Which sandbox?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>A <strong>Full sandbox</strong> — it's the only type with a complete copy of production data, suited to performance/load testing and final staging. It refreshes every 29 days, which fits an infrequent pre-release cadence.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Build/test in sandboxes, then deploy to production.</li><li>Developer & Developer Pro = metadata only, 1-day refresh; Developer Pro has more storage.</li><li>Partial Copy = sample data (~10k/object), 5-day refresh; Full = all data, 29-day refresh.</li><li>Match the sandbox to the data realism the task needs.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>Which sandbox carries a complete copy of production data?</span></summary><div class="ans"><b>Full sandbox.</b> — Refreshes every 29 days; used for performance testing and staging.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>Refresh interval of a Partial Copy sandbox?</span></summary><div class="ans"><b>5 days.</b> — It holds a sample of data (~10k records per object).</div></details><details class="sc"><summary><span class="qn">Q3</span><span>Which sandboxes contain no records at all?</span></summary><div class="ans"><b>Developer and Developer Pro.</b> — They copy metadata only.</div></details></section><section class="chapter" id="ch2"><div class="ch-eyebrow"><span class="n">02</span> · Objective</div><h2>Change sets</h2><p class="obj">Given a use case, demonstrate knowledge, viability, and troubleshooting when using change sets.</p>
+<p>Change sets are the declarative, admin-friendly way to move <strong>metadata</strong> between <strong>related</strong> orgs. They're simple and useful — but their limits are exactly what the exam probes.</p>
+<h3>How they work</h3>
+<ul>
+<li>An <strong>outbound change set</strong> is created in the <em>source</em> org (usually a sandbox), populated with components, and uploaded.</li>
+<li>It arrives as an <strong>inbound change set</strong> in the <em>target</em> org (usually production), where it's validated and deployed.</li>
+<li>They require a <strong>deployment connection</strong> and travel only between <strong>related orgs</strong> — a production org and its sandboxes.</li>
+</ul>
+<div class="box key"><div class="bl">◆ Add dependencies</div><p>Use <strong>"View/Add Dependencies"</strong> to pull in components a change relies on (a field's object, a validation rule's fields). A missing dependency is the number-one cause of a failed deployment.</p></div>
+<div class="box trap"><div class="bl">▲ Exam trap — what change sets can't do</div><ul style="margin-bottom:0"><li>Deploy to <strong>unrelated</strong> orgs — only between a production org and its own sandboxes.</li><li><strong>Delete</strong> components in the target — you can only create/update.</li><li>Move <strong>data</strong> — metadata only.</li></ul><p>For unrelated orgs or deletions, use <strong>packages</strong> or the <strong>Metadata API / SFDX / ANT</strong>.</p></div>
+<p>Before the real deployment, run a <strong>validation-only</strong> deploy on the inbound change set to catch failures (missing dependencies, failing tests) early.</p>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">An admin deploys a new validation rule via change set, but it fails because it references two fields not present in production. What went wrong and how is it avoided next time?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>The change set was missing <strong>dependencies</strong> — the two referenced fields. Use <strong>View/Add Dependencies</strong> to include them, and run a <strong>validation-only</strong> deploy first to surface the gap before the live deployment.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Change sets move metadata between related orgs (production and its sandboxes) via a deployment connection.</li><li>They can't reach unrelated orgs, can't delete components, and can't move data.</li><li>Add dependencies to avoid the most common failure; validate before deploying.</li><li>For unrelated orgs or deletions, use packages or the Metadata API.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>Can a change set delete a component in production?</span></summary><div class="ans"><b>No.</b> — Change sets only create/update; use the Metadata API (destructiveChanges) to delete.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>Change sets can move metadata between which orgs?</span></summary><div class="ans"><b>Related orgs only — a production org and its sandboxes.</b> — Unrelated orgs need packages or the Metadata API.</div></details><details class="sc"><summary><span class="qn">Q3</span><span>Top cause of a failed change-set deployment?</span></summary><div class="ans"><b>Missing dependencies.</b> — Use View/Add Dependencies and validate first.</div></details></section><section class="chapter" id="ch3"><div class="ch-eyebrow"><span class="n">03</span> · Objective</div><h2>Managed & unmanaged packages</h2><p class="obj">Describe the use cases and considerations when using unmanaged and managed packages.</p>
+<p>Packages bundle metadata for distribution. The managed-vs-unmanaged choice turns on two things: <strong>upgradeability</strong> and <strong>IP protection</strong>.</p>
+<h3>The comparison</h3>
+<div class="tw"><table>
+<tr><th></th><th>Unmanaged</th><th>Managed</th></tr>
+<tr><td>Purpose</td><td>Distribute <strong>editable templates</strong> / open source; move metadata</td><td>Distribute a <strong>product</strong> (ISV / AppExchange)</td></tr>
+<tr><td>Editable after install?</td><td><strong>Yes</strong> — becomes the subscriber's own</td><td>Mostly <strong>locked</strong>; some components extensible</td></tr>
+<tr><td>Upgradeable by publisher?</td><td><strong>No</strong></td><td><strong>Yes</strong> — versioned upgrades</td></tr>
+<tr><td>Namespace</td><td>None</td><td><strong>Namespaced</strong> (isolated)</td></tr>
+<tr><td>IP protected?</td><td>No (source visible)</td><td><strong>Yes</strong> (source hidden)</td></tr>
+</table></div>
+<div class="box key"><div class="bl">◆ Choose by intent</div><p>Distributing a maintained, upgradeable, protected app to many customers → <strong>managed</strong>. Sharing an editable starting point / open-source template, or moving metadata between your own orgs → <strong>unmanaged</strong>.</p></div>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>Only <strong>managed</strong> packages support <strong>publisher upgrades</strong> and <strong>IP protection</strong>. Once an unmanaged package is installed, the publisher can't push updates — the subscriber owns and edits the components. Commercial AppExchange apps are almost always <strong>managed</strong>.</p></div>
+<p>Modern tooling adds <strong>unlocked packages</strong> and <strong>second-generation (2GP) packaging</strong> for source-driven development, but the managed/unmanaged distinction is the exam core.</p>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">An ISV wants to sell an app on the AppExchange, push version upgrades to customers, and keep its source code hidden. Package type?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>A <strong>managed</strong> package — it's the only type that supports versioned publisher upgrades and IP protection via a namespace. An unmanaged package would expose the source and couldn't be upgraded after install.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Managed = upgradeable, namespaced, IP-protected — for ISV/AppExchange products.</li><li>Unmanaged = editable template, no upgrades, no IP protection — for open source / metadata moves.</li><li>Only managed packages support publisher upgrades.</li><li>Unlocked/2GP packaging exists for source-driven dev, but managed vs unmanaged is the core.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>Which package type can the publisher upgrade after install?</span></summary><div class="ans"><b>Managed.</b> — Unmanaged packages become the subscriber's own and can't be upgraded by the publisher.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>You want to share an editable open-source template. Package type?</span></summary><div class="ans"><b>Unmanaged.</b> — It's fully editable and not IP-protected.</div></details></section><section class="chapter" id="ch4"><div class="ch-eyebrow"><span class="n">04</span> · Objective</div><h2>Determining the deployment plan</h2><p class="obj">Given a scenario, determine the appropriate deployment plan.</p>
+<p>Match the mechanism to the org relationship, the change, and whether deletions or Apex are involved. This chapter ties the domain together.</p>
+<h3>Mechanisms matched to scenarios</h3>
+<div class="tw"><table>
+<tr><th>Situation</th><th>Best mechanism</th></tr>
+<tr><td>Admin moving config between a sandbox and its production org</td><td><strong>Change set</strong></td></tr>
+<tr><td>Deploying to an <strong>unrelated</strong> org / distributing to customers</td><td><strong>Package</strong> (managed / unmanaged / unlocked)</td></tr>
+<tr><td>Source-controlled, developer-driven, CI/CD deployment</td><td><strong>SFDX / Metadata API</strong> (VS Code, ANT)</td></tr>
+<tr><td>Need to <strong>delete</strong> components in the target</td><td><strong>Metadata API</strong> (destructiveChanges) — not change sets</td></tr>
+<tr><td>Small, one-off declarative change</td><td>Rebuild by hand or a small change set</td></tr>
+</table></div>
+<div class="box key"><div class="bl">◆ Considerations for any plan</div><ul style="margin-bottom:0"><li><strong>Test in a sandbox</strong> and <strong>validate</strong> before deploying to production.</li><li><strong>Apex code coverage</strong> — deploying to production needs ≥75% overall coverage, with every trigger having some coverage.</li><li>Watch <strong>dependencies</strong> and <strong>order</strong> (objects before the fields/rules that reference them).</li><li>Plan <strong>data</strong> separately — deployment tools move metadata, not records.</li></ul></div>
+<div class="box trap"><div class="bl">▲ Exam trap — the 75% rule</div><p>Deploying anything containing <strong>Apex</strong> to <strong>production</strong> triggers the <strong>75% code coverage</strong> gate — a favourite deployment question even on this declarative-focused exam. And remember change sets can't delete or reach unrelated orgs.</p></div>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">A consultancy must deploy a completed solution — including some Apex — from their build org into a brand-new client production org they have no sandbox relationship with. Plan?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>The orgs are <strong>unrelated</strong>, so a change set is out. Distribute via a <strong>package</strong> (or deploy with the <strong>Metadata API / SFDX</strong>). Because it contains Apex, the deployment to production must meet the <strong>≥75% code coverage</strong> requirement.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Related orgs → change set; unrelated/customers → package; CI/CD → SFDX/Metadata API.</li><li>Deletions → Metadata API (destructiveChanges), not change sets.</li><li>Apex to production requires ≥75% code coverage.</li><li>Always validate first, mind dependencies and order, and plan data separately.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>Deploying to an unrelated production org. Change set or package?</span></summary><div class="ans"><b>A package (or Metadata API / SFDX).</b> — Change sets only work between related orgs.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>What coverage is required to deploy Apex to production?</span></summary><div class="ans"><b>At least 75% code coverage.</b> — Plus every trigger must have some coverage.</div></details><details class="sc"><summary><span class="qn">Q3</span><span>How do you delete components in a target org during deployment?</span></summary><div class="ans"><b>The Metadata API (destructiveChanges).</b> — Change sets can't delete.</div></details></section>
+    <footer class="doc"><span><b>Cornish Consulting</b> — Study Desk</span><span>05 · App Deployment</span></footer>
+  </div>
+  <aside class="rail"><div class="rail-inner"><div class="rlabel">Contents</div><nav id="toc"><a href="#ch1"><span class="rn">01</span>Lifecycle & sandboxes</a><a href="#ch2"><span class="rn">02</span>Change sets</a><a href="#ch3"><span class="rn">03</span>Packages</a><a href="#ch4"><span class="rn">04</span>Deployment plan</a></nav></div></aside>
+</div>
+<script>
+const links=[...document.querySelectorAll('#toc a')];
+const secs=[...document.querySelectorAll('.chapter')];
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){const id=e.target.id;links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+id));}})},{rootMargin:'-15% 0px -75% 0px'});
+secs.forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

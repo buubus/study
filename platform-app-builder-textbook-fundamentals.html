@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F5">
+<title>Salesforce Fundamentals — App Builder Textbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#F7F7F5;--carbon:#141415;--indigo:#0047FF;--flint:#8E8E8B;
+  --hair:rgba(20,20,21,.15);--hair-soft:rgba(20,20,21,.08);--paper:#FFFFFF;
+  --wash:rgba(0,71,255,.06);--amber:#B45309;--amber-wash:rgba(180,83,9,.07);
+  --green:#1a7f52;--green-wash:rgba(26,127,82,.07);
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --disp:'Inter Tight',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--carbon);font-family:var(--sans);font-size:16px;line-height:1.62;letter-spacing:-.003em;-webkit-font-smoothing:antialiased}
+.page{max-width:1080px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1fr 232px;gap:56px}
+.col{min-width:0;padding:44px 0 120px}
+/* top bar */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(247,247,245,.9);backdrop-filter:blur(8px);border-bottom:.5px solid var(--hair);padding:12px 24px;display:flex;align-items:center;gap:16px;max-width:1080px;margin:0 auto}
+.topbar a.back{font-family:var(--disp);font-size:12.5px;font-weight:600;color:var(--carbon);text-decoration:none;display:inline-flex;align-items:center;gap:7px;letter-spacing:-.01em}
+.topbar a.back svg{transform:rotate(180deg)}
+.topbar .sp{margin-left:auto}
+.topbar .pr{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:8px 13px;border:.5px solid var(--carbon);background:transparent;cursor:pointer;color:var(--carbon)}
+.topbar .pr:hover{background:var(--carbon);color:var(--canvas)}
+/* header */
+header.doc{border-bottom:.5px solid var(--carbon);padding-bottom:30px;margin-bottom:8px}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--flint);margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.eyebrow .n{color:var(--indigo)}
+.eyebrow .badge{margin-left:auto;padding:3px 9px;border:.5px solid var(--hair);color:var(--carbon);letter-spacing:.08em}
+h1{font-family:var(--disp);font-size:40px;font-weight:700;letter-spacing:-.045em;line-height:1.03}
+header.doc .lead{margin-top:16px;font-size:17px;max-width:62ch;color:#2a2a2e}
+/* toc rail */
+.rail{padding:52px 0 0}
+.rail-inner{position:sticky;top:70px}
+.rail .rlabel{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--flint);margin-bottom:14px}
+.rail a{display:block;font-size:13px;color:var(--flint);text-decoration:none;padding:5px 0 5px 14px;border-left:1.5px solid var(--hair-soft);line-height:1.35;transition:color .15s,border-color .15s}
+.rail a:hover{color:var(--carbon)}
+.rail a.on{color:var(--carbon);border-left-color:var(--indigo);font-weight:500}
+.rail a .rn{font-family:var(--mono);font-size:10px;color:var(--indigo);margin-right:7px}
+/* chapters */
+.chapter{padding-top:46px;scroll-margin-top:64px}
+.chapter+.chapter{border-top:.5px solid var(--hair)}
+.ch-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--flint);margin-bottom:10px}
+.ch-eyebrow .n{color:var(--indigo)}
+.chapter h2{font-family:var(--disp);font-size:27px;font-weight:600;letter-spacing:-.035em;line-height:1.1;margin-bottom:8px}
+.obj{font-size:14px;color:var(--flint);font-style:italic;margin-bottom:20px;max-width:64ch}
+h3{font-family:var(--disp);font-size:19px;font-weight:600;letter-spacing:-.02em;margin:30px 0 10px}
+h4{font-family:var(--disp);font-size:15.5px;font-weight:600;letter-spacing:-.01em;margin:22px 0 6px}
+p{margin-bottom:13px;max-width:68ch}
+ul,ol{margin:0 0 15px 22px}li{margin-bottom:6px;max-width:66ch}
+strong{font-weight:600}em{font-style:italic}
+code{font-family:var(--mono);font-size:13px;background:var(--wash);padding:1px 5px;border-radius:2px}
+.rule{height:.5px;background:var(--hair);margin:30px 0}
+/* callouts */
+.box{border:.5px solid var(--hair);padding:16px 18px;margin:20px 0;background:var(--paper)}
+.box .bl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.box.key{background:var(--wash);border-color:rgba(0,71,255,.22)}.box.key .bl{color:var(--indigo)}
+.box.trap{background:var(--amber-wash);border-color:rgba(180,83,9,.25)}.box.trap .bl{color:var(--amber)}
+.box.mnem{background:var(--green-wash);border-color:rgba(26,127,82,.25)}.box.mnem .bl{color:var(--green)}
+.box p:last-child,.box ul:last-child,.box li:last-child{margin-bottom:0}
+/* scenario */
+.scn{border:.5px solid var(--carbon);margin:22px 0;background:var(--paper)}
+.scn .sh{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--canvas);background:var(--carbon);padding:8px 14px}
+.scn .sb{padding:15px 18px}
+.scn .q{font-weight:500;margin-bottom:10px}
+.scn .a{border-top:.5px solid var(--hair);margin-top:12px;padding-top:12px}
+.scn .a .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo);margin-bottom:5px}
+/* tables */
+.tw{overflow-x:auto;margin:20px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--paper);border:.5px solid var(--hair)}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--flint);text-align:left;padding:10px 13px;border-bottom:.5px solid var(--hair);background:var(--canvas);vertical-align:top}
+td{padding:10px 13px;border-bottom:.5px solid var(--hair-soft);vertical-align:top;color:#26262b}
+tr:last-child td{border-bottom:none}td strong{color:var(--carbon)}
+/* recap + self-check */
+.recap{background:var(--paper);border:.5px solid var(--hair);padding:18px 20px;margin:28px 0 8px}
+.recap .bl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);margin-bottom:10px}
+.recap ul{margin:0 0 0 18px;font-size:14px}.recap li{margin-bottom:6px}
+details.sc{border:.5px solid var(--hair);background:var(--paper);margin:10px 0;padding:0}
+details.sc summary{cursor:pointer;padding:13px 16px;font-weight:500;font-size:14.5px;list-style:none;display:flex;gap:10px;align-items:baseline}
+details.sc summary::-webkit-details-marker{display:none}
+details.sc summary .qn{font-family:var(--mono);font-size:11px;color:var(--indigo)}
+details.sc[open] summary{border-bottom:.5px solid var(--hair-soft)}
+details.sc .ans{padding:12px 16px 15px 40px;font-size:14px;color:#26262b}
+details.sc .ans b{color:var(--indigo)}
+.selfcheck-h{font-family:var(--disp);font-size:15.5px;font-weight:600;margin:28px 0 6px;letter-spacing:-.01em}
+footer.doc{margin-top:80px;padding-top:20px;border-top:.5px solid var(--hair);display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--flint);flex-wrap:wrap;gap:8px}
+footer.doc b{color:var(--carbon)}
+@media(max-width:900px){
+  .page{grid-template-columns:1fr;gap:0}.rail{display:none}
+  h1{font-size:30px}.chapter h2{font-size:23px}
+  .col{padding:32px 0 90px}
+}
+@media print{
+  .topbar,.rail,details.sc summary{display:none!important}
+  details.sc[open] .ans,details.sc .ans{display:block!important}
+  details.sc{border:none}details.sc .ans{padding-left:0}
+  body{background:#fff;font-size:11px}.page{display:block;padding:0}
+  .box,.scn,.recap,table,.chapter{break-inside:avoid}
+  a[href]::after{content:''}
+  h1{font-size:22px}.chapter h2{font-size:17px}
+  @page{margin:1.3cm}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="back" href="index.html"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M4 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg> Study Desk</a>
+  <span class="sp"></span>
+  <button class="pr" onclick="window.print()">⎙ Print / PDF</button>
+</div>
+<div class="page">
+  <div class="col">
+    <header class="doc">
+      <div class="eyebrow"><span class="n">01</span> · Platform App Builder — Deep Dive <span class="badge">23% of exam</span></div>
+      <h1>Salesforce Fundamentals.</h1>
+      <p class="lead">The widest domain by surface area: the platform build ladder, the layered security model, sharing, analytics, mobile, and collaboration. Master the decision rules here and a quarter of the exam falls into place.</p>
+    </header>
+    <section class="chapter" id="ch1"><div class="ch-eyebrow"><span class="n">01</span> · Objective</div><h2>Declarative vs programmatic boundaries</h2><p class="obj">Given a scenario, identify the boundaries of declarative customization and the use cases for programmatic customization.</p>
+<p>This objective is the philosophical spine of the whole certification. Almost every scenario question is, underneath, asking the same thing: <em>what is the simplest, most maintainable tool that fully satisfies this requirement?</em> Get the instinct right and you will second-guess far fewer answers.</p>
+<h3>The build ladder</h3>
+<p>Think of platform customisation as a ladder you climb only as far as you must. Each rung adds power but also cost — more skill to build, more risk, more to maintain, harder to upgrade.</p>
+<div class="tw"><table>
+<tr><th>Rung</th><th>What lives here</th><th>Cost of ownership</th></tr>
+<tr><td><strong>1 · Configuration</strong></td><td>Standard objects &amp; fields, list views, standard reports — switch on and use.</td><td>Lowest</td></tr>
+<tr><td><strong>2 · Declarative customisation</strong></td><td>Custom objects/fields, page layouts &amp; Lightning pages, formula fields, validation rules, roll-ups, Flows, approval processes.</td><td>Low — admin-maintainable</td></tr>
+<tr><td><strong>3 · Programmatic</strong></td><td>Apex (triggers, classes, batch), Lightning Web Components, Aura, Visualforce, callouts.</td><td>Highest — needs developers, tests, coverage</td></tr>
+</table></div>
+<div class="box key"><div class="bl">◆ The one rule</div><p>Choose the <strong>lowest rung that fully meets the requirement</strong>. On this exam, code is only the correct answer when the requirement is genuinely <em>impossible</em> — or clearly impractical — declaratively. If a Flow, formula, validation rule or roll-up can do it, an Apex answer is wrong even though it would also work.</p></div>
+
+<h3>When code is genuinely required</h3>
+<p>Learn the short list of things declarative tools cannot do, because the exam builds "you must use code" scenarios out of exactly these:</p>
+<ul>
+<li><strong>External callouts / integration logic</strong> too complex for a Flow HTTP action or External Services — Apex.</li>
+<li><strong>Complex, high-volume transactional logic</strong> — heavy bulk processing, custom rollback, multi-object orchestration beyond Flow's comfort.</li>
+<li><strong>Bespoke user interfaces</strong> that standard and AppExchange components can't render — Lightning Web Components.</li>
+<li><strong>Asynchronous / scheduled processing</strong> beyond scheduled Flows — Batch, Queueable, or @future Apex.</li>
+<li><strong>Logic that must run at points, or with control, Flow can't express</strong> — e.g. very complex cross-object validation or merge logic.</li>
+</ul>
+<div class="box trap"><div class="bl">▲ Exam trap — the two directions</div><p>The trap runs both ways. <strong>Over-engineering:</strong> a validation-rule-shaped requirement with "write an Apex trigger" offered — wrong. <strong>Under-powering:</strong> a requirement that clearly needs a callout or complex bulk logic with "use a validation rule" offered — also wrong because it can't actually do the job. Read for what the requirement <em>needs</em>, then pick the lowest rung that reaches it.</p></div>
+
+<h3>Reading the signal words</h3>
+<div class="tw"><table>
+<tr><th>Phrasing in the scenario</th><th>Almost always points to</th></tr>
+<tr><td>"without code", "point-and-click", "admins must maintain it"</td><td>Declarative (Flow / formula / validation rule)</td></tr>
+<tr><td>"prevent the record from saving when…"</td><td>Validation rule</td></tr>
+<tr><td>"automatically create/update a record when…"</td><td>Record-triggered Flow</td></tr>
+<tr><td>"calculate and display…"</td><td>Formula field (or roll-up for children)</td></tr>
+<tr><td>"call/sync an external system"</td><td>Apex callout (or Flow HTTP action for simple cases)</td></tr>
+<tr><td>"custom, pixel-perfect interface"</td><td>Lightning Web Component</td></tr>
+</table></div>
+
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">A company needs a field on Case to show the parent Account's loyalty tier, and to stop users saving a Case if its Priority is High but no Account is linked. What should the admin build?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>Two requirements, two declarative tools. Displaying a parent value is a <strong>cross-object formula field</strong> (Case → Account). Blocking a save on a condition is a <strong>validation rule</strong>. No code, no Flow needed. An answer proposing Apex, or a Flow to copy the tier onto the Case, over-engineers a formula problem.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Climb the ladder only as far as the requirement forces you: configuration → declarative → code.</li><li>Code is right only when declarative genuinely can't do it: callouts, complex bulk, bespoke UI, async.</li><li>Trap runs both ways — over-engineering and under-powering are both wrong answers.</li><li>Signal words ("without code", "prevent saving", "call an external system") map to tools.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>A requirement can be met with either a record-triggered Flow or an Apex trigger. Which does the exam prefer?</span></summary><div class="ans"><b>The Flow.</b> — Lowest-code option that fully meets the requirement wins; Apex is only correct when declarative can't do the job.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>Name a requirement that forces you into Apex rather than Flow.</span></summary><div class="ans"><b>A complex external callout, heavy bulk/transactional logic, or bespoke UI (LWC).</b> — These sit outside what declarative tools can express.</div></details><details class="sc"><summary><span class="qn">Q3</span><span>Is "install an AppExchange app" a declarative or programmatic choice for the candidate?</span></summary><div class="ans"><b>It is a declarative, buy-don't-build choice.</b> — You configure and install rather than write code, even though the package itself may contain Apex.</div></details></section><section class="chapter" id="ch2"><div class="ch-eyebrow"><span class="n">02</span> · Objective</div><h2>Extending an org with the AppExchange</h2><p class="obj">Identify common scenarios for extending an org using the AppExchange.</p>
+<p>The AppExchange is Salesforce's marketplace — the "buy, don't build" rung. When a requirement describes a common, well-solved, non-differentiating need, the most professional answer is often to install someone else's solution rather than build your own.</p>
+<h3>What you can install</h3>
+<div class="tw"><table>
+<tr><th>Listing type</th><th>What it is</th></tr>
+<tr><td><strong>Apps</strong></td><td>Complete solutions — document generation, e-signature, accounting, data quality.</td></tr>
+<tr><td><strong>Components</strong></td><td>Lightning components / building blocks that drop into your pages.</td></tr>
+<tr><td><strong>Flow &amp; Bolt solutions</strong></td><td>Pre-built flows, actions, industry templates.</td></tr>
+<tr><td><strong>Consultants</strong></td><td>Implementation partners — services, not software.</td></tr>
+</table></div>
+<div class="box key"><div class="bl">◆ Delivery = packages</div><p>AppExchange solutions install as <strong>packages</strong> — almost always <strong>managed</strong> packages: namespaced, upgradeable by the publisher, and IP-protected. This ties directly into the App Deployment domain, so the two reinforce each other.</p></div>
+
+<h3>The build-vs-buy judgement</h3>
+<p>Buy from the AppExchange when the need is <strong>common and non-differentiating</strong>: mass email, deduplication, PDF/quote generation, complex billing, e-signature, address validation. Building these yourself is slower, costlier, and becomes your burden to maintain forever. Build custom only when the requirement is specific to <em>your</em> business and no vendor solves it well.</p>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>When a scenario names a whole <em>category</em> that vendors clearly own — "generate a branded PDF quote", "clean and deduplicate a large import" — the best answer is usually <strong>"install an app from the AppExchange"</strong>, not a bespoke build. The exam rewards not reinventing the wheel.</p></div>
+
+<h4>Before you install</h4>
+<ul>
+<li>Check the app's <strong>security review</strong> status, supported <strong>editions</strong>, and the limits it consumes (custom objects, fields, tabs).</li>
+<li>Install into a <strong>sandbox</strong> first and test.</li>
+<li>Choose install scope — <strong>admins only, all users, or specific profiles</strong>.</li>
+</ul>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">Sales ops need reps to generate a branded, print-ready PDF proposal from an Opportunity, with no developer time available. What is the recommended approach?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>Document generation is a mature, non-differentiating category with many managed apps on the AppExchange. <strong>Install a document-generation app</strong> rather than build Visualforce PDF rendering. It's faster, maintained by the vendor, and needs no code.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>AppExchange is the buy-don't-build rung: apps, components, templates, and consultants.</li><li>Solutions install as packages — usually managed (upgradeable, namespaced, IP-protected).</li><li>Buy for common/non-differentiating needs; build only for what's specific to your business.</li><li>Check security review, editions, limits; install to a sandbox first.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>How do AppExchange solutions arrive in your org?</span></summary><div class="ans"><b>As packages, usually managed packages.</b> — Which means the publisher can push upgrades and the source is IP-protected.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>A requirement is common across the industry and no developers are available. Build or buy?</span></summary><div class="ans"><b>Buy from the AppExchange.</b> — Non-differentiating, well-solved needs are ideal buy candidates.</div></details></section><section class="chapter" id="ch3"><div class="ch-eyebrow"><span class="n">03</span> · Objective</div><h2>Object, record & field access</h2><p class="obj">Apply features and capabilities available to restrict and extend object, record, and field access.</p>
+<p>Salesforce security is layered, and the exam tests whether you know which lever controls which layer. Confuse them and you'll pick the wrong tool for a security scenario every time.</p>
+<h3>The three layers</h3>
+<div class="tw"><table>
+<tr><th>Layer</th><th>Question it answers</th><th>Controlled by</th></tr>
+<tr><td><strong>Object (CRUD)</strong></td><td>Can the user Create/Read/Update/Delete this <em>type</em> of record at all?</td><td>Profiles &amp; Permission Sets</td></tr>
+<tr><td><strong>Field (FLS)</strong></td><td>Can the user see/edit this specific <em>field</em>?</td><td>Profiles &amp; Permission Sets (Field-Level Security)</td></tr>
+<tr><td><strong>Record</strong></td><td><em>Which specific records</em> can the user see/edit?</td><td>OWD, role hierarchy, sharing rules, manual sharing, teams, Apex</td></tr>
+</table></div>
+<p>This chapter covers the top two (object and field). Record-level sharing is big enough to have its own chapter next.</p>
+
+<h3>Profiles vs permission sets</h3>
+<ul>
+<li>Every user has <strong>exactly one profile</strong> — the baseline. A profile grants object CRUD, field FLS, tab visibility, app access, page-layout assignment, login hours/IP, and system/user permissions.</li>
+<li><strong>Permission sets</strong> and <strong>permission set groups</strong> grant <em>additional</em> access on top of the profile. They only add.</li>
+</ul>
+<div class="box key"><div class="bl">◆ The modern best-practice model</div><p>Keep profiles <strong>lean and generic</strong> (a small number of baseline profiles) and layer every exception through <strong>permission sets</strong>. When a scenario says "a subset of users <em>also</em> needs access to X", the answer is a <strong>permission set</strong>, not a brand-new profile.</p></div>
+<div class="box trap"><div class="bl">▲ Exam trap — add vs restrict</div><p>A permission set can only <strong>extend</strong> access; it can never take away what the profile grants. To <em>restrict</em>, you tighten the <strong>profile</strong>. (Within a permission set <em>group</em>, a <strong>muting permission set</strong> can remove specific permissions — but a standalone permission set never subtracts.)</p></div>
+
+<h3>How CRUD and FLS interact</h3>
+<p>Field access is meaningful only when object access exists. To <em>see</em> a field's data a user needs <strong>Read on the object AND Visible on the field</strong>. To <em>edit</em> it, they need Edit on the object AND the field not marked Read-Only in FLS. Removing object Read hides every field regardless of FLS.</p>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">Most users should never see the Contact "SSN" field, but a small compliance team must edit it. How do you configure this?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>Set FLS on the baseline profile(s) so the field is <strong>not visible</strong> to everyone. Then grant the compliance team a <strong>permission set</strong> that makes the field visible and editable, and assign it only to them. Extend for the few; restrict at the baseline.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Three layers: object (CRUD) and field (FLS) via profiles + permission sets; record via sharing.</li><li>One profile per user = baseline; permission sets add on top and only ever extend.</li><li>"A subset also needs X" → permission set. To restrict → tighten the profile.</li><li>Seeing a field needs Read on the object AND Visible on the field.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>A group of users needs extra object access beyond their profile. New profile or permission set?</span></summary><div class="ans"><b>Permission set.</b> — Keep profiles lean; layer exceptions with permission sets.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>Can a (standalone) permission set remove access the profile grants?</span></summary><div class="ans"><b>No.</b> — Permission sets only extend. Restricting is done on the profile; only a muting permission set within a group can remove.</div></details><details class="sc"><summary><span class="qn">Q3</span><span>A user has Read on the object but the field is hidden in FLS. Do they see the field?</span></summary><div class="ans"><b>No.</b> — Both object Read and field Visible are required.</div></details></section><section class="chapter" id="ch4"><div class="ch-eyebrow"><span class="n">04</span> · Objective</div><h2>Choosing the right sharing solution</h2><p class="obj">Given a set of business requirements, determine the appropriate sharing solution.</p>
+<p>Record-level access is a system unto itself. It starts <strong>locked</strong> at the org-wide default and is progressively <strong>opened up</strong>. The golden principle: <em>sharing always widens access, it never restricts below the baseline.</em></p>
+<h3>Org-Wide Defaults — the floor</h3>
+<div class="tw"><table>
+<tr><th>OWD</th><th>Meaning</th></tr>
+<tr><td><strong>Private</strong></td><td>Only the owner (and those above in the role hierarchy) can see the record.</td></tr>
+<tr><td><strong>Public Read Only</strong></td><td>Everyone can view; only owner/above can edit.</td></tr>
+<tr><td><strong>Public Read/Write</strong></td><td>Everyone can view and edit.</td></tr>
+<tr><td><strong>Controlled by Parent</strong></td><td>Access mirrors the master record (master-detail children).</td></tr>
+</table></div>
+<p>Set the OWD to the <strong>most restrictive</strong> level anyone should have, then open up for those who need more.</p>
+
+<h3>The mechanisms that widen access</h3>
+<ol>
+<li><strong>Role hierarchy</strong> — managers automatically gain access to records owned by people beneath them (when "Grant Access Using Hierarchies" is enabled; it's always on for standard objects).</li>
+<li><strong>Sharing rules</strong> — automatic rules based on <em>record owner</em> or <em>criteria</em>, sharing whole categories of records to roles, subordinates, or public groups. Grant Read Only or Read/Write.</li>
+<li><strong>Manual sharing</strong> — an owner or admin shares an individual record with a specific user/group (only available when OWD is Private or Public Read Only).</li>
+<li><strong>Teams</strong> — Account, Opportunity, and Case teams grant access via membership.</li>
+<li><strong>Apex managed sharing</strong> — programmatic, for logic too complex for declarative rules.</li>
+</ol>
+<div class="box mnem"><div class="bl">◆ Mnemonic — O-R-S-M-A</div><p><strong>O</strong>WD → <strong>R</strong>ole hierarchy → <strong>S</strong>haring rules → <strong>M</strong>anual → <strong>A</strong>pex. The order in which access widens, from broad baseline to surgical exception.</p></div>
+
+<h3>Choosing between them</h3>
+<div class="tw"><table>
+<tr><th>Requirement shape</th><th>Solution</th></tr>
+<tr><td>Everyone should have the same access</td><td>Set the OWD</td></tr>
+<tr><td>Managers should see their reports' records</td><td>Role hierarchy (usually automatic)</td></tr>
+<tr><td>A whole role/group needs a <em>category</em> of records</td><td>Sharing rule (criteria- or owner-based)</td></tr>
+<tr><td>Share one specific record with one person</td><td>Manual sharing</td></tr>
+<tr><td>Collaboration on specific accounts/opps/cases</td><td>Teams</td></tr>
+<tr><td>Logic too complex for rules</td><td>Apex managed sharing</td></tr>
+</table></div>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>If OWD is <strong>Public Read/Write</strong>, sharing rules and manual sharing are pointless — access is already maximal. They only matter when the OWD is <em>more restrictive</em> than everyone-can-edit. Also: sharing can raise Read to Read/Write but can <strong>never drop</strong> anyone below the OWD.</p></div>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">Opportunities are Private. The EMEA sales team (a role) must all read every Opportunity owned by anyone in the EMEA region. Occasionally a rep needs to grant one specific competitor-sensitive Opp to a single legal reviewer. What two mechanisms fit?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>The team-wide, category-based need is a <strong>sharing rule</strong> (share EMEA-owned Opps to the EMEA role, Read Only). The one-off, single-record, single-person need is <strong>manual sharing</strong>. Two different shapes, two different tools — both legitimate only because OWD is Private.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>OWD sets the most restrictive floor; every other mechanism only opens access up.</li><li>O-R-S-M-A: OWD, role hierarchy, sharing rules, manual, Apex.</li><li>Group needs a category → sharing rule; one record to one person → manual sharing.</li><li>With Public Read/Write OWD, sharing rules and manual sharing are meaningless.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>A public group needs read access to all cases created by the support team. Which mechanism?</span></summary><div class="ans"><b>A sharing rule (owner- or criteria-based).</b> — It shares a whole category of records to a group automatically.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>Does a sharing rule work if OWD is Public Read/Write?</span></summary><div class="ans"><b>No — it's redundant.</b> — Everyone already has maximal access; sharing only widens from a restrictive baseline.</div></details><details class="sc"><summary><span class="qn">Q3</span><span>Requirement: share exactly one record with exactly one user, ad hoc. Tool?</span></summary><div class="ans"><b>Manual sharing.</b> — Available when OWD is Private or Public Read Only.</div></details></section><section class="chapter" id="ch5"><div class="ch-eyebrow"><span class="n">05</span> · Objective</div><h2>Reports — formats and analysis</h2><p class="obj">Identify the features and capabilities available when creating reports.</p>
+<p>Report questions test two things: choosing the right <strong>format</strong> for the shape of the analysis, and knowing which <strong>analysis features</strong> exist so you don't reach for a custom field or code when the report engine already does it.</p>
+<h3>The four formats</h3>
+<div class="tw"><table>
+<tr><th>Format</th><th>Use when</th><th>Charts / dashboards?</th></tr>
+<tr><td><strong>Tabular</strong></td><td>A simple list of rows, no grouping. Fastest; good for exports and list-style output.</td><td>Only on a dashboard with a row limit</td></tr>
+<tr><td><strong>Summary</strong></td><td>Rows <strong>grouped</strong> with subtotals (Opps by Stage). The workhorse.</td><td>Yes</td></tr>
+<tr><td><strong>Matrix</strong></td><td>Grouped by <strong>rows and columns</strong> — a pivot grid (Stage × Month).</td><td>Yes</td></tr>
+<tr><td><strong>Joined</strong></td><td>Multiple <strong>blocks</strong> side by side, possibly different report types, sharing a common field.</td><td>Yes</td></tr>
+</table></div>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>Charts and most dashboard components need <strong>grouped</strong> data — so Summary or Matrix. A <strong>Tabular</strong> report can only feed a dashboard component if you set a <strong>row limit</strong>. "We need a chart but the report is tabular" → change it to Summary.</p></div>
+
+<h3>Analysis features to recognise</h3>
+<ul>
+<li><strong>Bucket fields</strong> — categorise on the fly (deal-size bands) without creating a custom formula field.</li>
+<li><strong>Summary formulas</strong> — calculated columns at row or group level (win rate); <code>PARENTGROUPVAL</code> / <code>PREVGROUPVAL</code> compare across groupings.</li>
+<li><strong>Row-level formulas</strong> — a calculation per row, again without a stored field.</li>
+<li><strong>Cross filters</strong> — filter on the presence/absence of related records ("Accounts <em>with/without</em> Opportunities").</li>
+<li><strong>Filter logic</strong> — AND/OR combinations across filters.</li>
+<li><strong>Historical trend reporting &amp; reporting snapshots</strong> — track how values change over time.</li>
+</ul>
+<div class="box key"><div class="bl">◆ Report before field</div><p>When a scenario needs a one-off categorisation or calculation <em>for a report only</em>, prefer a <strong>bucket field</strong> or <strong>report/row-level formula</strong> over creating a permanent custom field. Less clutter, no data model change.</p></div>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">A manager wants a report showing which Accounts have <em>no</em> open Cases, grouped by Region, with a chart. Which format and features?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p><strong>Summary</strong> format (grouped by Region, so a chart is possible). Use a <strong>cross filter</strong>: Accounts <em>without</em> Cases (with a sub-filter on Status = Open). No custom field, no code.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Four formats: Tabular (list), Summary (grouped), Matrix (pivot), Joined (blocks).</li><li>Charts/dashboards need grouping → Summary or Matrix; Tabular needs a row limit.</li><li>Buckets, summary/row-level formulas, cross filters and filter logic solve most needs without custom fields.</li><li>Prefer report-only features over permanent custom fields for one-off analysis.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>You need a two-dimensional pivot of revenue by Product (rows) and Quarter (columns). Format?</span></summary><div class="ans"><b>Matrix.</b> — Grouping on both rows and columns.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>How do you report "Accounts with no Opportunities"?</span></summary><div class="ans"><b>A cross filter (Accounts without Opportunities).</b> — Cross filters test presence/absence of related records.</div></details><details class="sc"><summary><span class="qn">Q3</span><span>A tabular report needs to appear as a dashboard chart. What must you do?</span></summary><div class="ans"><b>Set a row limit (or convert to Summary).</b> — Charts require grouped data or a limited tabular source.</div></details></section><section class="chapter" id="ch6"><div class="ch-eyebrow"><span class="n">06</span> · Objective</div><h2>Report types</h2><p class="obj">Identify the features and capabilities available when creating report types.</p>
+<p>A <strong>report type</strong> is the lens that decides which objects and fields a report can even draw from — and, crucially, whether related child records are <em>required</em>. Choose the wrong report type and the data you want is simply unreachable, no matter how you build the report.</p>
+<h3>Standard vs custom report types</h3>
+<ul>
+<li><strong>Standard</strong> report types are auto-generated for standard/custom objects and their relationships.</li>
+<li><strong>Custom</strong> report types let you define exactly which related objects appear, which fields are available (including fields pulled via lookup), and the join behaviour.</li>
+</ul>
+<div class="box key"><div class="bl">◆ The "with" vs "with or without" switch</div><p>In a custom report type each object relationship is set to one of:</p><ul style="margin-bottom:0"><li><strong>"A records must have related B records"</strong> — an <em>inner join</em>. Only Accounts that <em>have</em> Cases appear.</li><li><strong>"A records may or may not have related B records"</strong> — an <em>outer join</em>. <em>All</em> Accounts appear, with or without Cases.</li></ul></div>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>"Our report is missing records that have no child records" → the report type is set to <strong>"must have related"</strong>; switch it to <strong>"may or may not have"</strong>. This single setting is one of the most reliably tested facts in the whole domain. A custom report type can join up to <strong>four objects</strong>.</p></div>
+<h4>Other capabilities</h4>
+<ul>
+<li>Surface fields from related objects by <strong>adding fields via lookup</strong>.</li>
+<li>A custom report type moves from <strong>In Development</strong> to <strong>Deployed</strong> before users can build on it.</li>
+<li>Control which fields appear by default in the report builder layout.</li>
+</ul>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">A custom object "Project" has related "Milestones". A report on the standard type shows only Projects that already have Milestones, but the PMO needs to see <em>all</em> Projects including empty ones. What do you change?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>Build (or edit) a <strong>custom report type</strong> and set the Project→Milestone relationship to <strong>"Projects may or may not have related Milestones"</strong> (outer join). Now empty Projects appear too.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>A report type defines which objects and fields a report can access.</li><li>Custom report types add control over relationships and lookup fields; join up to 4 objects.</li><li>"Must have related" = inner join; "may or may not have" = outer join.</li><li>Missing childless records → switch the relationship to "may or may not have".</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>A report omits parent records that have no children. What's the fix?</span></summary><div class="ans"><b>Set the custom report type relationship to "may or may not have related".</b> — That's the outer join; the inner join hides childless parents.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>How many objects can a custom report type join?</span></summary><div class="ans"><b>Up to four.</b> — Beyond four you need a different approach.</div></details></section><section class="chapter" id="ch7"><div class="ch-eyebrow"><span class="n">07</span> · Objective</div><h2>Dashboards</h2><p class="obj">Identify the features and capabilities available when creating dashboards.</p>
+<p>A dashboard is a visual layer over report data. The single most tested dashboard concept is the <strong>running user</strong> — whose data everyone sees.</p>
+<h3>Fundamentals</h3>
+<ul>
+<li>Each <strong>component</strong> is powered by a source report (chart, gauge, metric, table, etc.).</li>
+<li>A dashboard shows a <strong>snapshot</strong>, refreshed on demand or on a schedule — not live data.</li>
+</ul>
+<h3>The running user</h3>
+<div class="box key"><div class="bl">◆ Running user</div><p>A dashboard displays data <strong>as seen by its running user</strong>, honouring that user's sharing access. Everyone who views a standard dashboard sees the <em>same</em> data — the running user's.</p></div>
+<div class="tw"><table>
+<tr><th>Type</th><th>Running user</th><th>Use case</th></tr>
+<tr><td><strong>Standard</strong></td><td>A fixed, single running user</td><td>Everyone sees one shared view (e.g. the VP's org-wide numbers)</td></tr>
+<tr><td><strong>Dynamic</strong></td><td>"The logged-in user"</td><td>Each viewer sees their <em>own</em> data through one dashboard</td></tr>
+</table></div>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>"Each rep should see only their own numbers, from one dashboard" → <strong>dynamic dashboard</strong> (runs as the logged-in user). "Everyone should see the same regional roll-up" → standard dashboard with that manager as running user. Dynamic dashboards have per-edition limits (e.g. up to 10 in Enterprise) and can't be scheduled for refresh or used for following.</p></div>
+<h4>Filters and access</h4>
+<ul>
+<li><strong>Dashboard filters</strong> let a viewer slice the same dashboard (up to 3 filters).</li>
+<li>Access is governed by the <strong>dashboard folder</strong>, shared to users, roles, or public groups.</li>
+</ul>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">Leadership wants one sales dashboard that every rep can open, where each rep sees only their own pipeline — without building 40 dashboards. Solution?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>A single <strong>dynamic dashboard</strong> set to run as the <strong>logged-in user</strong>. Each rep sees their own data through the one dashboard, respecting their record access.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Dashboards show a snapshot of report data through the running user's access.</li><li>Standard = fixed running user (everyone sees the same); dynamic = logged-in user (each sees own).</li><li>Dynamic dashboards have edition limits and can't be scheduled.</li><li>Folder sharing controls who can view; up to 3 dashboard filters.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>Whose data does a standard dashboard show?</span></summary><div class="ans"><b>The running user's data, for everyone who views it.</b> — It honours the running user's sharing, not the viewer's.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>One dashboard, each viewer sees their own records. Which type?</span></summary><div class="ans"><b>Dynamic dashboard (run as logged-in user).</b> — Avoids cloning a dashboard per person.</div></details></section><section class="chapter" id="ch8"><div class="ch-eyebrow"><span class="n">08</span> · Objective</div><h2>Actions & layouts for mobile</h2><p class="obj">Given a set of requirements, determine the appropriate global, object-specific actions and layouts to optimise the Salesforce mobile user experience.</p>
+<p>The Salesforce mobile app renders the same metadata as desktop, but two levers decide whether it's usable on a phone: <strong>actions</strong> (what users can quickly do) and <strong>compact layouts</strong> (what they see first).</p>
+<h3>Global vs object-specific actions</h3>
+<div class="tw"><table>
+<tr><th>Type</th><th>Where it lives</th><th>Key trait</th></tr>
+<tr><td><strong>Global action</strong></td><td>Available anywhere — mobile nav, publisher, Home. Not tied to a record.</td><td>No parent context</td></tr>
+<tr><td><strong>Object-specific action</strong></td><td>On a specific object's page layout.</td><td>Can <strong>auto-relate</strong> and <strong>pre-fill</strong> fields from the parent record</td></tr>
+</table></div>
+<p>Action categories include <strong>Create a Record, Update a Record, Log a Call, Send Email, and Custom</strong> (Flow / LWC / Visualforce).</p>
+<div class="box key"><div class="bl">◆ Why object-specific wins for context</div><p>Object-specific actions can set the <strong>relationship automatically</strong> and pre-populate fields from the parent — a global action can't, because it has no parent. "New Case" launched from an Account, pre-filling that Account, is object-specific.</p></div>
+
+<h3>Compact layouts — the mobile headline</h3>
+<p>The <strong>compact layout</strong> defines the key fields shown at the <strong>top of a record</strong> in the mobile app, and in the highlights panel on desktop Lightning. It's how you decide what a user sees first on a small screen.</p>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>"Reps need the four most important fields visible immediately on their phone" → configure the <strong>compact layout</strong>, not the full page layout. The full page layout still governs the complete detail view and which actions appear in the mobile action bar.</p></div>
+<h4>Also relevant</h4>
+<ul>
+<li>The page layout's <strong>mobile &amp; Lightning actions</strong> section orders actions in the mobile action bar.</li>
+<li>The Salesforce mobile app <strong>navigation menu</strong> is configured per app/profile.</li>
+</ul>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">Field reps complain they must scroll through a long Account layout on mobile to find the phone number and tier. They also want to log a call in two taps, defaulting the related Account. What do you configure?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>Set the Account <strong>compact layout</strong> to surface phone and tier at the top. Add an <strong>object-specific "Log a Call" action</strong> on the Account layout so it auto-relates to that Account. Compact layout for what they <em>see</em>; object-specific action for what they <em>do</em>.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Global actions work anywhere but have no parent context; object-specific actions pre-fill from the parent.</li><li>Compact layout = the key fields shown first on mobile and in the desktop highlights panel.</li><li>Full page layout still drives the detail view and the action bar order.</li><li>"See key fields first" → compact layout; "quick action in context" → object-specific action.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>You need the four most important fields at the top of a record on mobile. What do you edit?</span></summary><div class="ans"><b>The compact layout.</b> — It controls the highlighted fields on mobile and the desktop highlights panel.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>Which action type can pre-populate fields from the parent record?</span></summary><div class="ans"><b>Object-specific.</b> — Global actions have no parent context.</div></details></section><section class="chapter" id="ch9"><div class="ch-eyebrow"><span class="n">09</span> · Objective</div><h2>Chatter — collaboration</h2><p class="obj">Describe the customisations and use cases for Chatter.</p>
+<p>Chatter is the platform's collaboration layer — feeds, groups, and feed tracking that turn records into conversations. The exam's favourite Chatter fact is <strong>feed tracking</strong>, and the distinction between it and field history tracking.</p>
+<h3>What Chatter provides</h3>
+<ul>
+<li><strong>Feeds</strong> on records and profiles — posts, comments, @mentions, likes, files.</li>
+<li><strong>Groups</strong> — public, private, or unlisted collaboration spaces, optionally tied to records.</li>
+<li><strong>Topics &amp; hashtags</strong> — cross-cutting organisation of posts.</li>
+<li><strong>Chatter actions</strong> in the publisher — the same global/object-specific actions surface here.</li>
+</ul>
+<h3>Feed tracking — the key control</h3>
+<div class="box key"><div class="bl">◆ Feed tracking</div><p>Enable <strong>feed tracking</strong> on an object and select up to <strong>20 fields</strong>; changes to those fields post automatically to the record's feed, visible to followers. It's the declarative way to surface "what changed" in context.</p></div>
+<div class="box trap"><div class="bl">▲ Exam trap — don't confuse these</div><p><strong>Chatter feed tracking</strong> posts changes into the <em>feed</em> for collaboration. <strong>Field history tracking</strong> is a separate feature that stores an audit trail (up to 20 fields) for <em>reporting</em>, not shown in the feed. "Users should see key changes in context on the record" → feed tracking. "We need an auditable history for compliance reporting" → field history tracking.</p></div>
+<h3>Common use cases</h3>
+<ul>
+<li>Cross-functional deal collaboration on the Opportunity feed.</li>
+<li>Groups for projects, regions, or communities of practice.</li>
+<li>Broadcasting record changes and approvals to stakeholders.</li>
+<li>Knowledge sharing via posts, files, and topics.</li>
+</ul>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">Support wants agents to see, right on the Case, whenever Priority or Status changes — as a running conversation they can comment on. What do you enable?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>Enable <strong>Chatter feed tracking</strong> on the Case object for the Priority and Status fields. Changes post to the Case feed where agents can comment. Field history tracking would log the changes for reports but wouldn't put them in the collaborative feed.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Chatter = feeds, groups, topics, and publisher actions for collaboration.</li><li>Feed tracking (up to 20 fields) posts changes into the record feed.</li><li>Field history tracking is a separate, report-only audit trail — don't confuse the two.</li><li>Use groups and feeds for cross-functional collaboration and change visibility.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>You want field changes to appear in the record's Chatter feed. What do you enable?</span></summary><div class="ans"><b>Feed tracking on those fields.</b> — Up to 20 fields per object.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>Compliance needs an auditable, reportable history of a field. Feed tracking or field history tracking?</span></summary><div class="ans"><b>Field history tracking.</b> — It stores a reportable audit trail rather than posting to the feed.</div></details></section>
+    <footer class="doc"><span><b>Cornish Consulting</b> — Study Desk</span><span>01 · Salesforce Fundamentals</span></footer>
+  </div>
+  <aside class="rail"><div class="rail-inner"><div class="rlabel">Contents</div><nav id="toc"><a href="#ch1"><span class="rn">01</span>Declarative vs code</a><a href="#ch2"><span class="rn">02</span>AppExchange</a><a href="#ch3"><span class="rn">03</span>Object & field access</a><a href="#ch4"><span class="rn">04</span>Sharing solutions</a><a href="#ch5"><span class="rn">05</span>Reports</a><a href="#ch6"><span class="rn">06</span>Report types</a><a href="#ch7"><span class="rn">07</span>Dashboards</a><a href="#ch8"><span class="rn">08</span>Mobile actions & layouts</a><a href="#ch9"><span class="rn">09</span>Chatter</a></nav></div></aside>
+</div>
+<script>
+const links=[...document.querySelectorAll('#toc a')];
+const secs=[...document.querySelectorAll('.chapter')];
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){const id=e.target.id;links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+id));}})},{rootMargin:'-15% 0px -75% 0px'});
+secs.forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

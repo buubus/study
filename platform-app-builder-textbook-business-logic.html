@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F5">
+<title>Business Logic & Process Automation — App Builder Textbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#F7F7F5;--carbon:#141415;--indigo:#0047FF;--flint:#8E8E8B;
+  --hair:rgba(20,20,21,.15);--hair-soft:rgba(20,20,21,.08);--paper:#FFFFFF;
+  --wash:rgba(0,71,255,.06);--amber:#B45309;--amber-wash:rgba(180,83,9,.07);
+  --green:#1a7f52;--green-wash:rgba(26,127,82,.07);
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --disp:'Inter Tight',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--canvas);color:var(--carbon);font-family:var(--sans);font-size:16px;line-height:1.62;letter-spacing:-.003em;-webkit-font-smoothing:antialiased}
+.page{max-width:1080px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1fr 232px;gap:56px}
+.col{min-width:0;padding:44px 0 120px}
+/* top bar */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(247,247,245,.9);backdrop-filter:blur(8px);border-bottom:.5px solid var(--hair);padding:12px 24px;display:flex;align-items:center;gap:16px;max-width:1080px;margin:0 auto}
+.topbar a.back{font-family:var(--disp);font-size:12.5px;font-weight:600;color:var(--carbon);text-decoration:none;display:inline-flex;align-items:center;gap:7px;letter-spacing:-.01em}
+.topbar a.back svg{transform:rotate(180deg)}
+.topbar .sp{margin-left:auto}
+.topbar .pr{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:8px 13px;border:.5px solid var(--carbon);background:transparent;cursor:pointer;color:var(--carbon)}
+.topbar .pr:hover{background:var(--carbon);color:var(--canvas)}
+/* header */
+header.doc{border-bottom:.5px solid var(--carbon);padding-bottom:30px;margin-bottom:8px}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--flint);margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.eyebrow .n{color:var(--indigo)}
+.eyebrow .badge{margin-left:auto;padding:3px 9px;border:.5px solid var(--hair);color:var(--carbon);letter-spacing:.08em}
+h1{font-family:var(--disp);font-size:40px;font-weight:700;letter-spacing:-.045em;line-height:1.03}
+header.doc .lead{margin-top:16px;font-size:17px;max-width:62ch;color:#2a2a2e}
+/* toc rail */
+.rail{padding:52px 0 0}
+.rail-inner{position:sticky;top:70px}
+.rail .rlabel{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--flint);margin-bottom:14px}
+.rail a{display:block;font-size:13px;color:var(--flint);text-decoration:none;padding:5px 0 5px 14px;border-left:1.5px solid var(--hair-soft);line-height:1.35;transition:color .15s,border-color .15s}
+.rail a:hover{color:var(--carbon)}
+.rail a.on{color:var(--carbon);border-left-color:var(--indigo);font-weight:500}
+.rail a .rn{font-family:var(--mono);font-size:10px;color:var(--indigo);margin-right:7px}
+/* chapters */
+.chapter{padding-top:46px;scroll-margin-top:64px}
+.chapter+.chapter{border-top:.5px solid var(--hair)}
+.ch-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--flint);margin-bottom:10px}
+.ch-eyebrow .n{color:var(--indigo)}
+.chapter h2{font-family:var(--disp);font-size:27px;font-weight:600;letter-spacing:-.035em;line-height:1.1;margin-bottom:8px}
+.obj{font-size:14px;color:var(--flint);font-style:italic;margin-bottom:20px;max-width:64ch}
+h3{font-family:var(--disp);font-size:19px;font-weight:600;letter-spacing:-.02em;margin:30px 0 10px}
+h4{font-family:var(--disp);font-size:15.5px;font-weight:600;letter-spacing:-.01em;margin:22px 0 6px}
+p{margin-bottom:13px;max-width:68ch}
+ul,ol{margin:0 0 15px 22px}li{margin-bottom:6px;max-width:66ch}
+strong{font-weight:600}em{font-style:italic}
+code{font-family:var(--mono);font-size:13px;background:var(--wash);padding:1px 5px;border-radius:2px}
+.rule{height:.5px;background:var(--hair);margin:30px 0}
+/* callouts */
+.box{border:.5px solid var(--hair);padding:16px 18px;margin:20px 0;background:var(--paper)}
+.box .bl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.box.key{background:var(--wash);border-color:rgba(0,71,255,.22)}.box.key .bl{color:var(--indigo)}
+.box.trap{background:var(--amber-wash);border-color:rgba(180,83,9,.25)}.box.trap .bl{color:var(--amber)}
+.box.mnem{background:var(--green-wash);border-color:rgba(26,127,82,.25)}.box.mnem .bl{color:var(--green)}
+.box p:last-child,.box ul:last-child,.box li:last-child{margin-bottom:0}
+/* scenario */
+.scn{border:.5px solid var(--carbon);margin:22px 0;background:var(--paper)}
+.scn .sh{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--canvas);background:var(--carbon);padding:8px 14px}
+.scn .sb{padding:15px 18px}
+.scn .q{font-weight:500;margin-bottom:10px}
+.scn .a{border-top:.5px solid var(--hair);margin-top:12px;padding-top:12px}
+.scn .a .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo);margin-bottom:5px}
+/* tables */
+.tw{overflow-x:auto;margin:20px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--paper);border:.5px solid var(--hair)}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--flint);text-align:left;padding:10px 13px;border-bottom:.5px solid var(--hair);background:var(--canvas);vertical-align:top}
+td{padding:10px 13px;border-bottom:.5px solid var(--hair-soft);vertical-align:top;color:#26262b}
+tr:last-child td{border-bottom:none}td strong{color:var(--carbon)}
+/* recap + self-check */
+.recap{background:var(--paper);border:.5px solid var(--hair);padding:18px 20px;margin:28px 0 8px}
+.recap .bl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);margin-bottom:10px}
+.recap ul{margin:0 0 0 18px;font-size:14px}.recap li{margin-bottom:6px}
+details.sc{border:.5px solid var(--hair);background:var(--paper);margin:10px 0;padding:0}
+details.sc summary{cursor:pointer;padding:13px 16px;font-weight:500;font-size:14.5px;list-style:none;display:flex;gap:10px;align-items:baseline}
+details.sc summary::-webkit-details-marker{display:none}
+details.sc summary .qn{font-family:var(--mono);font-size:11px;color:var(--indigo)}
+details.sc[open] summary{border-bottom:.5px solid var(--hair-soft)}
+details.sc .ans{padding:12px 16px 15px 40px;font-size:14px;color:#26262b}
+details.sc .ans b{color:var(--indigo)}
+.selfcheck-h{font-family:var(--disp);font-size:15.5px;font-weight:600;margin:28px 0 6px;letter-spacing:-.01em}
+footer.doc{margin-top:80px;padding-top:20px;border-top:.5px solid var(--hair);display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--flint);flex-wrap:wrap;gap:8px}
+footer.doc b{color:var(--carbon)}
+@media(max-width:900px){
+  .page{grid-template-columns:1fr;gap:0}.rail{display:none}
+  h1{font-size:30px}.chapter h2{font-size:23px}
+  .col{padding:32px 0 90px}
+}
+@media print{
+  .topbar,.rail,details.sc summary{display:none!important}
+  details.sc[open] .ans,details.sc .ans{display:block!important}
+  details.sc{border:none}details.sc .ans{padding-left:0}
+  body{background:#fff;font-size:11px}.page{display:block;padding:0}
+  .box,.scn,.recap,table,.chapter{break-inside:avoid}
+  a[href]::after{content:''}
+  h1{font-size:22px}.chapter h2{font-size:17px}
+  @page{margin:1.3cm}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="back" href="index.html"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M4 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg> Study Desk</a>
+  <span class="sp"></span>
+  <button class="pr" onclick="window.print()">⎙ Print / PDF</button>
+</div>
+<div class="page">
+  <div class="col">
+    <header class="doc">
+      <div class="eyebrow"><span class="n">03</span> · Platform App Builder — Deep Dive <span class="badge">28% of exam</span></div>
+      <h1>Business Logic & Process Automation.</h1>
+      <p class="lead">The heaviest domain, and the one that most rewards precision. Formula, roll-up, validation, approvals, and — above all — the Flow-first automation model, the order of execution, and how to automate without triggering recursion.</p>
+    </header>
+    <section class="chapter" id="ch1"><div class="ch-eyebrow"><span class="n">01</span> · Objective</div><h2>Formula fields</h2><p class="obj">Given a scenario, demonstrate the use of formula fields to meet stated business requirements.</p>
+<p>A formula field is a read-only value calculated at runtime — never stored, always current. It's the first tool to reach for whenever a scenario says "display" or "calculate" a value from data already on (or above) the record.</p>
+<h3>Core characteristics</h3>
+<ul>
+<li><strong>Read-only</strong>, recalculated whenever the record is viewed or queried — so it's never stale, and never editable by users or automation.</li>
+<li>Return types: Text, Number, Currency, Percent, Date, Date/Time, Time, Checkbox (boolean).</li>
+<li>Can reference the record's own fields and — via <strong>cross-object formulas</strong> — fields on <strong>parent</strong> records up the relationship chain.</li>
+</ul>
+<div class="box key"><div class="bl">◆ Cross-object formulas go UP, not down</div><p>Formulas can traverse <strong>up to 10 relationships</strong> to pull a parent's field (show the Account's Industry on a Contact). They go <strong>up</strong> from child to parent only — never down to children. To aggregate children you need a <strong>roll-up summary</strong>, not a formula.</p></div>
+
+<h3>Functions worth recognising</h3>
+<ul>
+<li><strong>IF, CASE</strong> — branching logic.</li>
+<li><strong>ISBLANK / ISNULL</strong> — emptiness checks.</li>
+<li><strong>TEXT, VALUE, DATE, TODAY, NOW</strong> — conversions and dates.</li>
+<li><strong>ISPICKVAL, INCLUDES</strong> — picklist and multi-select checks.</li>
+<li><strong>HYPERLINK, IMAGE</strong> — rich display in the field.</li>
+</ul>
+<p>Note: <code>ISCHANGED</code>, <code>PRIORVALUE</code>, <code>ISNEW</code> are <em>not</em> available in formula fields — they belong to validation rules and flows, because a formula field has no notion of "before".</p>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>A formula field <strong>cannot</strong> reference or aggregate <strong>child</strong> records (that's a roll-up), cannot be edited or set by automation, and stores <strong>no history</strong>. The compiled formula size limit (~3,900 characters / 5,000 bytes) is real for very complex formulas.</p></div>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">On the Contact, sales want a read-only "Account Tier" that always reflects the parent Account's Tier field, and a colour-coded status. Build?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>A <strong>cross-object formula field</strong> on Contact referencing <code>Account.Tier__c</code>, using <code>CASE</code> (or <code>IMAGE</code>) for the colour coding. No automation needed — it stays current automatically, and can't drift out of sync the way a copied field would.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Formula fields are read-only, runtime-calculated, never stored, always current.</li><li>Cross-object formulas reference parent fields up to 10 relationships up — never children.</li><li>No ISCHANGED/PRIORVALUE/ISNEW in formulas; no child aggregation; no history.</li><li>Prefer a formula over automation-copied fields to avoid drift.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>Can a formula field aggregate a sum of child records?</span></summary><div class="ans"><b>No — that's a roll-up summary.</b> — Formulas only traverse up to parents.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>Can automation write to a formula field?</span></summary><div class="ans"><b>No — formula fields are read-only.</b> — They recalculate at runtime.</div></details><details class="sc"><summary><span class="qn">Q3</span><span>You need to show a parent Account field on the Contact, always current. Tool?</span></summary><div class="ans"><b>A cross-object formula field.</b> — It reads the parent value live, avoiding sync drift.</div></details></section><section class="chapter" id="ch2"><div class="ch-eyebrow"><span class="n">02</span> · Objective</div><h2>Roll-up summary fields</h2><p class="obj">Given a scenario, determine the capabilities, use cases, and implications of roll-up summary fields.</p>
+<p>A roll-up summary is the only <em>declarative</em> way to aggregate child records onto a parent — but it comes with one hard requirement that dominates the exam questions.</p>
+<h3>What they do</h3>
+<p>A roll-up summary sits on the <strong>parent</strong> and aggregates values from its <strong>child</strong> records using <strong>COUNT, SUM, MIN,</strong> or <strong>MAX</strong>. The value is stored and recalculated automatically as children change.</p>
+<div class="box key"><div class="bl">◆ The hard requirement</div><p>Roll-up summaries require a <strong>master-detail</strong> relationship (child → parent). You <strong>cannot</strong> create one over a plain lookup. A few standard exceptions exist (e.g. Opportunity → Account), but for custom modelling the rule is simple: <strong>no master-detail, no roll-up.</strong></p></div>
+
+<h3>Capabilities and limits</h3>
+<ul>
+<li>You can <strong>filter</strong> which child records are included (criteria).</li>
+<li>COUNT works on any child; SUM/MIN/MAX need a numeric, currency, or date field.</li>
+<li>Certain fields <strong>can't be rolled up</strong> — e.g. long text areas, and some cross-object formula fields on the child.</li>
+<li>Roll-up recalculation can <strong>re-trigger the parent's own automation</strong> — a recursion risk (see the errors chapter).</li>
+</ul>
+<div class="box trap"><div class="bl">▲ Exam trap — the lookup workaround</div><p>"Sum child amounts onto the parent, but the relationship is a lookup" → you must either (a) change it to master-detail, or (b) maintain the total with a <strong>record-triggered Flow</strong> (or AppExchange tool / Apex). Flow is the <em>declarative</em> workaround when master-detail isn't possible.</p></div>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">An Account should show the count of related "Support Tickets" and the sum of their hours — but Tickets are linked by a <em>lookup</em> because a Ticket can be reassigned to a different Account. What are the options?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>A roll-up summary is impossible over a lookup. Options: (1) convert the relationship to master-detail (but that loses easy reparenting and independent ownership), or (2) keep the lookup and use a <strong>record-triggered Flow</strong> to maintain Count and Sum on the Account. Given the reassignment requirement, the Flow approach preserves the lookup's flexibility.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Roll-up summaries aggregate children onto the parent: COUNT, SUM, MIN, MAX.</li><li>They require a master-detail relationship (a few standard exceptions aside).</li><li>Over a lookup, use a record-triggered Flow (or Apex) to maintain the total instead.</li><li>Roll-up recalculation can re-trigger parent automation — watch for recursion.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>Which four functions can a roll-up summary use?</span></summary><div class="ans"><b>COUNT, SUM, MIN, MAX.</b> — On a master-detail child.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>The relationship is a lookup but you need a running total on the parent. Declarative option?</span></summary><div class="ans"><b>A record-triggered Flow to maintain the total.</b> — Roll-ups need master-detail; Flow is the declarative fallback.</div></details></section><section class="chapter" id="ch3"><div class="ch-eyebrow"><span class="n">03</span> · Objective</div><h2>Validation rules</h2><p class="obj">Given a scenario, demonstrate the use of validation rules to meet stated business requirements.</p>
+<p>Validation rules are the platform's gatekeeper for data quality. A rule is a formula that, when it evaluates to <strong>TRUE, blocks the save</strong> and shows an error.</p>
+<h3>How they work</h3>
+<ul>
+<li>The formula returns TRUE/FALSE. <strong>TRUE = error</strong> — the save is stopped and the message displayed.</li>
+<li>They fire on <strong>insert and update</strong>, at the point of save.</li>
+<li>Errors can appear at the <strong>top of the page</strong> or next to a <strong>specific field</strong>.</li>
+</ul>
+<div class="box key"><div class="bl">◆ Write the invalid condition</div><p>Describe the state you want to <em>block</em>. "Close Date must be in the future" becomes a rule that fires when <code>CloseDate &lt; TODAY()</code>. The formula is the <em>error</em> condition, not the valid one.</p></div>
+
+<h3>Functions that make validation powerful</h3>
+<ul>
+<li><strong>ISCHANGED(field)</strong> — enforce only when a field changes.</li>
+<li><strong>PRIORVALUE(field)</strong> — compare to the pre-edit value (e.g. block moving a Stage backwards).</li>
+<li><strong>ISNEW()</strong> — enforce only on creation.</li>
+<li><strong>ISPICKVAL, ISBLANK, REGEX</strong> — value checks and format enforcement.</li>
+<li><strong>$Profile / $Permission / $User</strong> — exempt certain users (e.g. an integration account).</li>
+</ul>
+<div class="box trap"><div class="bl">▲ Exam trap — validation fires on automation too</div><p>Validation rules also run on records created/updated by <strong>imports, the API, and automation</strong>. A badly scoped rule can break a data load or a Flow. To exempt an integration user, gate the rule with <code>$User</code> / <code>$Profile</code>. Also: cross-object validation can reference <strong>parent</strong> fields (up the master-detail), not child records.</p></div>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">Reps must not move an Opportunity from "Closed Won" back to an open stage, but the nightly integration user must be allowed to update these records freely. Build?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>A <strong>validation rule</strong> using <code>ISCHANGED(StageName)</code> and <code>PRIORVALUE(StageName) = "Closed Won"</code> to block the backward move — combined with <code>$Profile.Name &lt;&gt; "Integration"</code> so the integration user is exempt. TRUE (for non-integration users making the illegal change) blocks the save.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Validation rule formula TRUE = blocked save with an error message.</li><li>ISCHANGED, PRIORVALUE, ISNEW enable state-aware and creation-only rules.</li><li>Rules fire on imports, API, and automation too — exempt integrations via $User/$Profile.</li><li>Cross-object validation reaches parent fields, not children.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>A validation rule returns TRUE for a record. What happens?</span></summary><div class="ans"><b>The save is blocked and the error shown.</b> — TRUE is the error condition.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>How do you stop a rule from breaking an integration user's data loads?</span></summary><div class="ans"><b>Gate it with $User or $Profile to exempt that user.</b> — Rules otherwise fire on API/automation.</div></details><details class="sc"><summary><span class="qn">Q3</span><span>Which function compares a field to its value before the edit?</span></summary><div class="ans"><b>PRIORVALUE.</b> — Useful for blocking backward stage moves.</div></details></section><section class="chapter" id="ch4"><div class="ch-eyebrow"><span class="n">04</span> · Objective</div><h2>Approval processes</h2><p class="obj">Given a scenario, determine the capabilities and use cases for approval processes.</p>
+<p>An approval process is a structured, multi-step sign-off engine. It's the right — and only — declarative answer whenever a record must be <strong>formally approved</strong> before it can progress.</p>
+<h3>Anatomy</h3>
+<ul>
+<li><strong>Entry criteria</strong> — which records may enter (Discount &gt; 20%).</li>
+<li><strong>Approval steps</strong> — one or more, each with an approver: a specific user, a role, the submitter's manager (via a hierarchy field), a queue, or a dynamically chosen related user.</li>
+<li><strong>Actions</strong> at each transition — <strong>Initial Submission, Approval, Rejection, Recall</strong> — each can fire field updates, email alerts, tasks, or outbound messages.</li>
+<li><strong>Approver experience</strong> — approve/reject by email, in-app, or in the Salesforce mobile app; delegated approvers supported.</li>
+</ul>
+<div class="box key"><div class="bl">◆ Signature capabilities no other tool has</div><p>Approval processes uniquely provide <strong>record locking</strong> during approval, <strong>multi-step routing</strong>, <strong>parallel approvers</strong> (all or any must approve), <strong>dynamic approver assignment</strong>, and an <strong>approval history</strong> related list. No Flow or validation rule gives you formal, auditable sign-off.</p></div>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>When a scenario needs a <strong>human to formally approve</strong> before something proceeds (a discount, an expense, a contract) → <strong>approval process</strong>, not a Flow. A Flow can <em>submit</em> a record into an approval and can run <em>on</em> final approval, but the sign-off engine itself is the approval process. Records can be <strong>locked</strong> automatically while pending.</p></div>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">Any Opportunity with a discount over 20% must be approved by the deal desk, then by the regional VP, and must be locked from edits while under review. What do you build, and how might a Flow assist?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>A two-step <strong>approval process</strong> (deal desk → VP) with entry criteria on discount and <strong>record locking</strong> enabled. A <strong>record-triggered Flow</strong> can <em>auto-submit</em> the Opportunity when the discount crosses 20%, but the approval routing, locking, and history live in the approval process.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Approval processes are the only declarative tool for formal, auditable human sign-off.</li><li>They provide record locking, multi-step and parallel routing, dynamic approvers, and history.</li><li>Actions fire on submission, approval, rejection, and recall.</li><li>Flow can auto-submit into an approval and act on the outcome, but isn't the sign-off engine.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>A discount must be formally approved by two managers before the deal proceeds. Tool?</span></summary><div class="ans"><b>An approval process.</b> — It provides multi-step sign-off, locking, and history.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>How can automation start an approval when criteria are met?</span></summary><div class="ans"><b>A record-triggered Flow can auto-submit the record for approval.</b> — The approval process still owns the routing and locking.</div></details></section><section class="chapter" id="ch5"><div class="ch-eyebrow"><span class="n">05</span> · Objective</div><h2>Determining the right automation tool</h2><p class="obj">Given a scenario, determine the tool or action needed to meet business requirements.</p>
+<p>The exam relentlessly asks "which automation tool?". In the current platform the default answer is <strong>Flow</strong> — and knowing the before-save vs after-save split resolves most of the harder questions.</p>
+<div class="box key"><div class="bl">◆ The Flow-first reality</div><p>Salesforce has <strong>retired the creation of new Workflow Rules and Process Builder processes</strong>. <strong>Flow is the tool for anything new.</strong> Legacy Workflow/Process Builder may still appear in scenarios (for updating existing automations), but you never <em>build</em> new ones.</p></div>
+
+<h3>The declarative toolset, by job</h3>
+<div class="tw"><table>
+<tr><th>Requirement</th><th>Tool</th></tr>
+<tr><td>Block a save when data is invalid</td><td><strong>Validation rule</strong></td></tr>
+<tr><td>Calculate / display a value (no storage)</td><td><strong>Formula field</strong></td></tr>
+<tr><td>Aggregate children onto a master-detail parent</td><td><strong>Roll-up summary</strong></td></tr>
+<tr><td>Formal human sign-off</td><td><strong>Approval process</strong></td></tr>
+<tr><td>Update fields / create records / send email on a trigger</td><td><strong>Record-triggered Flow</strong></td></tr>
+<tr><td>Guided, multi-screen data entry / wizard</td><td><strong>Screen Flow</strong></td></tr>
+<tr><td>Run on a schedule / batch of records</td><td><strong>Schedule-triggered Flow</strong></td></tr>
+<tr><td>React to a platform event</td><td><strong>Platform Event-triggered Flow</strong></td></tr>
+<tr><td>Reusable logic called from other flows/Apex</td><td><strong>Autolaunched Flow</strong></td></tr>
+<tr><td>Callouts / complex bulk / rollback / logic Flow can't express</td><td><strong>Apex</strong></td></tr>
+</table></div>
+
+<h3>Record-triggered Flow: before-save vs after-save</h3>
+<div class="tw"><table>
+<tr><th></th><th>Before-save (fast field update)</th><th>After-save</th></tr>
+<tr><td>Use for</td><td>Updating fields on <strong>the same record</strong> that triggered it</td><td>Related records, emails, sending to approval, async actions</td></tr>
+<tr><td>Performance</td><td><strong>Much faster</strong> — no extra DML</td><td>Heavier (a separate save)</td></tr>
+<tr><td>Can't do</td><td>Actions, sub-flows, related-record updates, emails</td><td>—</td></tr>
+</table></div>
+<div class="box trap"><div class="bl">▲ Exam trap</div><p>"Update a field on the <strong>same record</strong> as efficiently as possible" → <strong>before-save record-triggered Flow</strong> (the modern, faster equivalent of a Workflow field update). "Update a <strong>related</strong> record or send an email" → after-save. Choosing after-save for a same-record update is a classic wrong answer.</p></div>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">When a Case is created, stamp a "Response Due" date on the same Case (24h out) and also notify the account owner by email. One Flow or two behaviours?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>Two behaviours across the split: the same-record field stamp belongs in a <strong>before-save</strong> flow (fast, no extra DML); the email to the account owner needs an <strong>after-save</strong> flow (emails and related-record work aren't allowed before save). In practice, a before-save flow for the date and an after-save flow for the notification.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>New automation = Flow; Workflow Rules and Process Builder can no longer be created.</li><li>Match the tool to the job: validation, formula, roll-up, approval, or a Flow variant.</li><li>Before-save Flow = fastest way to set fields on the same record; after-save for related records/email/approval.</li><li>Drop to Apex only for callouts, complex bulk, or logic Flow can't express.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>Fastest way to default a field on the same record on save?</span></summary><div class="ans"><b>A before-save record-triggered Flow.</b> — No extra DML; runs earliest.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>Can you create a new Workflow Rule today?</span></summary><div class="ans"><b>No.</b> — Salesforce retired new Workflow/Process Builder creation; use Flow.</div></details><details class="sc"><summary><span class="qn">Q3</span><span>You need to send an email and update a related record when a record changes. Before-save or after-save Flow?</span></summary><div class="ans"><b>After-save.</b> — Before-save can't send emails or touch related records.</div></details></section><section class="chapter" id="ch6"><div class="ch-eyebrow"><span class="n">06</span> · Objective</div><h2>Automating without errors</h2><p class="obj">Given a set of business requirements, recommend a solution to automate business processes while avoiding errors in automation.</p>
+<p>When several automations touch the same save, <strong>order</strong> and <strong>recursion</strong> decide whether the system behaves or spirals. This chapter is where the harder automation questions are won.</p>
+<h3>Order of execution — the map</h3>
+<p>On every save, Salesforce runs steps in a fixed order. A simplified, exam-relevant sequence:</p>
+<ol>
+<li>Loads the record and overwrites with new values; runs <strong>system validation</strong> (required fields, formats).</li>
+<li><strong>Before-save record-triggered Flows</strong>.</li>
+<li><strong>Before Apex triggers</strong>.</li>
+<li>System + <strong>custom validation rules</strong>; <strong>duplicate rules</strong>.</li>
+<li>Record saved (not yet committed).</li>
+<li><strong>After Apex triggers</strong>.</li>
+<li>Assignment rules, auto-response rules.</li>
+<li><strong>Workflow rules</strong> (legacy) — a workflow field update re-fires before/after triggers <em>once</em>.</li>
+<li><strong>After-save record-triggered Flows</strong> and processes.</li>
+<li>Escalation rules; <strong>roll-up summary</strong> recalculation on the parent (which can trigger the parent's own automation).</li>
+<li>Criteria-based sharing evaluation.</li>
+<li>Commit to the database; then <strong>post-commit</strong> work (emails, async/@future).</li>
+</ol>
+<div class="box key"><div class="bl">◆ Why it matters</div><p>Two automations writing the same fields can <strong>overwrite each other</strong> or fire in an order you didn't expect. The sequence explains puzzles like "why did my validation rule reject a value my flow was supposed to set?" — because the flow ran <em>after</em> validation, or vice-versa.</p></div>
+
+<h3>Recursion — the classic failure</h3>
+<div class="box trap"><div class="bl">▲ The recursion loop</div><p>Automation A updates Field 1 → that triggers Automation B, which updates Field 2 → which re-triggers A… → an infinite loop that hits governor limits and errors. It's especially easy when <strong>field updates, roll-ups, and record-triggered flows</strong> all touch related records.</p></div>
+<h4>How to avoid it</h4>
+<ul>
+<li><strong>Gate with entry criteria / ISCHANGED</strong> so automation only runs when the relevant field actually changed.</li>
+<li>Prefer <strong>one before-save flow per object</strong> for same-record field updates rather than several overlapping automations.</li>
+<li>Avoid multiple tools writing the <strong>same fields</strong>; consolidate the logic.</li>
+<li>Watch <strong>roll-up recalculation re-triggering parent automation</strong>.</li>
+<li>Test in a sandbox at <strong>realistic data volumes</strong> to surface governor-limit failures early.</li>
+</ul>
+<div class="box mnem"><div class="bl">◆ Rule of thumb</div><p><strong>One object, one before-save flow</strong> for field defaults; keep logic consolidated and entry criteria tight. Fewer tools touching a save means fewer surprises.</p></div>
+<div class="scn"><div class="sh">Worked scenario</div><div class="sb">
+<p class="q">An admin has three record-triggered flows on Account, each updating a rating field, plus a roll-up that recalculates on child changes. Users report intermittent "too many SOQL/DML" errors on save. What's likely wrong and how do you fix it?</p>
+<div class="a"><div class="lbl">Reasoning → Answer</div><p>Overlapping automations are almost certainly <strong>re-triggering each other</strong> (recursion) and stacking operations past governor limits. Consolidate the rating logic into a <strong>single before-save flow</strong>, gate each branch with <strong>ISCHANGED / entry criteria</strong>, and check whether the roll-up recalculation is re-firing the flows. Then load-test in a sandbox.</p></div>
+</div></div>
+<div class="recap"><div class="bl">◆ Chapter recap</div><ul><li>Know the order of execution: before-save flow → before trigger → validation/dup → save → after trigger → workflow → after-save flow → roll-up → commit → emails.</li><li>Recursion: automations re-triggering each other until governor limits error the save.</li><li>Prevent it: tight entry criteria/ISCHANGED, one before-save flow per object, no duplicate field writers.</li><li>Watch roll-up recalculation re-firing parent automation; test at volume.</li></ul></div><div class="selfcheck-h">Self-check.</div><details class="sc"><summary><span class="qn">Q1</span><span>What runs first on save — a before-save flow or a validation rule?</span></summary><div class="ans"><b>The before-save flow.</b> — It runs before custom validation, so it can set a value the rule then checks.</div></details><details class="sc"><summary><span class="qn">Q2</span><span>What causes an automation recursion loop?</span></summary><div class="ans"><b>Automations that update fields which re-trigger each other in a cycle.</b> — Gate with ISCHANGED/entry criteria and consolidate logic.</div></details><details class="sc"><summary><span class="qn">Q3</span><span>Best practice for same-record field defaults to minimise conflicts?</span></summary><div class="ans"><b>One before-save flow per object with tight entry criteria.</b> — Fewer overlapping writers means fewer surprises and no extra DML.</div></details></section>
+    <footer class="doc"><span><b>Cornish Consulting</b> — Study Desk</span><span>03 · Business Logic & Process Automation</span></footer>
+  </div>
+  <aside class="rail"><div class="rail-inner"><div class="rlabel">Contents</div><nav id="toc"><a href="#ch1"><span class="rn">01</span>Formula fields</a><a href="#ch2"><span class="rn">02</span>Roll-up summary</a><a href="#ch3"><span class="rn">03</span>Validation rules</a><a href="#ch4"><span class="rn">04</span>Approval processes</a><a href="#ch5"><span class="rn">05</span>Choosing the tool</a><a href="#ch6"><span class="rn">06</span>Avoiding errors</a></nav></div></aside>
+</div>
+<script>
+const links=[...document.querySelectorAll('#toc a')];
+const secs=[...document.querySelectorAll('.chapter')];
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){const id=e.target.id;links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+id));}})},{rootMargin:'-15% 0px -75% 0px'});
+secs.forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

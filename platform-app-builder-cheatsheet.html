@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F5">
+<title>Platform App Builder — One-Page Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--canvas:#F7F7F5;--carbon:#141415;--indigo:#0047FF;--flint:#8E8E8B;--hair:rgba(20,20,21,.16);--paper:#fff;--wash:rgba(0,71,255,.05);--sans:'Inter',system-ui,sans-serif;--disp:'Inter Tight',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--canvas);color:var(--carbon);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.topbar{position:sticky;top:0;z-index:10;background:rgba(247,247,245,.92);backdrop-filter:blur(8px);border-bottom:.5px solid var(--hair);padding:11px 22px;display:flex;align-items:center;gap:14px;max-width:1100px;margin:0 auto}
+.topbar a.back{font-family:var(--disp);font-size:12.5px;font-weight:600;color:var(--carbon);text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.topbar a.back svg{transform:rotate(180deg)}
+.topbar .sp{margin-left:auto}
+.topbar .pr{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:8px 13px;border:.5px solid var(--carbon);background:transparent;cursor:pointer;color:var(--carbon)}
+.topbar .pr:hover{background:var(--carbon);color:var(--canvas)}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 22px 80px}
+.hd{border-bottom:.5px solid var(--carbon);padding-bottom:16px;margin-bottom:20px;display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.eyebrow{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--flint);margin-bottom:10px}
+.eyebrow .n{color:var(--indigo)}
+h1{font-family:var(--disp);font-size:30px;font-weight:700;letter-spacing:-.04em;line-height:1}
+.hd .facts{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--flint);text-align:right;line-height:1.7}
+.hd .facts b{color:var(--carbon)}
+.grid{columns:3;column-gap:16px}
+@media(max-width:900px){.grid{columns:2}}
+@media(max-width:600px){.grid{columns:1}}
+.card{break-inside:avoid;border:.5px solid var(--hair);background:var(--paper);padding:12px 14px;margin:0 0 14px}
+.card h3{font-family:var(--disp);font-size:13.5px;font-weight:600;letter-spacing:-.01em;color:var(--indigo);margin-bottom:8px;display:flex;align-items:baseline;gap:7px}
+.card h3 .n{font-family:var(--mono);font-size:10px;color:var(--flint);letter-spacing:.05em}
+.card h3 .pct{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--flint);letter-spacing:.05em}
+.card ul{list-style:none;font-size:12px;line-height:1.5}
+.card li{padding-left:12px;position:relative;margin-bottom:5px;color:#232328}
+.card li::before{content:"";position:absolute;left:0;top:7px;width:4px;height:4px;background:var(--indigo);opacity:.5}
+.card li b{color:var(--carbon);font-weight:600}
+.card.tie{border-color:var(--carbon)}
+.card.tie h3{color:var(--carbon)}
+.card.tie li::before{background:var(--carbon);opacity:.7}
+code{font-family:var(--mono);font-size:11px;background:var(--wash);padding:0 3px}
+footer{margin-top:8px;padding-top:14px;border-top:.5px solid var(--hair);display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--flint);flex-wrap:wrap;gap:6px}
+footer b{color:var(--carbon)}
+@media print{
+  .topbar{display:none}
+  body{background:#fff;font-size:9px}
+  .wrap{padding:0;max-width:100%}
+  .grid{columns:3;column-gap:9px}
+  .card{margin-bottom:8px;padding:8px 10px;border-color:#bbb}
+  h1{font-size:19px}
+  .card h3{font-size:11px}
+  .card ul{font-size:8.4px;line-height:1.42}
+  .card li{margin-bottom:3px}
+  @page{margin:0.8cm;size:A4 portrait}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="back" href="index.html"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M4 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg> Study Desk</a>
+  <span class="sp"></span>
+  <button class="pr" onclick="window.print()">⎙ Print one page</button>
+</div>
+<div class="wrap">
+  <div class="hd">
+    <div>
+      <div class="eyebrow"><span class="n">★</span> Salesforce Platform App Builder</div>
+      <h1>One-page cheat sheet.</h1>
+    </div>
+    <div class="facts"><b>60</b> +5 Q · <b>105</b> min · <b>63%</b> to pass<br>Scenario-based · lowest-code answer wins</div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3><span class="n">01</span> Fundamentals <span class="pct">23%</span></h3><ul>
+      <li>Declarative first; <b>code</b> only for callouts, complex bulk, bespoke UI, async.</li>
+      <li>Object/Field = <b>Profiles + Perm Sets</b> (perm sets only add).</li>
+      <li>Record = <b>OWD → role → sharing rules → manual → Apex</b> (opens up only).</li>
+      <li>Reports: Tabular/Summary/Matrix/Joined — charts need grouping.</li>
+      <li>Report type <b>"must have"</b> vs <b>"may or may not have"</b> related.</li>
+      <li>Dashboard shows <b>running user's</b> data; <b>dynamic</b> = own data.</li>
+      <li>Compact layout = mobile key fields; feed tracking ≠ field history.</li>
+    </ul></div>
+    <div class="card"><h3><span class="n">02</span> Data Modeling <span class="pct">22%</span></h3><ul>
+      <li>Record types = different <b>picklists / layouts / process</b>, per profile.</li>
+      <li><b>Master-Detail (ROCS):</b> Roll-ups, Owner inherited, Cascade, Sharing by parent; max 2/object.</li>
+      <li>Lookup: loose, optional, own sharing, <b>no roll-up</b>, reparent freely.</li>
+      <li>Many-to-many = <b>junction</b> w/ 2 master-details; 1st = primary.</li>
+      <li><b>External ID</b> → upsert / match key.</li>
+      <li>Long Text→Text <b>truncates</b>; many type changes wipe data — sandbox test.</li>
+      <li>Import Wizard ≤50k; Data Loader ≤5M + <b>upsert</b>; live external → Salesforce Connect.</li>
+    </ul></div>
+    <div class="card"><h3><span class="n">03</span> Business Logic <span class="pct">28%</span></h3><ul>
+      <li>Formula: read-only, up to <b>parent</b>, never children.</li>
+      <li>Roll-up: <b>COUNT/SUM/MIN/MAX</b>, master-detail only.</li>
+      <li>Validation: formula <b>TRUE = block</b>; fires on API/import too; exempt via <code>$Profile</code>.</li>
+      <li>Approval process = only <b>formal sign-off</b> + record lock.</li>
+      <li>New automation = <b>Flow</b>; same-record = <b>before-save</b>; related/email = after-save.</li>
+      <li>Know <b>order of execution</b>; avoid <b>recursion</b> (gate w/ ISCHANGED).</li>
+    </ul></div>
+    <div class="card"><h3><span class="n">04</span> User Interface <span class="pct">17%</span></h3><ul>
+      <li>App Builder builds <b>record / app / home</b> pages; visibility rules.</li>
+      <li>Page layout = fields, related lists, actions; Lightning page = arrangement.</li>
+      <li><b>Dynamic Forms</b> = per-field placement + visibility (no code).</li>
+      <li><b>JS buttons don't work in Lightning</b> → action / Flow / LWC.</li>
+      <li>Object-specific action pre-fills from parent; global doesn't.</li>
+      <li>Embed a <b>screen Flow</b> via Flow component for guided UI.</li>
+      <li>Custom LWC only when nothing standard fits; needs correct targets.</li>
+    </ul></div>
+    <div class="card"><h3><span class="n">05</span> App Deployment <span class="pct">10%</span></h3><ul>
+      <li>Sandboxes: Dev & Dev Pro = metadata, <b>1-day</b>; Partial = sample, <b>5-day</b>; Full = all data, <b>29-day</b>.</li>
+      <li>Change sets: <b>related orgs only</b>, no deletes, metadata only, add dependencies.</li>
+      <li>Managed = upgradeable / namespaced / IP-protected; Unmanaged = editable template.</li>
+      <li>Unrelated orgs / customers → <b>package</b>; deletions → Metadata API.</li>
+      <li>Apex to production → <b>≥75% coverage</b>.</li>
+    </ul></div>
+    <div class="card tie"><h3><span class="n">★</span> Tie-breakers</h3><ul>
+      <li>Two valid answers → pick <b>less code / more scalable</b>.</li>
+      <li>Aggregate children → <b>roll-up (M-D)</b>, or Flow if lookup.</li>
+      <li>Block a bad save → <b>validation rule</b>.</li>
+      <li>Formal approval → <b>approval process</b>, not Flow.</li>
+      <li>Fast same-record update → <b>before-save Flow</b>.</li>
+      <li>Realistic-but-not-full data → <b>Partial Copy</b> sandbox.</li>
+      <li>Reach an unrelated org → <b>package</b>, not change set.</li>
+      <li>Show one field conditionally → <b>Dynamic Forms</b>.</li>
+    </ul></div>
+  </div>
+  <footer><span><b>Cornish Consulting</b> — Study Desk</span><span>Platform App Builder · one-page master</span></footer>
+</div>
+</body>
+</html>
