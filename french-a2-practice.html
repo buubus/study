@@ -196,149 +196,1521 @@
 
 // Placement test — graded A1 -> A2+ to estimate a starting point.
 const PLACEMENT = [
-  {band:1, q:"Je ___ étudiant.", options:["suis","es","est","sommes"], answer:"suis", tts:"Je suis étudiant."},
-  {band:1, q:"Tu ___ à Nantes ?", options:["habites","habite","habitez","habitent"], answer:"habites", tts:"Tu habites à Nantes ?"},
-  {band:1, q:"___ heure est-il ?", options:["Quelle","Quel","Quels","Comment"], answer:"Quelle", tts:"Quelle heure est-il ?"},
-  {band:2, q:"Hier, j'___ mangé une pizza.", options:["ai","suis","a","as"], answer:"ai", tts:"Hier, j'ai mangé une pizza."},
-  {band:2, q:"Nous allons ___ un film ce soir.", options:["regarder","regardé","regardons","regardez"], answer:"regarder", tts:"Nous allons regarder un film ce soir."},
-  {band:3, q:"Elle est ___ au cinéma. (aller)", options:["allée","allé","allés","a allé"], answer:"allée", tts:"Elle est allée au cinéma."},
-  {band:3, q:"Quand j'étais petit, je ___ au foot. (jouer)", options:["jouais","ai joué","joue","jouerai"], answer:"jouais", tts:"Quand j'étais petit, je jouais au foot."},
-  {band:3, q:"Je voudrais ___ eau, s'il vous plaît.", options:["de l'","du","de la","des"], answer:"de l'", tts:"Je voudrais de l'eau, s'il vous plaît."},
-  {band:4, q:"Ce livre est ___ intéressant ___ l'autre.", options:["plus … que","aussi … comme","moins … de","très … que"], answer:"plus … que", tts:"Ce livre est plus intéressant que l'autre."},
-  {band:5, q:"Il faut que je ___ maintenant. (partir)", options:["parte","pars","partir","partirai"], answer:"parte", tts:"Il faut que je parte maintenant."}
-];
-
-// A2 practice modules
-const MODULES = [
-  {
-    id:"pc", title:"Le passé composé.", desc:"Talking about finished past actions — avoir vs être.",
-    ex:[
-      {type:"mcq", q:"J'___ fini mes devoirs.", options:["ai","suis","a","as"], answer:"ai", tts:"J'ai fini mes devoirs.", note:"'Finir' takes avoir. Most verbs do."},
-      {type:"fill", q:"Elle a ___ le bus. (prendre)", answer:["pris"], tts:"Elle a pris le bus.", note:"Irregular past participle: prendre → pris."},
-      {type:"mcq", q:"Nous ___ arrivés à midi.", options:["sommes","avons","êtes","ont"], answer:"sommes", tts:"Nous sommes arrivés à midi.", note:"Arriver is a 'house of être' verb, so the participle agrees: arrivé-s."},
-      {type:"fill", q:"Ils sont ___ hier soir. (partir)", answer:["partis"], tts:"Ils sont partis hier soir.", note:"Être verb, masculine plural → partis."},
-      {type:"translate", src:"I saw that film.", answer:["j'ai vu ce film","j'ai vu ce film-là"], tts:"J'ai vu ce film.", note:"voir → vu."},
-      {type:"fill", q:"Tu as ___ à ta mère ? (écrire)", answer:["écrit","ecrit"], tts:"Tu as écrit à ta mère ?", note:"écrire → écrit."}
-    ]
-  },
-  {
-    id:"imp", title:"Imparfait ou passé composé.", desc:"Background and habit vs a single completed event.",
-    ex:[
-      {type:"mcq", q:"Il ___ quand je suis sorti. (pleuvoir)", options:["pleuvait","a plu","pleut","pleuvra"], answer:"pleuvait", tts:"Il pleuvait quand je suis sorti.", note:"Ongoing background scene → imparfait."},
-      {type:"mcq", q:"Soudain, le téléphone ___.", options:["a sonné","sonnait","sonne","sonnera"], answer:"a sonné", tts:"Soudain, le téléphone a sonné.", note:"'Soudain' signals a single event → passé composé."},
-      {type:"fill", q:"Quand j'étais jeune, j'___ à Paris. (habiter)", answer:["habitais"], tts:"Quand j'étais jeune, j'habitais à Paris.", note:"A lasting past state → imparfait."},
-      {type:"mcq", q:"Chaque matin, elle ___ un café.", options:["buvait","a bu","boit","boira"], answer:"buvait", tts:"Chaque matin, elle buvait un café.", note:"'Chaque matin' = a habit → imparfait."},
-      {type:"translate", src:"I was reading when she arrived.", answer:["je lisais quand elle est arrivée","je lisais quand elle est arrivee"], tts:"Je lisais quand elle est arrivée.", note:"Background (lisais) + interrupting event (est arrivée)."}
-    ]
-  },
-  {
-    id:"fut", title:"Le futur.", desc:"Futur proche (aller + infinitive) and futur simple.",
-    ex:[
-      {type:"mcq", q:"Demain, je ___ voir mes amis.", options:["vais","vas","va","vont"], answer:"vais", tts:"Demain, je vais voir mes amis.", note:"Futur proche: je vais + infinitive."},
-      {type:"fill", q:"L'année prochaine, nous ___ en Italie. (voyager)", answer:["voyagerons"], tts:"L'année prochaine, nous voyagerons en Italie.", note:"Futur simple: infinitive + -ons."},
-      {type:"mcq", q:"Il ___ content demain. (être)", options:["sera","est","était","serait"], answer:"sera", tts:"Il sera content demain.", note:"être is irregular in the future: je serai, il sera…"},
-      {type:"fill", q:"Tu ___ à la fête ? (venir)", answer:["viendras"], tts:"Tu viendras à la fête ?", note:"venir → viendr- : tu viendras."},
-      {type:"translate", src:"We are going to eat at seven.", answer:["nous allons manger à sept heures","on va manger à sept heures","nous allons manger a sept heures"], tts:"Nous allons manger à sept heures.", note:"Futur proche is fine for a near, planned action."}
-    ]
-  },
-  {
-    id:"part", title:"Partitifs et quantités.", desc:"du, de la, de l', des — and how they change.",
-    ex:[
-      {type:"mcq", q:"Je bois ___ café le matin.", options:["du","de la","des","de l'"], answer:"du", tts:"Je bois du café le matin.", note:"café is masculine → du."},
-      {type:"mcq", q:"Elle mange ___ salade.", options:["de la","du","des","de l'"], answer:"de la", tts:"Elle mange de la salade.", note:"salade is feminine → de la."},
-      {type:"mcq", q:"Il n'y a pas ___ pain.", options:["de","du","de la","des"], answer:"de", tts:"Il n'y a pas de pain.", note:"After a negative, partitives collapse to 'de'."},
-      {type:"fill", q:"Je voudrais un peu ___ sucre.", answer:["de"], tts:"Je voudrais un peu de sucre.", note:"Expressions of quantity (un peu, beaucoup) take 'de'."},
-      {type:"translate", src:"I don't drink wine.", answer:["je ne bois pas de vin"], tts:"Je ne bois pas de vin.", note:"Negative → 'de vin', not 'du vin'."}
-    ]
-  },
-  {
-    id:"pron", title:"La vie quotidienne.", desc:"Reflexive verbs and daily-routine language.",
-    ex:[
-      {type:"fill", q:"Le matin, je ___ à sept heures. (se lever)", answer:["me lève","me leve"], tts:"Le matin, je me lève à sept heures.", note:"Reflexive: je me lève (note the accent: lève)."},
-      {type:"mcq", q:"Nous ___ couchons tard le week-end.", options:["nous","se","vous","me"], answer:"nous", tts:"Nous nous couchons tard le week-end.", note:"The reflexive pronoun matches the subject: nous → nous."},
-      {type:"fill", q:"Elle ___ les mains. (se laver)", answer:["se lave"], tts:"Elle se lave les mains.", note:"elle se lave — with body parts, use the reflexive."},
-      {type:"mcq", q:"Ils ___ réveillés tard.", options:["se sont","sont","ont","se"], answer:"se sont", tts:"Ils se sont réveillés tard.", note:"Reflexives take être in the passé composé: se sont réveillés."},
-      {type:"translate", src:"I get up early.", answer:["je me lève tôt","je me leve tot"], tts:"Je me lève tôt.", note:"se lever → je me lève."}
-    ]
-  },
-  {
-    id:"comp", title:"Comparatifs et superlatifs.", desc:"plus / moins / aussi … que, and the best/worst.",
-    ex:[
-      {type:"mcq", q:"Marie est ___ grande ___ Paul.", options:["plus … que","aussi … comme","plus … de","moins … comme"], answer:"plus … que", tts:"Marie est plus grande que Paul.", note:"plus/moins/aussi + adjective + que."},
-      {type:"mcq", q:"C'est le restaurant ___ cher de la ville.", options:["le plus","plus","très","meilleur"], answer:"le plus", tts:"C'est le restaurant le plus cher de la ville.", note:"Superlative: le/la plus + adjective."},
-      {type:"fill", q:"Le TGV est ___ rapide que le bus.", answer:["plus"], tts:"Le TGV est plus rapide que le bus.", note:"'more … than' → plus … que."},
-      {type:"mcq", q:"Cette glace est ___ que l'autre.", options:["meilleure","plus bonne","mieux","plus bon"], answer:"meilleure", tts:"Cette glace est meilleure que l'autre.", note:"'bon' is irregular: better = meilleur(e), not 'plus bon'."},
-      {type:"translate", src:"He is taller than me.", answer:["il est plus grand que moi"], tts:"Il est plus grand que moi.", note:"que moi — use the stressed pronoun after 'que'."}
-    ]
-  },
-  {
-    id:"civ", title:"La vie civique.", desc:"Residency and citizenship language — préfecture, values, symbols.",
-    ex:[
-      {type:"fill", q:"La devise de la France : « Liberté, Égalité, ___ ».", answer:["fraternité","fraternite"], tts:"Liberté, Égalité, Fraternité.", note:"The Republic's motto — a livret du citoyen staple."},
-      {type:"mcq", q:"Pour renouveler mon titre de séjour, je vais à la ___.", options:["préfecture","mairie","poste","gare"], answer:"préfecture", tts:"Pour renouveler mon titre de séjour, je vais à la préfecture.", note:"Residence permits are handled at the préfecture, not the mairie."},
-      {type:"fill", q:"La séparation des religions et de l'État s'appelle la ___.", answer:["laïcité","laicité","laicite"], tts:"La laïcité.", note:"Laïcité — a core Republican principle you may be asked to explain."},
-      {type:"mcq", q:"Le 14 juillet, on célèbre ___.", options:["la fête nationale","Noël","le nouvel an","Pâques"], answer:"la fête nationale", tts:"Le 14 juillet, on célèbre la fête nationale.", note:"Bastille Day — la fête nationale."},
-      {type:"mcq", q:"L'hymne national français s'appelle ___.", options:["La Marseillaise","La Marianne","Le Coq","La République"], answer:"La Marseillaise", tts:"L'hymne national s'appelle La Marseillaise.", note:"Anthem: La Marseillaise. Marianne is the Republic's symbol, not the anthem."},
-      {type:"fill", q:"Les couleurs du drapeau sont bleu, blanc et ___.", answer:["rouge"], tts:"Bleu, blanc, rouge.", note:"The tricolore: bleu, blanc, rouge."},
-      {type:"mcq", q:"L'égalité entre les femmes et les hommes est un ___ de la République.", options:["principe","problème","secret","choix"], answer:"principe", tts:"L'égalité entre les femmes et les hommes est un principe de la République.", note:"A founding principle — a likely theme in the entretien."},
-      {type:"translate", src:"I have an appointment at the prefecture.", answer:["j'ai un rendez-vous à la préfecture","j'ai un rendez-vous a la prefecture","j'ai rendez-vous à la préfecture"], tts:"J'ai un rendez-vous à la préfecture.", note:"avoir / prendre un rendez-vous — essential admin phrase."},
-      {type:"fill", q:"En France, l'école publique est gratuite et ___.", answer:["laïque","laique","obligatoire"], tts:"L'école publique est gratuite, obligatoire et laïque.", note:"Three words worth memorising together: gratuite, obligatoire, laïque."}
-    ]
-  },
-  {
-    id:"dict", title:"Dictée.", desc:"Hear a sentence, write it down — listening and spelling.",
-    ex:[
-      {type:"dictation", answer:["j'habite en france depuis cinq ans","j'habite en france depuis 5 ans"], audio:"audio/dict-1.mp3", tts:"J'habite en France depuis cinq ans.", note:"depuis + duration = 'for'. A key phrase for proving length of residence."},
-      {type:"dictation", answer:["je voudrais prendre un rendez-vous","je voudrais prendre un rendez vous"], audio:"audio/dict-2.mp3", tts:"Je voudrais prendre un rendez-vous.", note:"Mind the hyphen: rendez-vous."},
-      {type:"dictation", answer:["mes enfants vont à l'école publique","mes enfants vont a l'ecole publique"], audio:"audio/dict-3.mp3", tts:"Mes enfants vont à l'école publique.", note:"aller → ils/elles vont."},
-      {type:"dictation", answer:["je travaille à nantes depuis deux ans","je travaille a nantes depuis 2 ans"], audio:"audio/dict-4.mp3", tts:"Je travaille à Nantes depuis deux ans.", note:"travailler à + city."},
-      {type:"dictation", answer:["j'ai besoin d'un justificatif de domicile"], audio:"audio/dict-5.mp3", tts:"J'ai besoin d'un justificatif de domicile.", note:"justificatif de domicile = proof of address — you'll produce it constantly."},
-      {type:"dictation", answer:["la liberté et l'égalité sont des valeurs importantes","la liberte et l'egalite sont des valeurs importantes"], audio:"audio/dict-6.mp3", tts:"La liberté et l'égalité sont des valeurs importantes.", note:"Republican-values vocabulary in a full sentence."}
-    ]
-  },
-  {
-    id:"comp-o", title:"Compréhension orale.", desc:"Short spoken passages, then multiple choice.",
-    ex:[
-      {type:"listen", q:"Où travaille Sophie ?", options:["Dans une école","Dans un hôpital","Dans un magasin","Dans une banque"], answer:"Dans une école", audio:"audio/co-1.mp3", tts:"Bonjour, je m'appelle Sophie. J'habite à Lyon avec ma famille. Je travaille dans une école. J'aime beaucoup mon travail.", note:"« Je travaille dans une école. »"},
-      {type:"listen", q:"Pourquoi va-t-il à la préfecture ?", options:["Pour renouveler son titre de séjour","Pour trouver un travail","Pour inscrire ses enfants","Pour ouvrir un compte"], answer:"Pour renouveler son titre de séjour", audio:"audio/co-2.mp3", tts:"Aujourd'hui, je vais à la préfecture. J'ai un rendez-vous à quatorze heures pour renouveler mon titre de séjour. Je dois apporter mon passeport et un justificatif de domicile.", note:"« ...pour renouveler mon titre de séjour. »"},
-      {type:"listen", q:"Que doit-il apporter au rendez-vous ?", options:["Son passeport et un justificatif de domicile","Une photo et un stylo","Son passeport seulement","Un billet de train"], answer:"Son passeport et un justificatif de domicile", audio:"audio/co-2.mp3", tts:"Aujourd'hui, je vais à la préfecture. J'ai un rendez-vous à quatorze heures pour renouveler mon titre de séjour. Je dois apporter mon passeport et un justificatif de domicile.", note:"« ...mon passeport et un justificatif de domicile. »"},
-      {type:"listen", q:"Quelle est la devise de la République ?", options:["Liberté, Égalité, Fraternité","Travail, Famille, Patrie","Paix, Ordre et Justice","Union, Force et Vertu"], answer:"Liberté, Égalité, Fraternité", audio:"audio/co-4.mp3", tts:"En France, tous les citoyens sont égaux. La devise de la République est Liberté, Égalité, Fraternité. Le 14 juillet est la fête nationale.", note:"« Travail, Famille, Patrie » was the Vichy motto — a common trap. The Republic's is Liberté, Égalité, Fraternité."},
-      {type:"listen", q:"Qu'est-ce qu'ils achètent au marché ?", options:["Des fruits, des légumes et du pain","Des vêtements","Des livres","Du poisson et de la viande"], answer:"Des fruits, des légumes et du pain", audio:"audio/co-5.mp3", tts:"Le week-end, nous faisons les courses au marché. J'achète des fruits, des légumes et du pain. Ensuite, nous prenons un café ensemble.", note:"« ...des fruits, des légumes et du pain. »"}
-    ]
-  }
-];
-
-// Mock exam — DELF A2-style: listening + reading + writing.
-const EXAM = {
-  durationMin:20,
-  listening:[
-    {q:"Quand la mairie est-elle ouverte le samedi ?", options:["Le matin seulement","Toute la journée","Elle est fermée","L'après-midi seulement"], answer:"Le matin seulement", audio:"audio/exam-1.mp3", tts:"Bonjour, vous êtes bien à la mairie de Nantes. Nos bureaux sont ouverts du lundi au vendredi, de neuf heures à dix-sept heures. Le samedi, nous sommes ouverts le matin seulement."},
-    {q:"Pourquoi Julie annule-t-elle le dîner ?", options:["Elle est malade","Elle travaille tard","Elle est en retard","Elle n'a pas faim"], answer:"Elle est malade", audio:"audio/exam-2.mp3", tts:"Salut Marc, c'est Julie. Je ne peux pas venir dîner ce soir, je suis malade. On peut se voir demain midi au café ?"},
-    {q:"Comment reçoit-on le rendez-vous ?", options:["Par courriel","Par téléphone","Par la poste","En personne"], answer:"Par courriel", audio:"audio/exam-3.mp3", tts:"Pour votre demande de titre de séjour, vous devez créer un compte en ligne, remplir le formulaire et payer les frais. Ensuite, vous recevrez un rendez-vous par courriel."},
-    {q:"Quel temps fera-t-il ce soir ?", options:["Il pleuvra peut-être","Il fera très chaud","Il neigera","Il y aura du soleil"], answer:"Il pleuvra peut-être", audio:"audio/exam-4.mp3", tts:"Aujourd'hui il fait beau à Nantes. Cet après-midi, le ciel sera nuageux, et il y aura peut-être de la pluie ce soir."},
-    {q:"Combien coûte le billet pour un adulte, un mardi ?", options:["Huit euros","C'est gratuit","Vingt euros","Cinq euros"], answer:"Huit euros", audio:"audio/exam-5.mp3", tts:"Le musée est gratuit le premier dimanche du mois. Les autres jours, le billet coûte huit euros pour les adultes, et il est gratuit pour les enfants."}
+ {
+  "band": 1,
+  "q": "Je ___ étudiant.",
+  "options": [
+   "suis",
+   "es",
+   "est",
+   "sommes"
   ],
-  reading:{
-    text:"Chère Madame,\nNous vous informons que votre carte de séjour est prête. Vous pouvez venir la chercher à la préfecture, du lundi au jeudi, entre 9h et 12h. N'oubliez pas d'apporter votre passeport et un timbre fiscal de 25 euros. La carte est valable pendant un an. Si vous ne pouvez pas venir, prenez un nouveau rendez-vous sur le site internet.\nCordialement,\nLe service des étrangers",
-    questions:[
-      {q:"Que peut-elle venir chercher à la préfecture ?", options:["Sa carte de séjour","Son passeport","Un timbre fiscal","Un formulaire"], answer:"Sa carte de séjour"},
-      {q:"Quels jours peut-elle venir ?", options:["Du lundi au jeudi","Le week-end","Tous les jours","Le vendredi seulement"], answer:"Du lundi au jeudi"},
-      {q:"Que doit-elle apporter ?", options:["Son passeport et un timbre fiscal","Une photo d'identité","De l'argent liquide","Rien de particulier"], answer:"Son passeport et un timbre fiscal"},
-      {q:"Combien coûte le timbre fiscal ?", options:["25 euros","12 euros","50 euros","C'est gratuit"], answer:"25 euros"},
-      {q:"Combien de temps la carte est-elle valable ?", options:["Un an","Six mois","Cinq ans","Trois mois"], answer:"Un an"}
+  "answer": "suis",
+  "tts": "Je suis étudiant."
+ },
+ {
+  "band": 1,
+  "q": "Tu ___ à Nantes ?",
+  "options": [
+   "habites",
+   "habite",
+   "habitez",
+   "habitent"
+  ],
+  "answer": "habites",
+  "tts": "Tu habites à Nantes ?"
+ },
+ {
+  "band": 1,
+  "q": "___ heure est-il ?",
+  "options": [
+   "Quelle",
+   "Quel",
+   "Quels",
+   "Comment"
+  ],
+  "answer": "Quelle",
+  "tts": "Quelle heure est-il ?"
+ },
+ {
+  "band": 2,
+  "q": "Elle ne mange ___ de viande.",
+  "options": [
+   "pas",
+   "personne",
+   "aucun",
+   "rien"
+  ],
+  "answer": "pas",
+  "tts": "Elle ne mange pas de viande."
+ },
+ {
+  "band": 2,
+  "q": "Hier, j'___ mangé une pizza.",
+  "options": [
+   "ai",
+   "suis",
+   "a",
+   "as"
+  ],
+  "answer": "ai",
+  "tts": "Hier, j'ai mangé une pizza."
+ },
+ {
+  "band": 2,
+  "q": "Nous allons ___ un film ce soir.",
+  "options": [
+   "regarder",
+   "regardé",
+   "regardons",
+   "regardez"
+  ],
+  "answer": "regarder",
+  "tts": "Nous allons regarder un film ce soir."
+ },
+ {
+  "band": 3,
+  "q": "Elle est ___ au cinéma. (aller)",
+  "options": [
+   "allée",
+   "allé",
+   "allés",
+   "a allé"
+  ],
+  "answer": "allée",
+  "tts": "Elle est allée au cinéma."
+ },
+ {
+  "band": 3,
+  "q": "Quand j'étais petit, je ___ au foot. (jouer)",
+  "options": [
+   "jouais",
+   "ai joué",
+   "joue",
+   "jouerai"
+  ],
+  "answer": "jouais",
+  "tts": "Quand j'étais petit, je jouais au foot."
+ },
+ {
+  "band": 3,
+  "q": "Je voudrais ___ eau, s'il vous plaît.",
+  "options": [
+   "de l'",
+   "du",
+   "de la",
+   "des"
+  ],
+  "answer": "de l'",
+  "tts": "Je voudrais de l'eau, s'il vous plaît."
+ },
+ {
+  "band": 4,
+  "q": "Tu vois Marie ? Oui, je ___ vois.",
+  "options": [
+   "la",
+   "le",
+   "lui",
+   "y"
+  ],
+  "answer": "la",
+  "tts": "Tu vois Marie ? Oui, je la vois."
+ },
+ {
+  "band": 4,
+  "q": "Ce livre est ___ intéressant ___ l'autre.",
+  "options": [
+   "plus … que",
+   "aussi … comme",
+   "moins … de",
+   "très … que"
+  ],
+  "answer": "plus … que",
+  "tts": "Ce livre est plus intéressant que l'autre."
+ },
+ {
+  "band": 5,
+  "q": "Il faut que je ___ maintenant. (partir)",
+  "options": [
+   "parte",
+   "pars",
+   "partir",
+   "partirai"
+  ],
+  "answer": "parte",
+  "tts": "Il faut que je parte maintenant."
+ }
+];
+
+const MODULES = [
+ {
+  "id": "pc",
+  "title": "Le passé composé.",
+  "desc": "Talking about finished past actions — avoir vs être.",
+  "ex": [
+   {
+    "type": "mcq",
+    "q": "J'___ fini mes devoirs.",
+    "options": [
+     "ai",
+     "suis",
+     "a",
+     "as"
+    ],
+    "answer": "ai",
+    "tts": "J'ai fini mes devoirs.",
+    "note": "'Finir' takes avoir, like most verbs."
+   },
+   {
+    "type": "fill",
+    "q": "Elle a ___ le bus. (prendre)",
+    "answer": [
+     "pris"
+    ],
+    "tts": "Elle a pris le bus.",
+    "note": "Irregular participle: prendre → pris."
+   },
+   {
+    "type": "mcq",
+    "q": "Nous ___ arrivés à midi.",
+    "options": [
+     "sommes",
+     "avons",
+     "êtes",
+     "ont"
+    ],
+    "answer": "sommes",
+    "tts": "Nous sommes arrivés à midi.",
+    "note": "Arriver uses être; the participle agrees (arrivé-s)."
+   },
+   {
+    "type": "fill",
+    "q": "Ils sont ___ hier soir. (partir)",
+    "answer": [
+     "partis"
+    ],
+    "tts": "Ils sont partis hier soir.",
+    "note": "Être verb, masculine plural → partis."
+   },
+   {
+    "type": "translate",
+    "src": "I saw that film.",
+    "answer": [
+     "j'ai vu ce film"
+    ],
+    "tts": "J'ai vu ce film.",
+    "note": "voir → vu."
+   },
+   {
+    "type": "fill",
+    "q": "Tu as ___ à ta mère ? (écrire)",
+    "answer": [
+     "écrit",
+     "ecrit"
+    ],
+    "tts": "Tu as écrit à ta mère ?",
+    "note": "écrire → écrit."
+   },
+   {
+    "type": "mcq",
+    "q": "Vous ___ venus en train ?",
+    "options": [
+     "êtes",
+     "avez",
+     "ont",
+     "sommes"
+    ],
+    "answer": "êtes",
+    "tts": "Vous êtes venus en train ?",
+    "note": "venir uses être: vous êtes venus."
+   },
+   {
+    "type": "fill",
+    "q": "Elle s'est ___ à sept heures. (se réveiller)",
+    "answer": [
+     "réveillée",
+     "reveillee"
+    ],
+    "tts": "Elle s'est réveillée à sept heures.",
+    "note": "Reflexive verbs use être; agrees → réveillée."
+   },
+   {
+    "type": "mcq",
+    "q": "J'ai ___ mes clés.",
+    "options": [
+     "perdu",
+     "perdue",
+     "perdus",
+     "perds"
+    ],
+    "answer": "perdu",
+    "tts": "J'ai perdu mes clés.",
+    "note": "With avoir, no agreement when the object comes after → perdu."
+   },
+   {
+    "type": "translate",
+    "src": "We went to Paris.",
+    "answer": [
+     "nous sommes allés à paris",
+     "on est allés à paris",
+     "nous sommes alles a paris"
+    ],
+    "tts": "Nous sommes allés à Paris.",
+    "note": "aller uses être: nous sommes allés."
+   },
+   {
+    "type": "fill",
+    "q": "Hier, il a ___ beau. (faire)",
+    "answer": [
+     "fait"
+    ],
+    "tts": "Hier, il a fait beau.",
+    "note": "faire → fait; weather uses 'il fait'."
+   }
+  ]
+ },
+ {
+  "id": "imp",
+  "title": "Imparfait ou passé composé.",
+  "desc": "Background and habit vs a single completed event.",
+  "ex": [
+   {
+    "type": "mcq",
+    "q": "Il ___ quand je suis sorti. (pleuvoir)",
+    "options": [
+     "pleuvait",
+     "a plu",
+     "pleut",
+     "pleuvra"
+    ],
+    "answer": "pleuvait",
+    "tts": "Il pleuvait quand je suis sorti.",
+    "note": "Ongoing scene → imparfait."
+   },
+   {
+    "type": "mcq",
+    "q": "Soudain, le téléphone ___.",
+    "options": [
+     "a sonné",
+     "sonnait",
+     "sonne",
+     "sonnera"
+    ],
+    "answer": "a sonné",
+    "tts": "Soudain, le téléphone a sonné.",
+    "note": "'Soudain' = a single event → passé composé."
+   },
+   {
+    "type": "fill",
+    "q": "Quand j'étais jeune, j'___ à Paris. (habiter)",
+    "answer": [
+     "habitais"
+    ],
+    "tts": "Quand j'étais jeune, j'habitais à Paris.",
+    "note": "A lasting past state → imparfait."
+   },
+   {
+    "type": "mcq",
+    "q": "Chaque matin, elle ___ un café.",
+    "options": [
+     "buvait",
+     "a bu",
+     "boit",
+     "boira"
+    ],
+    "answer": "buvait",
+    "tts": "Chaque matin, elle buvait un café.",
+    "note": "'Chaque matin' = a habit → imparfait."
+   },
+   {
+    "type": "translate",
+    "src": "I was reading when she arrived.",
+    "answer": [
+     "je lisais quand elle est arrivée",
+     "je lisais quand elle est arrivee"
+    ],
+    "tts": "Je lisais quand elle est arrivée.",
+    "note": "Background (lisais) + event (est arrivée)."
+   },
+   {
+    "type": "mcq",
+    "q": "Nous ___ la télé quand tu as téléphoné.",
+    "options": [
+     "regardions",
+     "avons regardé",
+     "regardons",
+     "regarderons"
+    ],
+    "answer": "regardions",
+    "tts": "Nous regardions la télé quand tu as téléphoné.",
+    "note": "Interrupted action → imparfait."
+   },
+   {
+    "type": "mcq",
+    "q": "L'année dernière, je ___ en Espagne.",
+    "options": [
+     "suis allé",
+     "allais",
+     "vais",
+     "irai"
+    ],
+    "answer": "suis allé",
+    "tts": "L'année dernière, je suis allé en Espagne.",
+    "note": "A completed, dated trip → passé composé."
+   },
+   {
+    "type": "fill",
+    "q": "Avant, il ___ très timide. (être)",
+    "answer": [
+     "était",
+     "etait"
+    ],
+    "tts": "Avant, il était très timide.",
+    "note": "A past description → imparfait: était."
+   },
+   {
+    "type": "mcq",
+    "q": "Elle ___ ses études en 2020.",
+    "options": [
+     "a fini",
+     "finissait",
+     "finit",
+     "finira"
+    ],
+    "answer": "a fini",
+    "tts": "Elle a fini ses études en 2020.",
+    "note": "A precise completed moment → passé composé."
+   }
+  ]
+ },
+ {
+  "id": "fut",
+  "title": "Le futur.",
+  "desc": "Futur proche (aller + infinitive) and futur simple.",
+  "ex": [
+   {
+    "type": "mcq",
+    "q": "Demain, je ___ voir mes amis.",
+    "options": [
+     "vais",
+     "vas",
+     "va",
+     "vont"
+    ],
+    "answer": "vais",
+    "tts": "Demain, je vais voir mes amis.",
+    "note": "Futur proche: je vais + infinitive."
+   },
+   {
+    "type": "fill",
+    "q": "L'année prochaine, nous ___ en Italie. (voyager)",
+    "answer": [
+     "voyagerons"
+    ],
+    "tts": "L'année prochaine, nous voyagerons en Italie.",
+    "note": "Futur simple: infinitive + -ons."
+   },
+   {
+    "type": "mcq",
+    "q": "Il ___ content demain. (être)",
+    "options": [
+     "sera",
+     "est",
+     "était",
+     "serait"
+    ],
+    "answer": "sera",
+    "tts": "Il sera content demain.",
+    "note": "être is irregular: il sera."
+   },
+   {
+    "type": "fill",
+    "q": "Tu ___ à la fête ? (venir)",
+    "answer": [
+     "viendras"
+    ],
+    "tts": "Tu viendras à la fête ?",
+    "note": "venir → viendr- : tu viendras."
+   },
+   {
+    "type": "translate",
+    "src": "We are going to eat at seven.",
+    "answer": [
+     "nous allons manger à sept heures",
+     "on va manger à sept heures",
+     "nous allons manger a sept heures"
+    ],
+    "tts": "Nous allons manger à sept heures.",
+    "note": "Futur proche for a near, planned action."
+   },
+   {
+    "type": "mcq",
+    "q": "Ce soir, elles ___ étudier.",
+    "options": [
+     "vont",
+     "va",
+     "allons",
+     "vais"
+    ],
+    "answer": "vont",
+    "tts": "Ce soir, elles vont étudier.",
+    "note": "elles → vont + infinitive."
+   },
+   {
+    "type": "fill",
+    "q": "Quand j'aurai le temps, je te ___. (appeler)",
+    "answer": [
+     "appellerai"
+    ],
+    "tts": "Quand j'aurai le temps, je t'appellerai.",
+    "note": "appeler doubles the l in the future: appellerai."
+   },
+   {
+    "type": "mcq",
+    "q": "Nous ___ une réunion lundi. (avoir)",
+    "options": [
+     "aurons",
+     "avons",
+     "avions",
+     "aurions"
+    ],
+    "answer": "aurons",
+    "tts": "Nous aurons une réunion lundi.",
+    "note": "avoir → aur- : nous aurons."
+   },
+   {
+    "type": "translate",
+    "src": "I will do it tomorrow.",
+    "answer": [
+     "je le ferai demain",
+     "je ferai ça demain",
+     "je ferai ca demain"
+    ],
+    "tts": "Je le ferai demain.",
+    "note": "faire → fer- : je ferai."
+   }
+  ]
+ },
+ {
+  "id": "part",
+  "title": "Partitifs et quantités.",
+  "desc": "du, de la, de l', des — and how they change.",
+  "ex": [
+   {
+    "type": "mcq",
+    "q": "Je bois ___ café le matin.",
+    "options": [
+     "du",
+     "de la",
+     "des",
+     "de l'"
+    ],
+    "answer": "du",
+    "tts": "Je bois du café le matin.",
+    "note": "café is masculine → du."
+   },
+   {
+    "type": "mcq",
+    "q": "Elle mange ___ salade.",
+    "options": [
+     "de la",
+     "du",
+     "des",
+     "de l'"
+    ],
+    "answer": "de la",
+    "tts": "Elle mange de la salade.",
+    "note": "salade is feminine → de la."
+   },
+   {
+    "type": "mcq",
+    "q": "Il n'y a pas ___ pain.",
+    "options": [
+     "de",
+     "du",
+     "de la",
+     "des"
+    ],
+    "answer": "de",
+    "tts": "Il n'y a pas de pain.",
+    "note": "After a negative, partitives become 'de'."
+   },
+   {
+    "type": "fill",
+    "q": "Je voudrais un peu ___ sucre.",
+    "answer": [
+     "de"
+    ],
+    "tts": "Je voudrais un peu de sucre.",
+    "note": "Quantities (un peu, beaucoup) take 'de'."
+   },
+   {
+    "type": "translate",
+    "src": "I don't drink wine.",
+    "answer": [
+     "je ne bois pas de vin"
+    ],
+    "tts": "Je ne bois pas de vin.",
+    "note": "Negative → 'de vin', not 'du vin'."
+   },
+   {
+    "type": "mcq",
+    "q": "Nous achetons ___ fruits.",
+    "options": [
+     "des",
+     "du",
+     "de la",
+     "de l'"
+    ],
+    "answer": "des",
+    "tts": "Nous achetons des fruits.",
+    "note": "Plural countable → des."
+   },
+   {
+    "type": "mcq",
+    "q": "Tu veux ___ eau ?",
+    "options": [
+     "de l'",
+     "du",
+     "de la",
+     "des"
+    ],
+    "answer": "de l'",
+    "tts": "Tu veux de l'eau ?",
+    "note": "Before a vowel → de l'."
+   },
+   {
+    "type": "mcq",
+    "q": "Elle boit beaucoup ___ thé.",
+    "options": [
+     "de",
+     "du",
+     "de la",
+     "des"
+    ],
+    "answer": "de",
+    "tts": "Elle boit beaucoup de thé.",
+    "note": "beaucoup de — always 'de'."
+   },
+   {
+    "type": "fill",
+    "q": "Il mange ___ viande tous les jours. (partitif)",
+    "answer": [
+     "de la"
+    ],
+    "tts": "Il mange de la viande tous les jours.",
+    "note": "viande is feminine → de la."
+   }
+  ]
+ },
+ {
+  "id": "pron",
+  "title": "Pronoms et vie quotidienne.",
+  "desc": "Reflexives plus direct (le/la/les) and indirect (lui/leur) pronouns.",
+  "ex": [
+   {
+    "type": "fill",
+    "q": "Le matin, je ___ à sept heures. (se lever)",
+    "answer": [
+     "me lève",
+     "me leve"
+    ],
+    "tts": "Le matin, je me lève à sept heures.",
+    "note": "Reflexive: je me lève (accent on lève)."
+   },
+   {
+    "type": "mcq",
+    "q": "Nous ___ couchons tard le week-end.",
+    "options": [
+     "nous",
+     "se",
+     "vous",
+     "me"
+    ],
+    "answer": "nous",
+    "tts": "Nous nous couchons tard le week-end.",
+    "note": "The reflexive pronoun matches the subject: nous → nous."
+   },
+   {
+    "type": "fill",
+    "q": "Elle ___ les mains. (se laver)",
+    "answer": [
+     "se lave"
+    ],
+    "tts": "Elle se lave les mains.",
+    "note": "With body parts, use the reflexive: se lave."
+   },
+   {
+    "type": "translate",
+    "src": "I get up early.",
+    "answer": [
+     "je me lève tôt",
+     "je me leve tot"
+    ],
+    "tts": "Je me lève tôt.",
+    "note": "se lever → je me lève."
+   },
+   {
+    "type": "mcq",
+    "q": "Ils ___ réveillés tard.",
+    "options": [
+     "se sont",
+     "sont",
+     "ont",
+     "se"
+    ],
+    "answer": "se sont",
+    "tts": "Ils se sont réveillés tard.",
+    "note": "Reflexives take être in the past: se sont réveillés."
+   },
+   {
+    "type": "mcq",
+    "q": "Tu vois Paul ? Oui, je ___ vois.",
+    "options": [
+     "le",
+     "la",
+     "lui",
+     "y"
+    ],
+    "answer": "le",
+    "tts": "Tu vois Paul ? Oui, je le vois.",
+    "note": "voir Paul = direct object → le (masculine)."
+   },
+   {
+    "type": "mcq",
+    "q": "Tu parles à Marie ? Oui, je ___ parle.",
+    "options": [
+     "lui",
+     "la",
+     "le",
+     "y"
+    ],
+    "answer": "lui",
+    "tts": "Tu parles à Marie ? Oui, je lui parle.",
+    "note": "parler à quelqu'un = indirect → lui."
+   },
+   {
+    "type": "mcq",
+    "q": "Tu as les billets ? Oui, je ___ ai.",
+    "options": [
+     "les",
+     "leur",
+     "y",
+     "en"
+    ],
+    "answer": "les",
+    "tts": "Tu as les billets ? Oui, je les ai.",
+    "note": "les billets = direct object → les."
+   },
+   {
+    "type": "translate",
+    "src": "I call them every day.",
+    "answer": [
+     "je les appelle tous les jours"
+    ],
+    "tts": "Je les appelle tous les jours.",
+    "note": "appeler quelqu'un = direct → les."
+   }
+  ]
+ },
+ {
+  "id": "comp",
+  "title": "Comparatifs et superlatifs.",
+  "desc": "plus / moins / aussi … que, and the best or worst.",
+  "ex": [
+   {
+    "type": "mcq",
+    "q": "Marie est ___ grande ___ Paul.",
+    "options": [
+     "plus … que",
+     "aussi … comme",
+     "plus … de",
+     "moins … comme"
+    ],
+    "answer": "plus … que",
+    "tts": "Marie est plus grande que Paul.",
+    "note": "plus/moins/aussi + adjective + que."
+   },
+   {
+    "type": "mcq",
+    "q": "C'est le restaurant ___ cher de la ville.",
+    "options": [
+     "le plus",
+     "plus",
+     "très",
+     "meilleur"
+    ],
+    "answer": "le plus",
+    "tts": "C'est le restaurant le plus cher de la ville.",
+    "note": "Superlative: le/la plus + adjective."
+   },
+   {
+    "type": "fill",
+    "q": "Le TGV est ___ rapide que le bus.",
+    "answer": [
+     "plus"
+    ],
+    "tts": "Le TGV est plus rapide que le bus.",
+    "note": "'more … than' → plus … que."
+   },
+   {
+    "type": "mcq",
+    "q": "Cette glace est ___ que l'autre.",
+    "options": [
+     "meilleure",
+     "plus bonne",
+     "mieux",
+     "plus bon"
+    ],
+    "answer": "meilleure",
+    "tts": "Cette glace est meilleure que l'autre.",
+    "note": "'bon' is irregular: better = meilleur(e)."
+   },
+   {
+    "type": "translate",
+    "src": "He is taller than me.",
+    "answer": [
+     "il est plus grand que moi"
+    ],
+    "tts": "Il est plus grand que moi.",
+    "note": "que moi — stressed pronoun after 'que'."
+   },
+   {
+    "type": "mcq",
+    "q": "Elle chante ___ que moi.",
+    "options": [
+     "mieux",
+     "meilleur",
+     "plus bien",
+     "plus bon"
+    ],
+    "answer": "mieux",
+    "tts": "Elle chante mieux que moi.",
+    "note": "'bien' is irregular: better (adverb) = mieux."
+   },
+   {
+    "type": "mcq",
+    "q": "Il y a ___ de monde qu'hier.",
+    "options": [
+     "moins",
+     "mieux",
+     "pire",
+     "pis"
+    ],
+    "answer": "moins",
+    "tts": "Il y a moins de monde qu'hier.",
+    "note": "'less' → moins de."
+   },
+   {
+    "type": "fill",
+    "q": "Paris est la ___ grande ville de France. (superlatif)",
+    "answer": [
+     "plus"
+    ],
+    "tts": "Paris est la plus grande ville de France.",
+    "note": "la plus grande — feminine superlative."
+   },
+   {
+    "type": "translate",
+    "src": "This film is less interesting than the book.",
+    "answer": [
+     "ce film est moins intéressant que le livre",
+     "ce film est moins interessant que le livre"
+    ],
+    "tts": "Ce film est moins intéressant que le livre.",
+    "note": "moins … que = less … than."
+   }
+  ]
+ },
+ {
+  "id": "civ",
+  "title": "La vie civique.",
+  "desc": "Residency and citizenship language — préfecture, values, symbols.",
+  "ex": [
+   {
+    "type": "fill",
+    "q": "La devise de la France : « Liberté, Égalité, ___ ».",
+    "answer": [
+     "fraternité",
+     "fraternite"
+    ],
+    "tts": "Liberté, Égalité, Fraternité.",
+    "note": "The Republic's motto."
+   },
+   {
+    "type": "mcq",
+    "q": "Pour renouveler mon titre de séjour, je vais à la ___.",
+    "options": [
+     "préfecture",
+     "mairie",
+     "poste",
+     "gare"
+    ],
+    "answer": "préfecture",
+    "tts": "Pour renouveler mon titre de séjour, je vais à la préfecture.",
+    "note": "Residence permits are handled at the préfecture."
+   },
+   {
+    "type": "fill",
+    "q": "La séparation des religions et de l'État s'appelle la ___.",
+    "answer": [
+     "laïcité",
+     "laicité",
+     "laicite"
+    ],
+    "tts": "La laïcité.",
+    "note": "Laïcité — a core Republican principle."
+   },
+   {
+    "type": "mcq",
+    "q": "Le 14 juillet, on célèbre ___.",
+    "options": [
+     "la fête nationale",
+     "Noël",
+     "le nouvel an",
+     "Pâques"
+    ],
+    "answer": "la fête nationale",
+    "tts": "Le 14 juillet, on célèbre la fête nationale.",
+    "note": "Bastille Day — la fête nationale."
+   },
+   {
+    "type": "mcq",
+    "q": "L'hymne national français s'appelle ___.",
+    "options": [
+     "La Marseillaise",
+     "La Marianne",
+     "Le Coq",
+     "La République"
+    ],
+    "answer": "La Marseillaise",
+    "tts": "L'hymne national s'appelle La Marseillaise.",
+    "note": "Anthem: La Marseillaise."
+   },
+   {
+    "type": "fill",
+    "q": "Les couleurs du drapeau sont bleu, blanc et ___.",
+    "answer": [
+     "rouge"
+    ],
+    "tts": "Bleu, blanc, rouge.",
+    "note": "The tricolore."
+   },
+   {
+    "type": "mcq",
+    "q": "L'égalité entre les femmes et les hommes est un ___ de la République.",
+    "options": [
+     "principe",
+     "problème",
+     "secret",
+     "choix"
+    ],
+    "answer": "principe",
+    "tts": "L'égalité entre les femmes et les hommes est un principe de la République.",
+    "note": "A founding principle."
+   },
+   {
+    "type": "translate",
+    "src": "I have an appointment at the prefecture.",
+    "answer": [
+     "j'ai un rendez-vous à la préfecture",
+     "j'ai rendez-vous à la préfecture",
+     "j'ai un rendez-vous a la prefecture"
+    ],
+    "tts": "J'ai un rendez-vous à la préfecture.",
+    "note": "Essential admin phrase."
+   },
+   {
+    "type": "fill",
+    "q": "En France, l'école publique est gratuite et ___.",
+    "answer": [
+     "laïque",
+     "laique",
+     "obligatoire"
+    ],
+    "tts": "L'école publique est gratuite, obligatoire et laïque.",
+    "note": "Gratuite, obligatoire, laïque."
+   },
+   {
+    "type": "mcq",
+    "q": "La capitale de la France est ___.",
+    "options": [
+     "Paris",
+     "Lyon",
+     "Marseille",
+     "Nantes"
+    ],
+    "answer": "Paris",
+    "tts": "La capitale de la France est Paris.",
+    "note": "Paris is the capital."
+   },
+   {
+    "type": "mcq",
+    "q": "Le président de la République est élu pour ___ ans.",
+    "options": [
+     "cinq",
+     "trois",
+     "sept",
+     "deux"
+    ],
+    "answer": "cinq",
+    "tts": "Le président de la République est élu pour cinq ans.",
+    "note": "A five-year term (le quinquennat)."
+   },
+   {
+    "type": "fill",
+    "q": "Le symbole de la République est une femme : ___.",
+    "answer": [
+     "marianne"
+    ],
+    "tts": "Marianne.",
+    "note": "Marianne personifies the Republic."
+   },
+   {
+    "type": "mcq",
+    "q": "« Marianne » représente ___.",
+    "options": [
+     "la République",
+     "une reine",
+     "une sainte",
+     "une actrice"
+    ],
+    "answer": "la République",
+    "tts": "Marianne représente la République.",
+    "note": "She is a symbol, not a real person."
+   }
+  ]
+ },
+ {
+  "id": "dict",
+  "title": "Dictée.",
+  "desc": "Hear a sentence, write it down — listening and spelling.",
+  "ex": [
+   {
+    "audio": "audio/dict-1.mp3",
+    "tts": "J'habite en France depuis cinq ans.",
+    "type": "dictation",
+    "answer": [
+     "j'habite en france depuis cinq ans."
     ]
+   },
+   {
+    "audio": "audio/dict-2.mp3",
+    "tts": "Je voudrais prendre un rendez-vous.",
+    "type": "dictation",
+    "answer": [
+     "je voudrais prendre un rendez-vous."
+    ]
+   },
+   {
+    "audio": "audio/dict-3.mp3",
+    "tts": "Mes enfants vont à l'école publique.",
+    "type": "dictation",
+    "answer": [
+     "mes enfants vont à l'école publique."
+    ]
+   },
+   {
+    "audio": "audio/dict-4.mp3",
+    "tts": "Je travaille à Nantes depuis deux ans.",
+    "type": "dictation",
+    "answer": [
+     "je travaille à nantes depuis deux ans."
+    ]
+   },
+   {
+    "audio": "audio/dict-5.mp3",
+    "tts": "J'ai besoin d'un justificatif de domicile.",
+    "type": "dictation",
+    "answer": [
+     "j'ai besoin d'un justificatif de domicile."
+    ]
+   },
+   {
+    "audio": "audio/dict-6.mp3",
+    "tts": "La liberté et l'égalité sont des valeurs importantes.",
+    "type": "dictation",
+    "answer": [
+     "la liberté et l'égalité sont des valeurs importantes."
+    ]
+   },
+   {
+    "audio": "audio/dict-7.mp3",
+    "tts": "Le matin, je me lève à sept heures.",
+    "type": "dictation",
+    "answer": [
+     "le matin, je me lève à sept heures."
+    ]
+   },
+   {
+    "audio": "audio/dict-8.mp3",
+    "tts": "Nous allons au marché tous les samedis.",
+    "type": "dictation",
+    "answer": [
+     "nous allons au marché tous les samedis."
+    ]
+   },
+   {
+    "audio": "audio/dict-9.mp3",
+    "tts": "Je voudrais renouveler mon titre de séjour.",
+    "type": "dictation",
+    "answer": [
+     "je voudrais renouveler mon titre de séjour."
+    ]
+   },
+   {
+    "audio": "audio/dict-10.mp3",
+    "tts": "Elle a pris le train pour aller à Paris.",
+    "type": "dictation",
+    "answer": [
+     "elle a pris le train pour aller à paris."
+    ]
+   },
+   {
+    "audio": "audio/dict-11.mp3",
+    "tts": "Il fait froid en hiver et chaud en été.",
+    "type": "dictation",
+    "answer": [
+     "il fait froid en hiver et chaud en été."
+    ]
+   },
+   {
+    "audio": "audio/dict-12.mp3",
+    "tts": "Pouvez-vous répéter, s'il vous plaît ?",
+    "type": "dictation",
+    "answer": [
+     "pouvez-vous répéter, s'il vous plaît ?"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "comp-o",
+  "title": "Compréhension orale.",
+  "desc": "Short spoken passages, then multiple choice.",
+  "ex": [
+   {
+    "audio": "audio/co-1.mp3",
+    "tts": "Bonjour, je m'appelle Sophie. J'habite à Lyon avec ma famille. Je travaille dans une école. J'aime beaucoup mon travail.",
+    "type": "listen",
+    "q": "Où travaille Sophie ?",
+    "options": [
+     "Dans une école",
+     "Dans un hôpital",
+     "Dans un magasin",
+     "Dans une banque"
+    ],
+    "answer": "Dans une école",
+    "note": "« Je travaille dans une école. »"
+   },
+   {
+    "audio": "audio/co-2.mp3",
+    "tts": "Aujourd'hui, je vais à la préfecture. J'ai un rendez-vous à quatorze heures pour renouveler mon titre de séjour. Je dois apporter mon passeport et un justificatif de domicile.",
+    "type": "listen",
+    "q": "Pourquoi va-t-il à la préfecture ?",
+    "options": [
+     "Pour renouveler son titre de séjour",
+     "Pour trouver un travail",
+     "Pour inscrire ses enfants",
+     "Pour ouvrir un compte"
+    ],
+    "answer": "Pour renouveler son titre de séjour",
+    "note": "« ...pour renouveler mon titre de séjour. »"
+   },
+   {
+    "audio": "audio/co-3.mp3",
+    "tts": "En France, tous les citoyens sont égaux. La devise de la République est Liberté, Égalité, Fraternité. Le quatorze juillet est la fête nationale.",
+    "type": "listen",
+    "q": "Quelle est la devise de la République ?",
+    "options": [
+     "Liberté, Égalité, Fraternité",
+     "Travail, Famille, Patrie",
+     "Paix, Ordre et Justice",
+     "Union, Force et Vertu"
+    ],
+    "answer": "Liberté, Égalité, Fraternité",
+    "note": "« Travail, Famille, Patrie » was the Vichy motto — a common trap."
+   },
+   {
+    "audio": "audio/co-4.mp3",
+    "tts": "Le week-end, nous faisons les courses au marché. J'achète des fruits, des légumes et du pain. Ensuite, nous prenons un café ensemble.",
+    "type": "listen",
+    "q": "Qu'est-ce qu'ils achètent au marché ?",
+    "options": [
+     "Des fruits, des légumes et du pain",
+     "Des vêtements",
+     "Des livres",
+     "Du poisson et de la viande"
+    ],
+    "answer": "Des fruits, des légumes et du pain",
+    "note": "« ...des fruits, des légumes et du pain. »"
+   },
+   {
+    "audio": "audio/co-5.mp3",
+    "tts": "Ce week-end, il va faire beau. Samedi, je vais me promener au parc avec mes amis. Dimanche, je vais rester à la maison pour me reposer.",
+    "type": "listen",
+    "q": "Que fait-elle dimanche ?",
+    "options": [
+     "Elle reste à la maison",
+     "Elle va au parc",
+     "Elle travaille",
+     "Elle voyage"
+    ],
+    "answer": "Elle reste à la maison",
+    "note": "« Dimanche, je vais rester à la maison. »"
+   },
+   {
+    "audio": "audio/co-6.mp3",
+    "tts": "Bonsoir, bienvenue au restaurant. Ce soir, le plat du jour est du poisson avec des légumes. Comme dessert, nous avons une tarte aux pommes. Bon appétit !",
+    "type": "listen",
+    "q": "Quel est le dessert ?",
+    "options": [
+     "Une tarte aux pommes",
+     "Une glace",
+     "Un gâteau au chocolat",
+     "Des fruits"
+    ],
+    "answer": "Une tarte aux pommes",
+    "note": "« Comme dessert, nous avons une tarte aux pommes. »"
+   },
+   {
+    "audio": "audio/co-7.mp3",
+    "tts": "Pour aller à la gare, c'est facile. Vous allez tout droit, puis vous tournez à gauche après la boulangerie. La gare est en face de la poste.",
+    "type": "listen",
+    "q": "Où se trouve la gare ?",
+    "options": [
+     "En face de la poste",
+     "À côté de la boulangerie",
+     "Derrière la mairie",
+     "Avant le parc"
+    ],
+    "answer": "En face de la poste",
+    "note": "« La gare est en face de la poste. »"
+   },
+   {
+    "audio": "audio/co-8.mp3",
+    "tts": "Cabinet du docteur Martin, bonjour. Votre rendez-vous est confirmé pour mardi prochain à dix heures. N'oubliez pas votre carte Vitale.",
+    "type": "listen",
+    "q": "Quel jour est le rendez-vous ?",
+    "options": [
+     "Mardi prochain",
+     "Lundi matin",
+     "Mercredi soir",
+     "Jeudi"
+    ],
+    "answer": "Mardi prochain",
+    "note": "« ...confirmé pour mardi prochain à dix heures. »"
+   },
+   {
+    "audio": "audio/co-9.mp3",
+    "tts": "Je m'appelle Amina. Je suis infirmière dans un hôpital à Nantes. Je travaille souvent le soir et la nuit. J'aime aider les gens.",
+    "type": "listen",
+    "q": "Quel est le métier d'Amina ?",
+    "options": [
+     "Infirmière",
+     "Professeure",
+     "Vendeuse",
+     "Cuisinière"
+    ],
+    "answer": "Infirmière",
+    "note": "« Je suis infirmière dans un hôpital. »"
+   }
+  ]
+ }
+];
+
+const EXAM = {
+ "durationMin": 25,
+ "sitListening": 6,
+ "listeningPool": [
+  {
+   "audio": "audio/exam-1.mp3",
+   "tts": "Bonjour, vous êtes bien à la mairie de Nantes. Nos bureaux sont ouverts du lundi au vendredi, de neuf heures à dix-sept heures. Le samedi, nous sommes ouverts le matin seulement.",
+   "type": "listen",
+   "q": "Quand la mairie est-elle ouverte le samedi ?",
+   "options": [
+    "Le matin seulement",
+    "Toute la journée",
+    "Elle est fermée",
+    "L'après-midi seulement"
+   ],
+   "answer": "Le matin seulement",
+   "note": ""
   },
-  writing:{
-    prompt:"Vous venez d'arriver à Nantes. Écrivez un court message (40–60 mots) à un(e) ami(e) : dites où vous habitez, ce que vous faites, et proposez de vous rencontrer.",
-    minWords:40,
-    model:"Salut Léa ! Ça y est, je suis arrivé à Nantes. J'habite dans un petit appartement près du centre-ville. Je travaille dans une entreprise et, le soir, je prends des cours de français. La ville me plaît beaucoup. Est-ce que tu es libre samedi ? On pourrait boire un café ensemble. À bientôt !",
-    rubric:[
-      "I covered all three points: where I live, what I do, and a proposal to meet.",
-      "My message is at least 40 words long.",
-      "I opened and closed properly (e.g. Salut… / À bientôt).",
-      "My verbs and tenses are mostly correct for what I meant."
-    ]
+  {
+   "audio": "audio/exam-2.mp3",
+   "tts": "Salut Marc, c'est Julie. Je ne peux pas venir dîner ce soir, je suis malade. On peut se voir demain midi au café ?",
+   "type": "listen",
+   "q": "Pourquoi Julie annule-t-elle le dîner ?",
+   "options": [
+    "Elle est malade",
+    "Elle travaille tard",
+    "Elle est en retard",
+    "Elle n'a pas faim"
+   ],
+   "answer": "Elle est malade",
+   "note": ""
+  },
+  {
+   "audio": "audio/exam-3.mp3",
+   "tts": "Pour votre demande de titre de séjour, vous devez créer un compte en ligne, remplir le formulaire et payer les frais. Ensuite, vous recevrez un rendez-vous par courriel.",
+   "type": "listen",
+   "q": "Comment reçoit-on le rendez-vous ?",
+   "options": [
+    "Par courriel",
+    "Par téléphone",
+    "Par la poste",
+    "En personne"
+   ],
+   "answer": "Par courriel",
+   "note": ""
+  },
+  {
+   "audio": "audio/exam-4.mp3",
+   "tts": "Aujourd'hui il fait beau à Nantes. Cet après-midi, le ciel sera nuageux, et il y aura peut-être de la pluie ce soir.",
+   "type": "listen",
+   "q": "Quel temps fera-t-il ce soir ?",
+   "options": [
+    "Il pleuvra peut-être",
+    "Il fera très chaud",
+    "Il neigera",
+    "Il y aura du soleil"
+   ],
+   "answer": "Il pleuvra peut-être",
+   "note": ""
+  },
+  {
+   "audio": "audio/exam-5.mp3",
+   "tts": "Le musée est gratuit le premier dimanche du mois. Les autres jours, le billet coûte huit euros pour les adultes, et il est gratuit pour les enfants.",
+   "type": "listen",
+   "q": "Combien coûte le billet pour un adulte, un mardi ?",
+   "options": [
+    "Huit euros",
+    "C'est gratuit",
+    "Vingt euros",
+    "Cinq euros"
+   ],
+   "answer": "Huit euros",
+   "note": ""
+  },
+  {
+   "audio": "audio/exam-6.mp3",
+   "tts": "Mesdames et messieurs, le train à destination de Paris partira à quinze heures trente, voie numéro deux. Merci de ne pas oublier vos bagages.",
+   "type": "listen",
+   "q": "À quelle heure part le train ?",
+   "options": [
+    "À quinze heures trente",
+    "À treize heures",
+    "À cinq heures",
+    "À dix heures"
+   ],
+   "answer": "À quinze heures trente",
+   "note": ""
+  },
+  {
+   "audio": "audio/exam-7.mp3",
+   "tts": "Bonjour, c'est l'école de votre fils. Demain, il n'y a pas de classe l'après-midi. Vous pouvez venir le chercher à midi. Merci.",
+   "type": "listen",
+   "q": "À quelle heure faut-il chercher l'enfant ?",
+   "options": [
+    "À midi",
+    "À huit heures",
+    "À seize heures",
+    "À dix heures"
+   ],
+   "answer": "À midi",
+   "note": ""
+  },
+  {
+   "audio": "audio/exam-8.mp3",
+   "tts": "Bonjour, pour ouvrir un compte bancaire, vous devez apporter une pièce d'identité et un justificatif de domicile. Le rendez-vous dure environ trente minutes.",
+   "type": "listen",
+   "q": "Que faut-il apporter pour ouvrir un compte ?",
+   "options": [
+    "Une pièce d'identité et un justificatif de domicile",
+    "Seulement un passeport",
+    "De l'argent liquide",
+    "Une photo d'identité"
+   ],
+   "answer": "Une pièce d'identité et un justificatif de domicile",
+   "note": ""
+  },
+  {
+   "audio": "audio/exam-9.mp3",
+   "tts": "La pharmacie est fermée le dimanche. En cas d'urgence, la pharmacie de garde se trouve place de la République, ouverte jour et nuit.",
+   "type": "listen",
+   "q": "Où est la pharmacie de garde ?",
+   "options": [
+    "Place de la République",
+    "À la gare",
+    "Devant l'école",
+    "Près du parc"
+   ],
+   "answer": "Place de la République",
+   "note": ""
+  },
+  {
+   "audio": "audio/exam-10.mp3",
+   "tts": "Salut ! Samedi, c'est mon anniversaire. J'organise une fête chez moi à partir de vingt heures. Apporte quelque chose à boire si tu veux. À samedi !",
+   "type": "listen",
+   "q": "À quelle heure commence la fête ?",
+   "options": [
+    "À vingt heures",
+    "À midi",
+    "À dix heures",
+    "À minuit"
+   ],
+   "answer": "À vingt heures",
+   "note": ""
   }
+ ],
+ "readingTexts": [
+  {
+   "text": "Chère Madame,\nNous vous informons que votre carte de séjour est prête. Vous pouvez venir la chercher à la préfecture, du lundi au jeudi, entre 9h et 12h. N'oubliez pas d'apporter votre passeport et un timbre fiscal de 25 euros. La carte est valable pendant un an. Si vous ne pouvez pas venir, prenez un nouveau rendez-vous sur le site internet.\nCordialement,\nLe service des étrangers",
+   "questions": [
+    {
+     "q": "Que peut-elle venir chercher à la préfecture ?",
+     "options": [
+      "Sa carte de séjour",
+      "Son passeport",
+      "Un timbre fiscal",
+      "Un formulaire"
+     ],
+     "answer": "Sa carte de séjour"
+    },
+    {
+     "q": "Quels jours peut-elle venir ?",
+     "options": [
+      "Du lundi au jeudi",
+      "Le week-end",
+      "Tous les jours",
+      "Le vendredi seulement"
+     ],
+     "answer": "Du lundi au jeudi"
+    },
+    {
+     "q": "Que doit-elle apporter ?",
+     "options": [
+      "Son passeport et un timbre fiscal",
+      "Une photo d'identité",
+      "De l'argent liquide",
+      "Rien de particulier"
+     ],
+     "answer": "Son passeport et un timbre fiscal"
+    },
+    {
+     "q": "Combien coûte le timbre fiscal ?",
+     "options": [
+      "25 euros",
+      "12 euros",
+      "50 euros",
+      "C'est gratuit"
+     ],
+     "answer": "25 euros"
+    },
+    {
+     "q": "Combien de temps la carte est-elle valable ?",
+     "options": [
+      "Un an",
+      "Six mois",
+      "Cinq ans",
+      "Trois mois"
+     ],
+     "answer": "Un an"
+    }
+   ]
+  },
+  {
+   "text": "Objet : Cours de français gratuits\nBonjour,\nLa mairie de Nantes propose des cours de français gratuits pour les nouveaux habitants. Les cours ont lieu le mardi et le jeudi soir, de 18h à 20h, à la bibliothèque municipale. Pour vous inscrire, envoyez un courriel avant le 30 septembre. Les places sont limitées.\nCordialement,\nLe service culturel",
+   "questions": [
+    {
+     "q": "Que propose la mairie ?",
+     "options": [
+      "Des cours de français gratuits",
+      "Un emploi",
+      "Un logement",
+      "Un voyage"
+     ],
+     "answer": "Des cours de français gratuits"
+    },
+    {
+     "q": "Quels jours ont lieu les cours ?",
+     "options": [
+      "Le mardi et le jeudi",
+      "Le week-end",
+      "Tous les jours",
+      "Le lundi"
+     ],
+     "answer": "Le mardi et le jeudi"
+    },
+    {
+     "q": "Où ont lieu les cours ?",
+     "options": [
+      "À la bibliothèque municipale",
+      "À l'école",
+      "À la mairie",
+      "Au parc"
+     ],
+     "answer": "À la bibliothèque municipale"
+    },
+    {
+     "q": "Comment faut-il s'inscrire ?",
+     "options": [
+      "Par courriel avant le 30 septembre",
+      "Par téléphone",
+      "En personne",
+      "Par la poste"
+     ],
+     "answer": "Par courriel avant le 30 septembre"
+    },
+    {
+     "q": "Que dit le texte sur les places ?",
+     "options": [
+      "Elles sont limitées",
+      "Elles sont chères",
+      "Il y en a beaucoup",
+      "Elles sont réservées"
+     ],
+     "answer": "Elles sont limitées"
+    }
+   ]
+  }
+ ],
+ "writingPrompts": [
+  {
+   "prompt": "Vous venez d'arriver à Nantes. Écrivez un court message (40–60 mots) à un(e) ami(e) : dites où vous habitez, ce que vous faites, et proposez de vous rencontrer.",
+   "minWords": 40,
+   "model": "Salut Léa ! Ça y est, je suis arrivé à Nantes. J'habite dans un petit appartement près du centre-ville. Je travaille dans une entreprise et, le soir, je prends des cours de français. La ville me plaît beaucoup. Est-ce que tu es libre samedi ? On pourrait boire un café ensemble. À bientôt !",
+   "rubric": [
+    "I covered all three points asked in the task.",
+    "My message is at least 40 words long.",
+    "I opened and closed properly (greeting + sign-off).",
+    "My verbs and tenses are mostly correct for what I meant."
+   ]
+  },
+  {
+   "prompt": "Vous cherchez un appartement à Nantes. Écrivez un court message (40–60 mots) à une agence : dites ce que vous cherchez (type de logement, quartier, budget) et demandez un rendez-vous pour visiter.",
+   "minWords": 40,
+   "model": "Bonjour, je m'appelle Marc Dupont. Je cherche un appartement à louer à Nantes, si possible près du centre-ville. Je voudrais deux pièces, avec une cuisine et une salle de bain. Mon budget est d'environ 700 euros par mois. Serait-il possible de visiter un appartement cette semaine ? Merci d'avance. Cordialement.",
+   "rubric": [
+    "I covered all three points asked in the task.",
+    "My message is at least 40 words long.",
+    "I opened and closed properly (greeting + sign-off).",
+    "My verbs and tenses are mostly correct for what I meant."
+   ]
+  },
+  {
+   "prompt": "Racontez votre week-end dernier à un(e) ami(e) (40–60 mots) : dites où vous êtes allé(e), ce que vous avez fait, et si vous avez aimé. Utilisez le passé composé.",
+   "minWords": 40,
+   "model": "Salut ! Ce week-end, je suis allé à la plage avec des amis. Samedi, nous avons nagé et nous avons pique-niqué au soleil. Le soir, nous sommes allés au restaurant. Dimanche, je me suis reposé à la maison. J'ai passé un très bon week-end ! Et toi ?",
+   "rubric": [
+    "I covered all three points: where I went, what I did, and whether I liked it.",
+    "My message is at least 40 words long.",
+    "I used the passé composé to talk about the past.",
+    "I opened and closed properly (greeting + sign-off)."
+   ]
+  }
+ ]
 };
 
 /* ============================ STATE ============================ */
@@ -377,6 +1749,9 @@ function playClip(item){
 const SPKR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 function gapify(q){return q.replace(/___/g,'<span class="gap">&nbsp;&nbsp;&nbsp;</span>');}
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function sampleN(a,n){return shuffle(a.slice()).slice(0,n);}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
 
 /* ============================ VIEWS ============================ */
 function render(){
@@ -472,12 +1847,12 @@ function nextPlace(){
   state.pi++;state.answered=false;render();
 }
 function finishPlace(){
-  const s=state.pscore;
+  const s=state.pscore, r=s/PLACEMENT.length;
   let lvl,name,rec,seg;
-  if(s<=3){lvl="A1";name="Foundations still settling — we'll build up to A2.";rec="pc";seg=0;}
-  else if(s<=5){lvl="A2";name="Lower A2. Best entry point: the passé composé.";rec="pc";seg=2;}
-  else if(s<=7){lvl="A2";name="Solid A2. Time to sharpen tenses and quantities.";rec="imp";seg=3;}
-  else if(s<=8){lvl="A2+";name="Upper A2, brushing B1. Push comparisons and nuance.";rec="comp";seg=4;}
+  if(r<0.35){lvl="A1";name="Foundations still settling — we'll build up to A2.";rec="pc";seg=0;}
+  else if(r<0.55){lvl="A2";name="Lower A2. Best entry point: the passé composé.";rec="pc";seg=2;}
+  else if(r<0.75){lvl="A2";name="Solid A2. Time to sharpen tenses and quantities.";rec="imp";seg=3;}
+  else if(r<0.9){lvl="A2+";name="Upper A2, brushing B1. Push comparisons and nuance.";rec="comp";seg=4;}
   else {lvl="B1";name="Beyond A2 already — treat these as a warm-up.";rec="comp";seg=5;}
   state.placed={lvl,name,seg};state.recId=rec;state.view="result";render();
 }
@@ -531,7 +1906,7 @@ function dash(){
   </div>`;
 }
 function goHome(){stopTimer();state.view="home";render();}
-function openMod(id){state.mod=MODULES.find(m=>m.id===id);state.ei=0;state.escore=0;state.answered=false;state.view="mod";render();}
+function openMod(id){const b=MODULES.find(m=>m.id===id);state.mod=Object.assign({},b,{ex:shuffle(b.ex.slice())});state.ei=0;state.escore=0;state.answered=false;state.view="mod";render();}
 
 function mod(){
   const m=state.mod;const item=m.ex[state.ei];
@@ -685,11 +2060,11 @@ function examintro(){
   <div class="fade">
     <span class="eyebrow">Assessment &nbsp;—&nbsp; DELF A2 format</span>
     <h1>Sit a mock A2 exam.</h1>
-    <p class="lede">Three timed sections modelled on the DELF A2 used for residence and nationality: listening, reading, and one short piece of writing. ${EXAM.durationMin} minutes, no feedback until the end.</p>
+    <p class="lede">Three timed sections modelled on the DELF A2 used for residence and nationality: listening, reading, and one short piece of writing. ${EXAM.durationMin} minutes, no feedback until the end. Questions are drawn from a larger bank, so no two sittings are the same.</p>
     <div class="card">
       <div class="breakdown" style="border-top:0">
-        <div class="brow"><span>Compréhension de l'oral</span><span class="s">${EXAM.listening.length} questions · /25</span></div>
-        <div class="brow"><span>Compréhension des écrits</span><span class="s">${EXAM.reading.questions.length} questions · /25</span></div>
+        <div class="brow"><span>Compréhension de l'oral</span><span class="s">${EXAM.sitListening} questions · /25</span></div>
+        <div class="brow"><span>Compréhension des écrits</span><span class="s">${EXAM.readingTexts[0].questions.length} questions · /25</span></div>
         <div class="brow"><span>Production écrite</span><span class="s">1 task · /25</span></div>
       </div>
       <p class="note" style="margin:16px 0 20px">Pass mark is 50%. The real exam also has a spoken section with an examiner, which a self-study app can't stand in for — so treat your mark here as three-quarters of the full picture.</p>
@@ -701,6 +2076,9 @@ function examintro(){
 }
 
 function beginExam(){
+  EXAM.listening=sampleN(EXAM.listeningPool,Math.min(EXAM.sitListening,EXAM.listeningPool.length));
+  EXAM.reading=pick(EXAM.readingTexts);
+  EXAM.writing=pick(EXAM.writingPrompts);
   const seq=[];
   EXAM.listening.forEach((it,i)=>seq.push({sec:"listening",n:i,data:it}));
   EXAM.reading.questions.forEach((q,i)=>seq.push({sec:"reading",n:i,data:q}));
