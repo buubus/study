@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Claude Code">
+<title>Claude &amp; Claude Code — Study Guide — Cornish Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#F7F7F5; --carbon:#141415; --indigo:#0047FF; --flint:#8E8E8B;
+    --hair:rgba(20,20,21,.14); --hair-strong:rgba(20,20,21,.26);
+    --ease:cubic-bezier(0.16,1,0.3,1);
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{background:var(--canvas);color:var(--carbon);font-family:"Inter",system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.55;letter-spacing:-.005em;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:720px;margin:0 auto;padding:0 calc(20px + env(safe-area-inset-right)) calc(64px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left))}
+
+  h1,h2,h3{font-family:"Inter Tight",sans-serif;letter-spacing:-.035em;font-weight:600;line-height:1.05}
+  h1{font-size:32px;font-weight:700}
+  h2{font-size:24px;margin-bottom:6px}
+  h3{font-size:16px;margin:22px 0 8px;letter-spacing:-.02em}
+  .eyebrow{font-family:"Inter Tight",sans-serif;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--flint);display:block;margin-bottom:14px}
+  .eyebrow .n{color:var(--indigo)}
+  p{margin:10px 0;font-size:15px}
+  .flint{color:var(--flint)}
+  b,strong{font-weight:600}
+
+  header{position:sticky;top:0;z-index:20;background:var(--canvas);border-bottom:0.5px solid var(--carbon);
+    padding:calc(14px + env(safe-area-inset-top)) 0 0}
+  .htop{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:12px}
+  .htop .home{font-family:"Inter Tight",sans-serif;font-size:12px;color:var(--indigo);text-decoration:none}
+  .htitle{font-family:"Inter Tight",sans-serif;font-size:14px;font-weight:600;letter-spacing:-.02em}
+  nav.chips{display:flex;gap:6px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  nav.chips::-webkit-scrollbar{display:none}
+  nav.chips a{flex:0 0 auto;font-family:"Inter Tight",sans-serif;font-size:12px;color:var(--carbon);text-decoration:none;border:0.5px solid var(--hair-strong);padding:6px 11px;white-space:nowrap;transition:border-color .3s var(--ease),color .3s var(--ease)}
+  nav.chips a:hover{border-color:var(--carbon)}
+  a:focus-visible,nav.chips a:focus-visible{outline:1.5px solid var(--indigo);outline-offset:2px}
+
+  .intro{padding:26px 0 8px;border-bottom:0.5px solid var(--hair)}
+  section{padding:30px 0;border-bottom:0.5px solid var(--hair);scroll-margin-top:120px}
+
+  .tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  .tbl th,.tbl td{text-align:left;padding:9px 10px;border-bottom:0.5px solid var(--hair);vertical-align:top}
+  .tbl thead th{font-family:"Inter Tight",sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--flint);font-weight:600;border-bottom:0.5px solid var(--hair-strong)}
+  .tbl td:first-child{color:var(--flint);white-space:nowrap;font-family:var(--mono);font-size:12.5px}
+  .tbl td.wrapcell:first-child{white-space:normal;font-family:"Inter Tight",sans-serif;font-size:13px}
+  .scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  pre.cmd{font-family:var(--mono);font-size:13px;line-height:1.7;background:rgba(20,20,21,.04);border-left:1.5px solid var(--carbon);padding:12px 14px;margin:14px 0;overflow-x:auto;white-space:pre;-webkit-overflow-scrolling:touch}
+  pre.cmd .c{color:var(--flint)}
+  code{font-family:var(--mono);background:rgba(20,20,21,.05);padding:1px 5px;font-size:12.5px}
+
+  .eg{border-left:1.5px solid var(--indigo);padding:10px 0 10px 16px;margin:14px 0;font-size:14.5px}
+  .eg .en{color:var(--flint);font-size:13px}
+  .tip{border:0.5px solid var(--hair-strong);padding:14px 16px;margin:16px 0;font-size:14px}
+  .tip b{font-family:"Inter Tight",sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--indigo);display:block;margin-bottom:6px;font-weight:600}
+  .key{color:var(--indigo);font-weight:600}
+  ul.tight{margin:8px 0 8px 2px;padding-left:18px}
+  ul.tight li{margin:5px 0;font-size:15px}
+  ol.tight{margin:8px 0 8px 2px;padding-left:20px}
+  ol.tight li{margin:5px 0;font-size:15px}
+  .totop{display:inline-block;margin-top:12px;font-family:"Inter Tight",sans-serif;font-size:12px;color:var(--flint);text-decoration:none}
+  footer{padding:28px 0;display:flex;justify-content:space-between;font-family:"Inter Tight",sans-serif;font-size:11px;color:var(--flint)}
+  @media(max-width:520px){h1{font-size:27px}h2{font-size:21px}pre.cmd{font-size:12px}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="top">
+
+<header>
+  <div class="htop">
+    <span class="htitle">Claude &amp; Claude Code</span>
+    <a class="home" href="index.html">← Study Desk</a>
+  </div>
+  <nav class="chips">
+    <a href="#landscape">Landscape</a>
+    <a href="#loop">The loop</a>
+    <a href="#extend">Extension layer</a>
+    <a href="#context">Context &amp; cost</a>
+    <a href="#permissions">Permissions</a>
+    <a href="#parallel">Parallel work</a>
+    <a href="#hooks">Hooks</a>
+    <a href="#mcp">MCP &amp; skills</a>
+    <a href="#sdk">Agent SDK</a>
+    <a href="#practice">Practice</a>
+    <a href="#ref">Reference</a>
+  </nav>
+</header>
+
+<div class="intro">
+  <span class="eyebrow"><span class="n">·</span>&nbsp; Engineering — Claude &amp; Claude Code</span>
+  <h1>The harness first, the commands second.</h1>
+  <p class="flint">Claude Code is not a chat box with file access. It is an agentic harness: a loop, a set of tools, a permission system, and an extension layer you configure. Learn the harness and the commands follow. This guide builds the model — loop, context, permissions — then layers the extension surface on top: skills, subagents, agent teams, hooks, MCP, and the Agent SDK. Verified against the documentation on 2026-08-05.</p>
+</div>
+
+<section id="landscape">
+  <span class="eyebrow"><span class="n">01</span>&nbsp; The landscape</span>
+  <h2>Three different things are called “Claude”.</h2>
+  <p>Conflating them is the most common source of confusion. They share a model and, increasingly, a configuration substrate — but they are separate products with separate boundaries.</p>
+
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Layer</th><th>What it is</th><th>Reached via</th></tr></thead>
+    <tbody>
+      <tr><td>Claude apps</td><td class="wrapcell">Chat, Projects, Artifacts, memory, connectors</td><td>claude.ai, desktop, mobile, Cowork, Claude in Chrome / Excel / PowerPoint, Claude Design, Claude Tag</td></tr>
+      <tr><td>Claude Code</td><td class="wrapcell">Agentic harness with filesystem, shell, git and browser tools</td><td>CLI, VS Code, JetBrains, Desktop app, web, Slack, mobile</td></tr>
+      <tr><td>Claude Platform</td><td class="wrapcell">Raw model access and the Agent SDK</td><td>API, Bedrock, Google Agent Platform, Microsoft Foundry</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Models and aliases</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Alias</th><th>Model</th><th>Position</th></tr></thead>
+    <tbody>
+      <tr><td>opus</td><td class="wrapcell">Claude Opus 5</td><td>Flagship for complex reasoning</td></tr>
+      <tr><td>sonnet</td><td class="wrapcell">Claude Sonnet 5</td><td>Workhorse; extended-context variant available</td></tr>
+      <tr><td>haiku</td><td class="wrapcell">Claude Haiku 4.5</td><td>Fast and cheap — good for fan-out subagents</td></tr>
+      <tr><td>fable</td><td class="wrapcell">Claude Fable 5</td><td>Mythos-tier with additional safeguards; not available as the advisor model</td></tr>
+    </tbody>
+  </table></div>
+  <p><code>opusplan</code> plans with Opus and executes with a cheaper model. <code>--fallback-model sonnet,haiku</code> sets a chain tried in order when the primary is overloaded or retired.</p>
+
+  <h3>Effort — the lever most people never touch</h3>
+  <p>Effort controls how much reasoning the model applies per turn. It is set with <code>/effort</code> or <code>--effort</code> and is <b>independent of extended thinking</b>: you can run low effort with thinking on, or maximum effort without it.</p>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Level</th><th>Good for</th></tr></thead>
+    <tbody>
+      <tr><td>low</td><td class="wrapcell">File lookups, listing directories</td></tr>
+      <tr><td>medium</td><td class="wrapcell">Routine edits, standard tasks</td></tr>
+      <tr><td>high</td><td class="wrapcell">Refactors, debugging</td></tr>
+      <tr><td>xhigh</td><td class="wrapcell">Coding and agentic work — the recommended default on current models</td></tr>
+      <tr><td>max</td><td class="wrapcell">Multi-step problems needing deep analysis. Session-only</td></tr>
+      <tr><td>ultracode</td><td class="wrapcell">Starts at xhigh and lets Claude escalate into a parallel workflow. Session-only</td></tr>
+    </tbody>
+  </table></div>
+  <p><code>ultrathink</code> in a prompt buys one-off deep reasoning without changing the session default. <b>Fast mode</b> (<code>/fast</code>) is a separate axis again — it trades cost for latency.</p>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<section id="loop">
+  <span class="eyebrow"><span class="n">02</span>&nbsp; The agentic loop</span>
+  <h2>Evaluate, call tools, repeat until done.</h2>
+  <p>Every Claude Code session — and every Agent SDK agent — runs the same cycle. Understanding it is what turns unpredictable behaviour into debuggable behaviour.</p>
+  <ol class="tight">
+    <li><b>Receive prompt.</b> The model gets your prompt plus the system prompt, tool definitions, and the conversation so far.</li>
+    <li><b>Evaluate and respond.</b> It emits text, one or more tool calls, or both.</li>
+    <li><b>Execute tools.</b> The harness runs them and feeds results back. Hooks can intercept here.</li>
+    <li><b>Repeat.</b> Steps 2 and 3 cycle. Each full cycle is one <b>turn</b>.</li>
+    <li><b>Return.</b> The loop ends when Claude produces a response with no tool calls.</li>
+  </ol>
+  <p>A quick question is one or two turns. “Refactor the auth module and update the tests” can be dozens of tool calls across many turns, with the approach adjusting after each result.</p>
+
+  <div class="tip"><b>The single highest-leverage habit</b>Give Claude something to verify against — tests, a type-checker, a linter, a running app. Agentic quality is bounded by the feedback loop available inside the turn, not by how well you worded the prompt.</div>
+
+  <h3>Built-in tools</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Category</th><th>Tools</th></tr></thead>
+    <tbody>
+      <tr><td>files</td><td class="wrapcell">Read, Edit, Write</td></tr>
+      <tr><td>search</td><td class="wrapcell">Glob, Grep</td></tr>
+      <tr><td>execution</td><td class="wrapcell">Bash (PowerShell on Windows)</td></tr>
+      <tr><td>web</td><td class="wrapcell">WebSearch, WebFetch</td></tr>
+      <tr><td>discovery</td><td class="wrapcell">ToolSearch — loads tool definitions on demand</td></tr>
+      <tr><td>orchestration</td><td class="wrapcell">Agent, Skill, AskUserQuestion, TaskCreate, TaskUpdate</td></tr>
+      <tr><td>navigation</td><td class="wrapcell">LSP — inactive until a code intelligence plugin is installed</td></tr>
+    </tbody>
+  </table></div>
+  <p>Read-only tools run <b>concurrently</b>; anything that modifies state runs sequentially to avoid conflicts.</p>
+
+  <h3>Working with the loop, not against it</h3>
+  <ul class="tight">
+    <li><b>Explore, then plan, then code.</b> <code>/plan</code> is read-only, so being wrong there is cheap.</li>
+    <li><b>Delegate, don’t dictate.</b> Describe the outcome and the constraints; let it choose the path.</li>
+    <li><b>Interrupt early.</b> Course-correcting at turn two costs a fraction of correcting at turn twenty.</li>
+    <li><b>Ask it about itself.</b> Claude Code fetches its own documentation map, so questions about its features are answered from current docs rather than training data.</li>
+  </ul>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<section id="extend">
+  <span class="eyebrow"><span class="n">03</span>&nbsp; The extension layer</span>
+  <h2>Each feature plugs into a different part of the loop.</h2>
+  <p>Everything you can add answers a different question: what does Claude always know, what can it look up, what can it reach, what runs without asking, and how do you ship the lot to a second repository.</p>
+
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Feature</th><th>What it does</th><th>Reach for it when</th></tr></thead>
+    <tbody>
+      <tr><td>CLAUDE.md</td><td class="wrapcell">Persistent context, loaded every session</td><td>“Always do X” conventions</td></tr>
+      <tr><td>.claude/rules/</td><td class="wrapcell">Same, but scoped to file paths via <code>paths:</code> frontmatter</td><td>Language- or directory-specific rules</td></tr>
+      <tr><td>skills</td><td class="wrapcell">Reusable knowledge or an invocable workflow</td><td>You’ve pasted the same playbook three times</td></tr>
+      <tr><td>subagents</td><td class="wrapcell">Isolated context that returns a summary</td><td>A side task would flood your window</td></tr>
+      <tr><td>agent teams</td><td class="wrapcell">Independent sessions that message each other</td><td>Teammates need to disagree and coordinate</td></tr>
+      <tr><td>hooks</td><td class="wrapcell">Deterministic action on a lifecycle event</td><td>It must happen every time</td></tr>
+      <tr><td>MCP</td><td class="wrapcell">External services and data</td><td>Claude can’t see the system it needs</td></tr>
+      <tr><td>artifacts</td><td class="wrapcell">Private interactive web page from session output</td><td>The output is visual or shareable</td></tr>
+      <tr><td>plugins</td><td class="wrapcell">Packaging and distribution for all of the above</td><td>A second repo needs the same setup</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="tip"><b>Request versus enforcement</b>“Never edit <code>.env</code>” written in CLAUDE.md is a <i>request</i>. A <code>PreToolUse</code> hook that blocks the edit is <i>enforcement</i>. If a rule must hold every time, it is a hook, not a sentence in a prompt. This one distinction matters more than any other in this guide.</div>
+
+  <h3>Skill or subagent?</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th></th><th>Skill</th><th>Subagent</th></tr></thead>
+    <tbody>
+      <tr><td class="wrapcell">Is</td><td>Reusable instructions or knowledge</td><td>An isolated worker with its own context</td></tr>
+      <tr><td class="wrapcell">Benefit</td><td>Share content across contexts</td><td>Context isolation — only a summary returns</td></tr>
+      <tr><td class="wrapcell">Best for</td><td>Reference material, invocable workflows</td><td>Reading many files, parallel work</td></tr>
+    </tbody>
+  </table></div>
+  <p>They combine: a subagent can preload skills via its <code>skills:</code> field, and a skill can run in isolated context with <code>context: fork</code>.</p>
+
+  <h3>Subagent or agent team?</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th></th><th>Subagent</th><th>Agent team</th></tr></thead>
+    <tbody>
+      <tr><td class="wrapcell">Communication</td><td>Reports back to the lead only</td><td>Teammates message each other directly</td></tr>
+      <tr><td class="wrapcell">Coordination</td><td>The lead manages all work</td><td>Shared task list, self-coordinating</td></tr>
+      <tr><td class="wrapcell">Token cost</td><td>Lower — results summarised</td><td>Higher — each teammate is a separate instance</td></tr>
+    </tbody>
+  </table></div>
+  <p>The transition point is concrete: you are running parallel subagents and hitting context limits, or your subagents need to talk to each other. Agent teams are experimental and off by default.</p>
+
+  <h3>Layering and precedence</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Feature</th><th>How levels combine</th></tr></thead>
+    <tbody>
+      <tr><td>CLAUDE.md</td><td class="wrapcell"><b>Additive</b> — every level loads; specific instructions usually win on conflict</td></tr>
+      <tr><td>skills</td><td class="wrapcell"><b>Override by name</b>: managed &gt; user &gt; project. Plugin skills are namespaced</td></tr>
+      <tr><td>subagents</td><td class="wrapcell"><b>Override by name</b>: managed &gt; CLI flag &gt; project &gt; user &gt; plugin</td></tr>
+      <tr><td>MCP servers</td><td class="wrapcell"><b>Override by name</b>: local &gt; project &gt; user</td></tr>
+      <tr><td>hooks</td><td class="wrapcell"><b>Merge</b> — every registered hook fires, from every source</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>When to add what</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Trigger</th><th>Add</th></tr></thead>
+    <tbody>
+      <tr><td class="wrapcell">Claude gets a convention wrong twice</td><td>A line in CLAUDE.md</td></tr>
+      <tr><td class="wrapcell">You keep typing the same prompt</td><td>A user-invocable skill</td></tr>
+      <tr><td class="wrapcell">You paste the same playbook a third time</td><td>A skill</td></tr>
+      <tr><td class="wrapcell">You keep copying from a tab Claude can’t see</td><td>An MCP server</td></tr>
+      <tr><td class="wrapcell">A side task floods the conversation</td><td>A subagent</td></tr>
+      <tr><td class="wrapcell">Something must happen every time</td><td>A hook</td></tr>
+      <tr><td class="wrapcell">A second repository needs the same setup</td><td>A plugin</td></tr>
+    </tbody>
+  </table></div>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<section id="context">
+  <span class="eyebrow"><span class="n">04</span>&nbsp; Context &amp; cost</span>
+  <h2>Everything you add is charged, some of it on every request.</h2>
+  <p>Context is the scarce resource. Too much doesn’t only fill the window — it adds noise, so skills stop triggering correctly and conventions get lost.</p>
+
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Feature</th><th>When it loads</th><th>Cost</th></tr></thead>
+    <tbody>
+      <tr><td>CLAUDE.md</td><td class="wrapcell">Session start, full content</td><td>Charged on <b>every</b> request</td></tr>
+      <tr><td>skills</td><td class="wrapcell">Descriptions at start, body on use</td><td>Low; zero with <code>disable-model-invocation: true</code></td></tr>
+      <tr><td>MCP</td><td class="wrapcell">Tool names at start, schemas deferred</td><td>Low — tool search is on by default</td></tr>
+      <tr><td>code intel</td><td class="wrapcell">After edits and on lookup</td><td>Low, often net negative — replaces file reads</td></tr>
+      <tr><td>subagents</td><td class="wrapcell">On spawn, fresh window</td><td>Isolated from the main session</td></tr>
+      <tr><td>hooks</td><td class="wrapcell">On trigger, outside the conversation</td><td>Zero unless they return output</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="tip"><b>Keep CLAUDE.md under 200 lines</b>It is the only item on that table charged in full on every single request. Reference material belongs in skills, which load on demand; path-specific rules belong in <code>.claude/rules/</code>, which load only when matching files are touched.</div>
+
+  <h3>Prompt caching — what breaks it</h3>
+  <p>The static prefix of your session is cached. Some actions invalidate that cache and force a full re-read of history; others don’t. The split is not intuitive.</p>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th></th><th>Invalidates the cache</th><th>Keeps the cache</th></tr></thead>
+    <tbody>
+      <tr><td class="wrapcell">Actions</td><td>Switching models · changing effort · toggling fast mode · connecting or disconnecting an MCP server · enabling or disabling a plugin · denying an entire tool · compacting · upgrading Claude Code</td><td>Editing files · editing CLAUDE.md mid-session · changing output style · changing permission mode · invoking skills and commands · <code>/recap</code> · rewinding</td></tr>
+    </tbody>
+  </table></div>
+  <p>Two flags exist specifically to protect the cache: <code>/cd</code> moves the session to a new directory without rebuilding the system prompt, and <code>--exclude-dynamic-system-prompt-sections</code> moves machine-specific sections out of the prompt so the cache is reusable across machines and users — worth it for any scripted fleet workload.</p>
+
+  <h3>Compaction</h3>
+  <p>When the window fills, the conversation is summarised. Older messages are <b>replaced</b>, so instructions from early in a session can vanish. Three defences:</p>
+  <ul class="tight">
+    <li>Persistent rules go in CLAUDE.md, not the opening prompt — CLAUDE.md is re-injected every request.</li>
+    <li>Tell the compactor what to keep. It reads CLAUDE.md like any other context, and the header is not a magic string — it matches on intent.</li>
+    <li>Use a <code>PreCompact</code> hook to archive the full transcript before it is summarised away.</li>
+  </ul>
+<pre class="cmd"><span class="c"># CLAUDE.md</span>
+# Summary instructions
+
+When summarizing this conversation, always preserve:
+- The current task objective and acceptance criteria
+- File paths that have been read or modified
+- Test results and error messages
+- Decisions made and the reasoning behind them</pre>
+
+  <h3>Cost controls</h3>
+<pre class="cmd">/context            <span class="c"># colour-grid of what is filling the window</span>
+/autocompact 500k   <span class="c"># set when auto-compaction fires</span>
+/doctor             <span class="c"># trims CLAUDE.md, flags unused skills/MCP/plugins, finds slow hooks</span>
+/insights           <span class="c"># report on your own session patterns and friction</span>
+claude -p --max-budget-usd 5.00 "query"   <span class="c"># hard cap; subagent spend counts</span></pre>
+  <div class="tip"><b>Run /doctor on every repo</b>It deduplicates local CLAUDE.md files against checked-in ones, cuts sections Claude could derive from the codebase anyway, and reports which skills, MCP servers and plugins are costing you context without being used. It reports first and asks before changing anything.</div>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<section id="permissions">
+  <span class="eyebrow"><span class="n">05</span>&nbsp; Permissions, auto mode &amp; sandboxing</span>
+  <h2>Three independent layers of control.</h2>
+  <p>Permission <i>modes</i> set the posture. Permission <i>rules</i> set the specifics. <i>Sandboxing</i> enforces at the OS level regardless of either. They are not alternatives.</p>
+
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Mode</th><th>Behaviour</th></tr></thead>
+    <tbody>
+      <tr><td>default</td><td class="wrapcell">Prompts for each new action. Labelled “Manual” in the UI</td></tr>
+      <tr><td>acceptEdits</td><td class="wrapcell">Auto-approves file edits and common filesystem commands</td></tr>
+      <tr><td>plan</td><td class="wrapcell">Read-only analysis, produces a plan you approve</td></tr>
+      <tr><td>auto</td><td class="wrapcell">A model classifier adjudicates; prompts only when it can’t decide</td></tr>
+      <tr><td>dontAsk</td><td class="wrapcell">Never prompts. Pre-approved tools run, everything else is denied</td></tr>
+      <tr><td>bypassPermissions</td><td class="wrapcell">Skips checks. Sandbox this — and it cannot run as root on Unix</td></tr>
+    </tbody>
+  </table></div>
+  <p>Cycle modes with <kbd>Shift</kbd>+<kbd>Tab</kbd>. Protected paths still apply in every mode.</p>
+
+  <h3>Rule syntax</h3>
+<pre class="cmd">"Bash(git log *)"      <span class="c"># allow one command family</span>
+"Edit(**/src/**)"      <span class="c"># a directory at any depth</span>
+"Edit(src/**)"         <span class="c"># only src in the working directory</span>
+"mcp__*"               <span class="c"># every MCP tool</span>
+"Bash(rm *)"           <span class="c"># deny rule: tool stays available, matching calls denied</span></pre>
+  <p>A bare tool name in a deny rule <b>removes the tool from context entirely</b>; a scoped rule leaves it available and denies only matching calls. Two different outcomes from similar-looking syntax.</p>
+
+  <h3>Auto mode</h3>
+  <p>Auto mode replaces prompting with a classifier. It is configurable: you declare trusted infrastructure, state boundaries in conversation, add human checkpoints, and override the block and allow rules. Inspect what you have with:</p>
+<pre class="cmd">claude auto-mode defaults --label 'Git Destructive'   <span class="c"># built-in rules as JSON</span>
+claude auto-mode config                               <span class="c"># your effective config</span>
+claude auto-mode reset --yes                          <span class="c"># back to defaults</span>
+/permissions                                          <span class="c"># review recent auto-mode denials</span></pre>
+  <p>This is the natural home for a tiered-autonomy model: tiers become classifier boundaries plus per-agent hooks, rather than a policy document nobody enforces.</p>
+
+  <h3>Sandboxing</h3>
+  <p>Separate from permissions entirely: OS-level filesystem and network isolation, with credential masking for environment variables and credential files. Approaches, weakest to strongest: sandboxed Bash tool, the sandbox runtime, dev containers, a custom container, a virtual machine, cloud sessions. For unattended runs, isolation is the answer — not a longer allowlist.</p>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<section id="parallel">
+  <span class="eyebrow"><span class="n">06</span>&nbsp; Parallel &amp; autonomous work</span>
+  <h2>Five different ways to run more than one thing.</h2>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Mechanism</th><th>Shape</th></tr></thead>
+    <tbody>
+      <tr><td>subagents</td><td class="wrapcell">Isolated workers inside your session, reporting to the lead</td></tr>
+      <tr><td>background</td><td class="wrapcell"><code>/background</code> detaches the session; <code>/fork</code> copies it into a new one</td></tr>
+      <tr><td>agent view</td><td class="wrapcell"><code>claude agents</code> — monitor, peek, reply, dispatch, all supervisor-hosted</td></tr>
+      <tr><td>agent teams</td><td class="wrapcell">Independent peers with a shared task list</td></tr>
+      <tr><td>workflows</td><td class="wrapcell">A saved script that fans work across subagents deterministically</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Agent view — the control plane</h3>
+<pre class="cmd">claude agents                 <span class="c"># monitor and dispatch</span>
+claude agents --json --all    <span class="c"># scriptable session list</span>
+claude --bg "investigate the flaky test"
+claude attach 7c5dcf5d        <span class="c"># take over in this terminal</span>
+claude logs|stop|rm|respawn 7c5dcf5d
+claude daemon status          <span class="c"># the supervisor process</span></pre>
+  <p>Background sessions are hosted by a supervisor, so they outlive the terminal that started them. File edits are isolated per session.</p>
+
+  <h3>Fan-out</h3>
+  <ul class="tight">
+    <li><code>/batch &lt;instruction&gt;</code> — decomposes a change into 5–30 units, one background subagent per unit, each in its own worktree, each opening a pull request.</li>
+    <li><b>Dynamic workflows</b> — Claude writes a script that orchestrates subagents, which you then save, reuse, and distribute in a plugin. Bundled examples include <code>/deep-research</code>.</li>
+    <li><code>-w &lt;name&gt;</code> — start in an isolated git worktree. Add <code>--tmux</code> for panes.</li>
+  </ul>
+
+  <h3>Keeping work running</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Command</th><th>Shape</th></tr></thead>
+    <tbody>
+      <tr><td>/goal</td><td class="wrapcell">Keep working across turns until a stated condition is met</td></tr>
+      <tr><td>/loop</td><td class="wrapcell">Re-run a prompt on an interval, or self-paced</td></tr>
+      <tr><td>routines</td><td class="wrapcell">Cloud sessions on a schedule, an API trigger, or a GitHub event</td></tr>
+      <tr><td>/autofix-pr</td><td class="wrapcell">A cloud session that watches a PR and pushes fixes when CI fails</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tip"><b>Every loop needs an exit</b><code>/goal</code>, <code>Stop</code> hooks, <code>TaskCompleted</code> hooks and <code>TeammateIdle</code> hooks can all refuse to let work end. Each needs a condition that can actually be satisfied, and ideally a counter. A gate that can never pass is an agent that never stops spending.</div>
+
+  <h3>Review</h3>
+<pre class="cmd">/code-review --fix          <span class="c"># local diff review, applies findings</span>
+/code-review ultra          <span class="c"># deep multi-agent cloud review</span>
+/review                     <span class="c"># fast read-only pass over a GitHub PR</span>
+/security-review            <span class="c"># security vulnerabilities in the diff</span>
+claude ultrareview 1234 --json</pre>
+  <p>A documented best practice worth adopting: add an <b>adversarial review step</b> — a second agent whose only job is to attack the first one’s work. It catches more than a longer prompt does.</p>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<section id="hooks">
+  <span class="eyebrow"><span class="n">07</span>&nbsp; Hooks</span>
+  <h2>The deterministic layer around a probabilistic agent.</h2>
+  <p>A hook has three levels of nesting, and the vocabulary prevents most confusion:</p>
+<pre class="cmd">hook event          <span class="c"># the lifecycle point — PreToolUse, Stop, TeammateIdle…</span>
+  matcher group     <span class="c"># the filter — "only Bash", "only on resume"</span>
+    hook handler    <span class="c"># what runs — command | http | mcp_tool | prompt | agent</span></pre>
+  <p>Hooks fire wherever Claude Code runs — terminal, IDE, Desktop, web — and inside subagents, where the input carries <code>agent_id</code> and <code>agent_type</code>. All matching handlers run in parallel.</p>
+
+  <h3>Handler types</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Type</th><th>Runs</th></tr></thead>
+    <tbody>
+      <tr><td>command</td><td class="wrapcell">A shell command. JSON on stdin, decision via exit code or stdout JSON</td></tr>
+      <tr><td>http</td><td class="wrapcell">POST to a URL. Decision via the response body</td></tr>
+      <tr><td>mcp_tool</td><td class="wrapcell">A tool on an already-connected MCP server. Never triggers a connection or OAuth flow</td></tr>
+      <tr><td>prompt</td><td class="wrapcell">Single-turn model evaluation returning a yes/no decision</td></tr>
+      <tr><td>agent</td><td class="wrapcell">A subagent that can read and grep to verify a condition first. Experimental</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>The events that can block</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Event</th><th>Exit 2 does</th></tr></thead>
+    <tbody>
+      <tr><td>PreToolUse</td><td class="wrapcell">Blocks the tool call</td></tr>
+      <tr><td>PermissionRequest</td><td class="wrapcell">Denies the permission</td></tr>
+      <tr><td>UserPromptSubmit</td><td class="wrapcell">Blocks the prompt and erases it</td></tr>
+      <tr><td>Stop / SubagentStop</td><td class="wrapcell">Prevents stopping — the conversation continues</td></tr>
+      <tr><td>TeammateIdle</td><td class="wrapcell">Keeps an agent-team teammate working</td></tr>
+      <tr><td>TaskCreated / TaskCompleted</td><td class="wrapcell">Rolls back creation / refuses the completion</td></tr>
+      <tr><td>PostToolBatch</td><td class="wrapcell">Halts the agentic loop before the next model call</td></tr>
+      <tr><td>ConfigChange</td><td class="wrapcell">Blocks the change, except policy settings</td></tr>
+      <tr><td>PreCompact</td><td class="wrapcell">Blocks compaction</td></tr>
+      <tr><td>WorktreeCreate</td><td class="wrapcell">Fails creation — on <b>any</b> non-zero exit, not just 2</td></tr>
+    </tbody>
+  </table></div>
+  <p>Observe-only events include <code>PostToolUse</code>, <code>PostToolUseFailure</code>, <code>SessionStart</code>, <code>Setup</code>, <code>SubagentStart</code>, <code>SessionEnd</code>, <code>Notification</code>, <code>InstructionsLoaded</code>, <code>CwdChanged</code>, <code>DirectoryAdded</code>, <code>FileChanged</code>, <code>PostCompact</code> and <code>StopFailure</code>.</p>
+
+  <div class="tip"><b>Exit 1 does not block</b>Claude Code treats exit 1 as a non-blocking error and proceeds — even though 1 is the conventional Unix failure code. Policy hooks must <code>exit 2</code>. And exit 2 discards any JSON you printed: choose exit codes <i>or</i> exit 0 with JSON, never both.</div>
+
+  <h3>Matchers — the trap</h3>
+  <p>How a matcher is evaluated depends entirely on which characters it contains.</p>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Contains</th><th>Evaluated as</th></tr></thead>
+    <tbody>
+      <tr><td>* or empty</td><td class="wrapcell">Match all</td></tr>
+      <tr><td>letters, digits, _ - , |</td><td class="wrapcell"><b>Exact string</b>, or a list separated by <code>|</code> or <code>,</code></td></tr>
+      <tr><td>anything else</td><td class="wrapcell"><b>JavaScript regex, unanchored</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="eg">
+    <code>mcp__memory</code> matches <b>nothing</b>. It contains only exact-match characters, so it is compared as a literal against <code>mcp__memory__create_entities</code> and fails.
+    <div class="en">Write <code>mcp__memory__.*</code> — the <code>.*</code> is what forces the regex path. Plugin-bundled servers are scoped differently again: <code>mcp__plugin_&lt;plugin&gt;_&lt;server&gt;__&lt;tool&gt;</code>.</div>
+  </div>
+  <p>Because regex matchers are unanchored, <code>Edit.*</code> also matches <code>NotebookEdit</code>. Use <code>^Edit$</code> for a whole-string match. Ten events ignore matchers entirely, including <code>Stop</code>, <code>UserPromptSubmit</code>, <code>PostToolBatch</code> and <code>TeammateIdle</code>.</p>
+
+  <h3>A hook end to end</h3>
+<pre class="cmd"><span class="c">// .claude/settings.json</span>
+{
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Bash",
+        "hooks": [
+          { "type": "command",
+            "if": "Bash(rm *)",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/block-rm.sh",
+            "args": [] }
+        ] }
+    ]
+  }
+}</pre>
+<pre class="cmd">#!/bin/bash
+<span class="c"># .claude/hooks/block-rm.sh</span>
+COMMAND=$(jq -r '.tool_input.command')
+
+if echo "$COMMAND" | grep -q 'rm -rf'; then
+  jq -n '{
+    hookSpecificOutput: {
+      hookEventName: "PreToolUse",
+      permissionDecision: "deny",
+      permissionDecisionReason: "Destructive command blocked by hook"
+    }
+  }'
+else
+  exit 0   <span class="c"># no decision — the normal permission flow applies</span>
+fi</pre>
+  <p>The <code>if</code> field uses permission-rule syntax and avoids spawning the process at all when it doesn’t match. It checks each subcommand, strips leading <code>VAR=value</code> assignments, and looks inside <code>$()</code> and backticks — but it <b>fails open</b> on anything it cannot parse. Use it for efficiency, never as a security boundary.</p>
+
+  <h3>Rewriting, not just blocking</h3>
+  <ul class="tight">
+    <li><code>PreToolUse</code> → <code>updatedInput</code> replaces tool arguments before execution.</li>
+    <li><code>PostToolUse</code> → <code>updatedToolOutput</code> replaces the tool’s result.</li>
+    <li><code>MessageDisplay</code> → <code>displayContent</code> changes what is shown, not what is stored.</li>
+    <li><code>PermissionDenied</code> → <code>retry: true</code> tells the model it may try again.</li>
+  </ul>
+  <p>The first two are the redaction layer: strip secrets outbound before they reach a third-party MCP server, scrub anything sensitive inbound.</p>
+
+  <h3>Injecting context</h3>
+  <p><code>additionalContext</code> passes a string into the window wrapped in a system reminder, capped at 10,000 characters. Two rules:</p>
+  <ul class="tight">
+    <li><b>Write facts, not commands.</b> “The deployment target is production” reads as project information. Text framed as an out-of-band system instruction can trip Claude’s prompt-injection defences, at which point it is surfaced to you instead of used.</li>
+    <li><b>It is replayed, not re-run, on resume.</b> Timestamps and commit SHAs go stale. <code>SessionStart</code> hooks do re-run on resume.</li>
+  </ul>
+
+  <div class="tip"><b>Ordering</b><code>PermissionRequest</code> fires <i>after</i> <code>PreToolUse</code>, and only on the “ask” path — if <code>PreToolUse</code> already allowed or denied, it never fires at all. It also does not fire in non-interactive mode, so automated permission decisions belong in <code>PreToolUse</code>.</div>
+
+  <h3>Where hooks live</h3>
+  <p>User settings, project settings, local settings, managed policy, plugin <code>hooks/hooks.json</code>, and skill or subagent frontmatter. <b>They merge rather than replace</b> — user and project hooks add to managed ones. Enterprise controls: <code>allowManagedHooksOnly</code>, <code>allowedHttpHookUrls</code>, and a <code>disableAllHooks</code> that cannot disable managed hooks from outside managed settings. <code>/hooks</code> shows everything active and where it came from.</p>
+  <p>Frontmatter hooks are the interesting scope: a subagent carries its own enforcement, so a low-autonomy agent physically cannot push, regardless of what it is asked to do.</p>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<section id="mcp">
+  <span class="eyebrow"><span class="n">08</span>&nbsp; MCP &amp; skills</span>
+  <h2>Tools from MCP, judgement from skills.</h2>
+  <p>MCP gives Claude purpose-built tools for an external system with connection and auth handled by the server. A skill teaches it how to use them well — your schema, your query patterns, your formatting rules. They are complements, and pairing them is where most of the leverage sits.</p>
+
+  <h3>Scopes and precedence</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Scope</th><th>Stored</th><th>Shared</th></tr></thead>
+    <tbody>
+      <tr><td>local</td><td class="wrapcell">Your machine, this project</td><td>No</td></tr>
+      <tr><td>project</td><td class="wrapcell"><code>.mcp.json</code> in the repo</td><td>Yes — supports env-var expansion</td></tr>
+      <tr><td>user</td><td class="wrapcell">All your projects</td><td>No</td></tr>
+    </tbody>
+  </table></div>
+  <p>Precedence is local &gt; project &gt; user. Managed configuration (<code>managed-mcp.json</code>, allowlists and denylists) sits above all three.</p>
+
+<pre class="cmd">claude mcp                        <span class="c"># configure servers</span>
+claude mcp login sentry           <span class="c"># OAuth without opening /mcp</span>
+claude mcp login sentry --no-browser   <span class="c"># prints the URL — for SSH</span>
+/mcp reconnect &lt;server&gt;
+/mcp disable &lt;server&gt;             <span class="c"># turn off without removing</span>
+claude --strict-mcp-config --mcp-config ./mcp.json</pre>
+
+  <h3>Things worth knowing</h3>
+  <ul class="tight">
+    <li><b>Tool search is on by default</b>, so idle servers cost almost nothing. Schemas load on demand.</li>
+    <li><b>Claude Code can be an MCP server</b>, exposed as a tool to other clients.</li>
+    <li><b>Servers can push</b> — channels deliver notifications into a running session and can relay permission prompts elsewhere. Research preview.</li>
+    <li><b>Elicitation</b> lets a server request user input mid-tool-call; hooks can intercept both the request and the response.</li>
+    <li>Long tool calls are backgrounded automatically. Output limits can be raised per tool.</li>
+  </ul>
+
+  <h3>Skill anatomy</h3>
+<pre class="cmd">---
+name: deploy
+description: Release checklist for the production stack
+disable-model-invocation: true   <span class="c"># only you can trigger it — zero context cost</span>
+context: fork                    <span class="c"># run in isolated context</span>
+---
+
+1. Confirm the changelog entry exists
+2. …</pre>
+  <p>Skills live in <code>.claude/skills/</code> and <code>~/.claude/skills/</code>, load live from disk, and can be chained — up to six at once, with the trailing text passed to each as arguments. Use <code>disable-model-invocation</code> for anything with side effects: it saves context and guarantees only you fire it.</p>
+  <div class="tip"><b>Descriptions are the interface</b>Claude chooses skills by matching your task against their descriptions. Vague or overlapping descriptions are the reason a skill “doesn’t trigger”. Write the description for the moment of selection, not as a title.</div>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<section id="sdk">
+  <span class="eyebrow"><span class="n">09</span>&nbsp; The Agent SDK</span>
+  <h2>The same harness, as a library.</h2>
+  <p>The Agent SDK runs Claude Code’s loop inside your own process, in Python or TypeScript. Both bundle a native Claude Code binary. From any other language, run the CLI as a subprocess with <code>-p --output-format json</code>.</p>
+
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>If you’re…</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td class="wrapcell">Building an agent without writing the tool loop</td><td><b>Agent SDK</b></td></tr>
+      <tr><td class="wrapcell">Working interactively from a terminal</td><td>Claude Code CLI</td></tr>
+      <tr><td class="wrapcell">Calling the API and owning the loop yourself</td><td>Client SDK</td></tr>
+      <tr><td class="wrapcell">Running long agents without operating sandboxes</td><td>Managed Agents</td></tr>
+    </tbody>
+  </table></div>
+  <p class="flint">Rule of thumb: if you are writing a tool-execution loop by hand and the tools are file, shell and search operations, the Agent SDK has already done that work.</p>
+
+  <h3>Message types</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Type</th><th>Emitted</th></tr></thead>
+    <tbody>
+      <tr><td>SystemMessage</td><td class="wrapcell">Lifecycle. Subtypes: init, compact_boundary, informational, worker_shutting_down</td></tr>
+      <tr><td>AssistantMessage</td><td class="wrapcell">After each response, including the final one</td></tr>
+      <tr><td>UserMessage</td><td class="wrapcell">After each tool execution, carrying results</td></tr>
+      <tr><td>StreamEvent</td><td class="wrapcell">Only with partial messages enabled</td></tr>
+      <tr><td>ResultMessage</td><td class="wrapcell">End of the loop: text, usage, cost, session ID</td></tr>
+    </tbody>
+  </table></div>
+  <p>In TypeScript, <code>AssistantMessage</code> wraps the raw API message — content blocks are at <code>message.message.content</code>, not <code>message.content</code>. A few trailing system events can arrive <i>after</i> <code>ResultMessage</code>, so iterate to completion rather than breaking on the result.</p>
+
+  <h3>A production-shaped agent</h3>
+<pre class="cmd">from claude_agent_sdk import query, ClaudeAgentOptions, ResultMessage
+
+async for message in query(
+    prompt="Find and fix the bug causing test failures in the auth module",
+    options=ClaudeAgentOptions(
+        allowed_tools=["Read", "Edit", "Bash", "Glob", "Grep"],
+        setting_sources=["project"],   <span class="c"># loads CLAUDE.md, skills, hooks</span>
+        max_turns=30,
+        max_budget_usd=5.00,
+        effort="high",
+    ),
+):
+    if isinstance(message, ResultMessage):
+        if message.subtype == "success":
+            print(message.result)</pre>
+
+  <h3>Result subtypes</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Subtype</th><th>Meaning</th><th><code>result</code>?</th></tr></thead>
+    <tbody>
+      <tr><td>success</td><td class="wrapcell">Finished normally</td><td>Yes</td></tr>
+      <tr><td>error_max_turns</td><td class="wrapcell">Hit the turn limit</td><td>No</td></tr>
+      <tr><td>error_max_budget_usd</td><td class="wrapcell">Hit the spend limit</td><td>No</td></tr>
+      <tr><td>error_during_execution</td><td class="wrapcell">API failure or cancellation</td><td>No</td></tr>
+    </tbody>
+  </table></div>
+  <p>Always check the subtype before reading <code>result</code>. Every subtype still carries <code>total_cost_usd</code>, <code>usage</code>, <code>num_turns</code> and <code>session_id</code>, so you can bill and resume after a failure. <code>stop_reason</code> reports why the model stopped: <code>end_turn</code>, <code>max_tokens</code>, or <code>refusal</code>.</p>
+
+  <div class="tip"><b>settingSources is the bridge</b>One option — <code>setting_sources=["project"]</code> — makes an SDK agent inherit CLAUDE.md, skills, filesystem hooks and subagent definitions from the repo. A workflow refined interactively in Claude Code becomes a productised agent without a rewrite.</div>
+
+  <h3>Deployment notes</h3>
+  <ul class="tight">
+    <li><b>Stateless hosts</b> — pass a <code>sessionStore</code> adapter so transcripts mirror to your own backend and any host can resume. Point <code>CLAUDE_CONFIG_DIR</code> at a temp directory if the local copy must be ephemeral.</li>
+    <li><b>Custom tools default to sequential.</b> Set <code>readOnlyHint</code> in the annotations to unlock concurrency.</li>
+    <li><b>Budget by default.</b> Subagent spend counts toward the cap; once reached, further subagents fail and running ones are stopped.</li>
+    <li><b>Terms</b> — use is governed by Anthropic’s Commercial Terms. Third-party products may not offer claude.ai login or rate limits without prior approval; use API-key auth. “Claude Agent” and “Powered by Claude” are permitted branding; “Claude Code” is not.</li>
+  </ul>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<section id="practice">
+  <span class="eyebrow"><span class="n">10</span>&nbsp; Practice &amp; pitfalls</span>
+  <h2>The habits that compound, and the traps that don’t announce themselves.</h2>
+
+  <h3>Seven habits</h3>
+  <ol class="tight">
+    <li><b>Give it something to verify against.</b> Tests, types, a linter, a running app.</li>
+    <li><b>Explore, plan, then code.</b> Plan mode is read-only and therefore cheap.</li>
+    <li><b>Delegate, don’t dictate.</b> Outcome and constraints, not step-by-step instructions.</li>
+    <li><b>Manage context aggressively.</b> Subagents for high-volume reading; <code>/clear</code> between unrelated tasks.</li>
+    <li><b>Promote repeated corrections into structure.</b> Twice → CLAUDE.md. Third playbook paste → a skill. Second repo → a plugin.</li>
+    <li><b>Enforce with hooks, guide with prompts.</b> “Always” and “never” in a prompt are hooks you haven’t written.</li>
+    <li><b>Add an adversary.</b> A reviewer whose job is to find the flaw.</li>
+  </ol>
+
+  <h3>Pitfalls</h3>
+  <ul class="tight">
+    <li>Hook exit code <b>1 does not block</b>. Only exit 2 does — except <code>WorktreeCreate</code>, where any non-zero aborts.</li>
+    <li>Exit 2 discards your JSON. Pick one signalling mechanism per hook.</li>
+    <li><code>mcp__server</code> as a matcher matches nothing. You need <code>mcp__server__.*</code>.</li>
+    <li>Regex matchers are unanchored — <code>Edit.*</code> catches <code>NotebookEdit</code>.</li>
+    <li>The <code>if</code> filter fails open on unparseable Bash. It is not a security boundary.</li>
+    <li><code>additionalContext</code> phrased as a system command can trip prompt-injection defences.</li>
+    <li>Switching model mid-session invalidates the prompt cache. So does changing effort.</li>
+    <li>A deny rule with a bare tool name removes the tool entirely; a scoped rule only denies matching calls.</li>
+    <li><code>${CLAUDE_PLUGIN_ROOT}</code> changes on every plugin update — persist state in <code>${CLAUDE_PLUGIN_DATA}</code>.</li>
+    <li>Instructions from early in a long session may not survive compaction. Persistent rules belong in CLAUDE.md.</li>
+  </ul>
+
+  <h3>Self-test</h3>
+  <ol class="tight">
+    <li>Why does a matcher of <code>mcp__github</code> never fire?</li>
+    <li>Your hook detects a policy violation and exits 1. What happens?</li>
+    <li>Which is cheaper over a long session: 400 lines in CLAUDE.md, or the same content as a skill? Why?</li>
+    <li>Name three actions that invalidate the prompt cache and two that don’t.</li>
+    <li>When would you reach for an agent team rather than parallel subagents?</li>
+    <li>You need a rule that must hold on every single tool call. Where does it go, and why not CLAUDE.md?</li>
+    <li>What does <code>setting_sources=["project"]</code> pull into an SDK agent?</li>
+    <li>Which permission mode never prompts but still denies anything unapproved?</li>
+  </ol>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<section id="ref">
+  <span class="eyebrow"><span class="n">11</span>&nbsp; Reference</span>
+  <h2>The commands worth memorising.</h2>
+
+  <h3>Shell</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Command</th><th>Does</th></tr></thead>
+    <tbody>
+      <tr><td>claude -p "q"</td><td class="wrapcell">Headless. Add <code>--output-format json|stream-json</code></td></tr>
+      <tr><td>claude -c / -r &lt;id&gt;</td><td class="wrapcell">Continue / resume by ID or name</td></tr>
+      <tr><td>claude -w &lt;name&gt;</td><td class="wrapcell">Start in an isolated git worktree</td></tr>
+      <tr><td>claude --bg "task"</td><td class="wrapcell">Launch a background agent and return</td></tr>
+      <tr><td>claude agents</td><td class="wrapcell">Agent view — monitor and dispatch</td></tr>
+      <tr><td>claude doctor</td><td class="wrapcell">Read-only install diagnostics</td></tr>
+      <tr><td>claude setup-token</td><td class="wrapcell">Long-lived OAuth token for CI</td></tr>
+      <tr><td>claude project purge</td><td class="wrapcell">Delete all local state for a project</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Flags</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Flag</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td>--permission-mode</td><td class="wrapcell">default | acceptEdits | plan | auto | dontAsk | bypassPermissions</td></tr>
+      <tr><td>--effort</td><td class="wrapcell">low | medium | high | xhigh | max | ultracode</td></tr>
+      <tr><td>--agents '&lt;json&gt;'</td><td class="wrapcell">Define subagents inline, no files</td></tr>
+      <tr><td>--tools "Bash,Read"</td><td class="wrapcell">Restrict built-in tools (<code>""</code> disables all)</td></tr>
+      <tr><td>--append-system-prompt</td><td class="wrapcell">Add to the default prompt, keeping safety and tool guidance</td></tr>
+      <tr><td>--system-prompt</td><td class="wrapcell"><b>Replace</b> it — you own everything it dropped</td></tr>
+      <tr><td>--json-schema</td><td class="wrapcell">Validated structured output in print mode</td></tr>
+      <tr><td>--max-turns / --max-budget-usd</td><td class="wrapcell">Guardrails for headless runs</td></tr>
+      <tr><td>--bare</td><td class="wrapcell">Skip discovery of hooks, skills, plugins, MCP, CLAUDE.md</td></tr>
+      <tr><td>--safe-mode</td><td class="wrapcell">Load nothing custom — for debugging a broken config</td></tr>
+      <tr><td>--cloud / --teleport</td><td class="wrapcell">Push to a web session / pull one into this terminal</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>In-session</h3>
+  <p><b>Setup</b> — <code>/init</code> · <code>/memory</code> · <code>/mcp</code> · <code>/permissions</code> · <code>/config key=value</code> · <code>/hooks</code> · <code>/plugin</code> · <code>/statusline</code></p>
+  <p><b>During a task</b> — <code>/plan</code> · <code>/model</code> · <code>/effort</code> · <code>/fast</code> · <code>/advisor</code> · <code>/context</code> · <code>/compact</code> · <code>/btw</code> · <code>/subtask</code> · <code>/recap</code></p>
+  <p><b>Parallel</b> — <code>/background</code> · <code>/fork</code> · <code>/branch</code> · <code>/batch</code> · <code>/tasks</code> · <code>/loop</code> · <code>/goal</code></p>
+  <p><b>Shipping</b> — <code>/diff</code> · <code>/code-review</code> · <code>/review</code> · <code>/security-review</code> · <code>/autofix-pr</code></p>
+  <p><b>Recovery</b> — <code>/rewind</code> · <code>/doctor</code> · <code>/debug</code> · <code>/reload-skills</code> · <code>/reload-plugins</code></p>
+  <p><b>Discovery</b> — <code>/powerup</code> · <code>/insights</code> · <code>/release-notes</code> · <code>/help</code></p>
+
+  <h3>File layout</h3>
+  <div class="scrollx"><table class="tbl">
+    <thead><tr><th>Path</th><th>Holds</th></tr></thead>
+    <tbody>
+      <tr><td>CLAUDE.md</td><td class="wrapcell">Always-on project context. Keep it under 200 lines</td></tr>
+      <tr><td>.claude/rules/</td><td class="wrapcell">Path-scoped rules via <code>paths:</code> frontmatter</td></tr>
+      <tr><td>.claude/skills/</td><td class="wrapcell">Project skills (user skills in <code>~/.claude/skills/</code>)</td></tr>
+      <tr><td>.claude/agents/</td><td class="wrapcell">Subagent definitions</td></tr>
+      <tr><td>.claude/settings.json</td><td class="wrapcell">Settings, permissions and hooks — committed</td></tr>
+      <tr><td>.claude/settings.local.json</td><td class="wrapcell">The same, gitignored</td></tr>
+      <tr><td>.mcp.json</td><td class="wrapcell">Project MCP servers, with env-var expansion</td></tr>
+      <tr><td>.claude/loop.md</td><td class="wrapcell">Default prompt for <code>/loop</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Staying current</h3>
+  <p>Claude Code ships several times a week, so any written reference decays. Two URLs make the rest re-derivable: the documentation map at <code>code.claude.com/docs/en/claude_code_docs_map.md</code>, and the full index at <code>code.claude.com/docs/llms.txt</code>. Append <code>.md</code> to any documentation URL for clean markdown. In-session, <code>/release-notes</code> and <code>/powerup</code> cover what changed and what you haven’t tried.</p>
+  <a class="totop" href="#top">↑ top</a>
+</section>
+
+<footer>
+  <span>Cornish Consulting — Study Desk</span>
+  <span>Verified 2026-08-05</span>
+</footer>
+
+</div>
+</body>
+</html>
